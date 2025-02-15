@@ -4,11 +4,19 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+
+#include <chrono>
+#include <iostream>
+#include <thread>
+
 #include "Minigin.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+
+int dae::Minigin::m_MsPerFrame{ 16 };	//+-60 fps	(as a minimum)
+float dae::Minigin::m_SecondsPerFixedUpdate{ 0.02f };	//+-60 fps
 
 SDL_Window* g_window{};
 
@@ -83,12 +91,30 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// todo: this update loop could use some work.
-	bool doContinue = true;
+	bool doContinue{ true };
+	std::chrono::steady_clock::time_point lastTime{ std::chrono::high_resolution_clock::now() };
+	std::chrono::steady_clock::time_point currentTime{};
+	float deltaTime{ 0.f };
+	float lag{ 0.f };
 	while (doContinue)
 	{
+		currentTime = std::chrono::high_resolution_clock::now();
+		deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+		lastTime = currentTime;
+		lag += deltaTime;
+
 		doContinue = input.ProcessInput();
-		sceneManager.Update();
+
+		while (lag >= m_SecondsPerFixedUpdate)
+		{
+			sceneManager.FixedUpdate(m_SecondsPerFixedUpdate);
+			lag -= m_SecondsPerFixedUpdate;
+		}
+		sceneManager.Update(deltaTime);
+		sceneManager.LateUpdate(deltaTime);
+
 		renderer.Render();
+
+		std::this_thread::sleep_for(currentTime + std::chrono::milliseconds(m_MsPerFrame) - std::chrono::high_resolution_clock::now());
 	}
 }

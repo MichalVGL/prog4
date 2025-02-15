@@ -174,9 +174,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Font.h" />
+    <ClInclude Include="FPSComp.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="TransformComp.h" />
+    <ClInclude Include="TextComp.h" />
+    <ClInclude Include="RenderComp.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
@@ -188,10 +193,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="FPSComp.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="TransformComp.cpp" />
+    <ClCompile Include="TextComp.cpp" />
+    <ClCompile Include="RenderComp.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
