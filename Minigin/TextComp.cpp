@@ -15,6 +15,7 @@
 //---------------------------
 TextComp::TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& font)
 	: Component{ parent }
+	, m_pRenderComp{}
 	, m_Text{}
 	, m_Font{ font }
 	, m_TextTexture{}
@@ -28,15 +29,20 @@ TextComp::~TextComp()
 	// nothing to destroy
 }
 
-void TextComp::Update(float deltaTime)
+void TextComp::Start()
 {
-	deltaTime; //todo remove
+	m_pRenderComp = GetOwner().GetComponent<RenderComp>();
+
+	assert(m_pRenderComp != nullptr && "TextComp could not find RenderComp");
+}
+
+void TextComp::Update(float)
+{
 	if (m_NeedsUpdate)
 	{
 		m_NeedsUpdate = false;
 
-		auto rComp = m_GObjectParent.GetComponent<RenderComp>();
-		if (rComp == nullptr || m_Text.length() == 0)
+		if (m_Text.length() == 0)
 		{
 			return;
 		}
@@ -54,12 +60,7 @@ void TextComp::Update(float deltaTime)
 		}
 		SDL_FreeSurface(surf);
 
-		if (m_TextTexture.get() != nullptr)
-		{
-			rComp->UnloadTexture(m_TextTexture);
-		}
-
-		m_TextTexture = rComp->LoadTexture(texture);
+		m_TextTexture = m_pRenderComp->LoadTexture(texture);
 	}
 }
 

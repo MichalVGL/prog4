@@ -12,7 +12,8 @@
 //---------------------------
 RenderComp::RenderComp(dae::GameObject& parent)
 	:Component{ parent }
-	, m_Textures{}
+	, m_pTransformComp{}
+	, m_Texture_sPtr{}
 {
 	// nothing to create
 }
@@ -22,51 +23,42 @@ RenderComp::~RenderComp()
 	// nothing to destroy
 }
 
+void RenderComp::Start()
+{
+	m_pTransformComp = GetOwner().GetComponent<TransformComp>();
+
+	assert(m_pTransformComp != nullptr && "RenderComp could not find TransformComp");
+}
+
 void RenderComp::Render() const
 {
 	glm::vec2 pos{};
 
-	auto tComp = m_GObjectParent.GetComponent<TransformComp>();
-	if (tComp.get() != nullptr)
+	if (m_Texture_sPtr.get() != nullptr)
 	{
-		pos += tComp->GetPosition();
-	}
+		pos += m_pTransformComp->GetPosition();
 
-	for (auto& text : m_Textures)
-	{
-		dae::Renderer::GetInstance().RenderTexture(*text, pos.x, pos.y);
+		dae::Renderer::GetInstance().RenderTexture(*m_Texture_sPtr, pos.x, pos.y);
 	}
 }
 
 std::shared_ptr<dae::Texture2D> RenderComp::LoadTexture(SDL_Texture* texture)
 {
-	m_Textures.push_back(std::make_shared<dae::Texture2D>(texture));
+	m_Texture_sPtr = std::make_shared<dae::Texture2D>(texture);
 
-	return m_Textures.back();
+	return m_Texture_sPtr;
 }
 
 std::shared_ptr<dae::Texture2D> RenderComp::LoadTexture(const std::string& filename)
 {
-	m_Textures.push_back(dae::ResourceManager::GetInstance().LoadTexture(filename));
+	m_Texture_sPtr = dae::ResourceManager::GetInstance().LoadTexture(filename);
 
-	return m_Textures.back();
+	return m_Texture_sPtr;
 }
 
-bool RenderComp::UnloadTexture(const std::shared_ptr<dae::Texture2D>& texture)
+void RenderComp::UnloadTexture()	//not tested
 {
-	auto loc = std::find_if(m_Textures.begin(), m_Textures.end(), [texture](const std::shared_ptr<dae::Texture2D>& x) {
-		return x.get() == texture.get();
-		});
-
-	if (loc != m_Textures.end())
-	{
-		m_Textures.erase(loc);
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	m_Texture_sPtr.reset();
 }
 
 

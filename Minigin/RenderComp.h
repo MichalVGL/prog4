@@ -9,6 +9,8 @@
 #include "Component.h"
 #include "Texture2D.h"
 
+class TransformComp;
+
 //-----------------------------------------------------
 // RenderComp Class									
 //-----------------------------------------------------
@@ -21,14 +23,16 @@ public:
 	// -------------------------
 	// Copy/move constructors and assignment operators
 	// -------------------------    
-	RenderComp(const RenderComp& other)					= default;
-	RenderComp(RenderComp&& other) noexcept				= default;
-	RenderComp& operator=(const RenderComp& other)		= default;
-	RenderComp& operator=(RenderComp&& other)	noexcept	= default;
+	RenderComp(const RenderComp& other)						= delete;
+	RenderComp(RenderComp&& other) noexcept					= delete;
+	RenderComp& operator=(const RenderComp& other)			= delete;
+	RenderComp& operator=(RenderComp&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
 	// Member functions						
 	//-------------------------------------------------
+
+	void Start() override;
 
 	//void FixedUpdate(float deltaFixedTime) override;
 	//void Update(float deltaTime) override;
@@ -39,19 +43,13 @@ public:
 	std::shared_ptr<dae::Texture2D> LoadTexture(SDL_Texture* texture);
 	std::shared_ptr<dae::Texture2D> LoadTexture(const std::string& filename);
 
-	bool UnloadTexture(const std::shared_ptr<dae::Texture2D>& texture);
+	void UnloadTexture();
 
 private: 
-	//-------------------------------------------------
-	// Private member functions								
-	//-------------------------------------------------
-	
 
-	//-------------------------------------------------
-	// Datamembers								
-	//-------------------------------------------------
+	TransformComp* m_pTransformComp;
 
-	std::vector<std::shared_ptr<dae::Texture2D>> m_Textures;
+	std::shared_ptr<dae::Texture2D> m_Texture_sPtr;
 
 };
 

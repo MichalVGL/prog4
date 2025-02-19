@@ -20,41 +20,36 @@ class Component
 {
 public:
 	Component(dae::GameObject& parent);		// Constructor
-	Component() = delete;				
 	virtual ~Component() = 0;				// Destructor
 
 	// -------------------------
 	// Copy/move constructors and assignment operators
 	// -------------------------    
-	Component(const Component& other)					= default;
-	Component(Component&& other) noexcept				= default;
-	Component& operator=(const Component& other)		= default;
-	Component& operator=(Component&& other)	noexcept	= default;
+	Component(const Component& other)					= delete;
+	Component(Component&& other) noexcept				= delete;
+	Component& operator=(const Component& other)		= delete;
+	Component& operator=(Component&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
 	// Member functions						
 	//-------------------------------------------------
 
-	virtual void FixedUpdate(float deltaFixedTime) { deltaFixedTime; };
-	virtual void Update(float deltaTime) { deltaTime; };
-	virtual void LateUpdate(float deltaTime) { deltaTime; };
+	virtual void Start();
+	virtual void FixedUpdate(float deltaFixedTime);
+	virtual void Update(float deltaTime);
+	virtual void LateUpdate(float deltaTime);
 
 	virtual void Render() const {};
 
-protected:
+	void FlagForDeletion();
+	bool IsFlaggedForDeletion() const;
 
-	const dae::GameObject& m_GObjectParent;
+	const dae::GameObject& GetOwner() const;
 
 private: 
-	//-------------------------------------------------
-	// Private member functions								
-	//-------------------------------------------------
 
-
-	//-------------------------------------------------
-	// Datamembers								
-	//-------------------------------------------------
-
+	bool m_IsFlaggedForDeletion;
+	const dae::GameObject& m_GObjectParent;
 };
 
  

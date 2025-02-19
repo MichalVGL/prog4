@@ -5,6 +5,8 @@
 //-----------------------------------------------------
 #include "Component.h"
 
+class TextComp;
+
 //-----------------------------------------------------
 // FPSComp Class									
 //-----------------------------------------------------
@@ -17,14 +19,16 @@ public:
 	// -------------------------
 	// Copy/move constructors and assignment operators
 	// -------------------------    
-	FPSComp(const FPSComp& other)					= default;
-	FPSComp(FPSComp&& other) noexcept				= default;
-	FPSComp& operator=(const FPSComp& other)		= default;
-	FPSComp& operator=(FPSComp&& other)	noexcept	= default;
+	FPSComp(const FPSComp& other)					= delete;
+	FPSComp(FPSComp&& other) noexcept				= delete;
+	FPSComp& operator=(const FPSComp& other)		= delete;
+	FPSComp& operator=(FPSComp&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
 	// Member functions						
 	//-------------------------------------------------
+
+	void Start() override;
 
 	//void FixedUpdate(float deltaFixedTime) override;
 	void Update(float deltaTime) override;
@@ -32,19 +36,12 @@ public:
 
 
 private: 
-	//-------------------------------------------------
-	// Private member functions								
-	//-------------------------------------------------
+
+	TextComp* m_pTextComp;
 
 	float m_RefreshPeriod;
 	float m_RefreshCounter;
 	float m_FPS;
-
-	//-------------------------------------------------
-	// Datamembers								
-	//-------------------------------------------------
-
-	
 };
 
  

@@ -91,6 +91,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
+	sceneManager.Start();
+
 	bool doContinue{ true };
 	std::chrono::steady_clock::time_point lastTime{ std::chrono::high_resolution_clock::now() };
 	std::chrono::steady_clock::time_point currentTime{};

@@ -18,10 +18,10 @@ public:
 	// -------------------------
 	// Copy/move constructors and assignment operators
 	// -------------------------    
-	TransformComp(const TransformComp& other)					= default;
-	TransformComp(TransformComp&& other) noexcept				= default;
-	TransformComp& operator=(const TransformComp& other)		= default;
-	TransformComp& operator=(TransformComp&& other)	noexcept	= default;
+	TransformComp(const TransformComp& other)					= delete;
+	TransformComp(TransformComp&& other) noexcept				= delete;
+	TransformComp& operator=(const TransformComp& other)		= delete;
+	TransformComp& operator=(TransformComp&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
 	// Member functions						

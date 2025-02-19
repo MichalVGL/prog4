@@ -12,6 +12,7 @@ namespace dae
 		void Remove(std::shared_ptr<GameObject> object);
 		void RemoveAll();
 
+		void Start();
 		void FixedUpdate(float deltaFixedTime);
 		void Update(float deltaTime);
 		void LateUpdate(float deltaTime);

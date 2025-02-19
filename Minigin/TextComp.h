@@ -16,6 +16,8 @@ namespace dae
 	class Font;
 }
 
+class RenderComp;
+
 //-----------------------------------------------------
 // TextComp Class									
 //-----------------------------------------------------
@@ -28,33 +30,29 @@ public:
 	// -------------------------
 	// Copy/move constructors and assignment operators
 	// -------------------------    
-	TextComp(const TextComp& other)					= default;
-	TextComp(TextComp&& other) noexcept				= default;
-	TextComp& operator=(const TextComp& other)		= default;
-	TextComp& operator=(TextComp&& other)	noexcept	= default;
+	TextComp(const TextComp& other)						= delete;
+	TextComp(TextComp&& other) noexcept					= delete;
+	TextComp& operator=(const TextComp& other)			= delete;
+	TextComp& operator=(TextComp&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
 	// Member functions						
 	//-------------------------------------------------
 
+	void Start() override;
 	//void FixedUpdate(float deltaFixedTime) override;
 	void Update(float deltaTime) override;
 	//void LateUpdate(float deltaTime) override;
 
-	//void Render() const override;	//unused
+	//void Render() const override;
 
 	void SetText(const std::string& text);
 	void SetFont(const std::shared_ptr<dae::Font>& font);
 
 private: 
-	//-------------------------------------------------
-	// Private member functions								
-	//-------------------------------------------------
-	
 
-	//-------------------------------------------------
-	// Datamembers								
-	//-------------------------------------------------
+	RenderComp* m_pRenderComp;
+
 	std::string m_Text;
 	std::shared_ptr<dae::Font> m_Font;
 	std::shared_ptr<dae::Texture2D> m_TextTexture;
