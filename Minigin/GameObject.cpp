@@ -97,8 +97,9 @@ int dae::GameObject::GetChildCount() const
 
 dae::GameObject* dae::GameObject::GetChildAt(int index) const
 {
-	assert(m_ChildGameObjects.size() < index && "");
-	return nullptr;
+	assert(index < static_cast<int>(m_ChildGameObjects.size()) && (index >= 0)
+		&& "Attempted to get a child GameObject at an invalid index");
+	return m_ChildGameObjects.at(index);
 }
 
 bool dae::GameObject::HasChild(GameObject* child) const

@@ -117,7 +117,7 @@ namespace dae
 
 		bool m_IsCompFlaggedForDeletion;
 
-		std::vector<const GameObject*> m_ChildGameObjects;
+		std::vector<GameObject*> m_ChildGameObjects;
 		GameObject* m_pParentGameObject;
 
 	};
