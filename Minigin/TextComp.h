@@ -21,7 +21,7 @@ class RenderComp;
 //-----------------------------------------------------
 // TextComp Class									
 //-----------------------------------------------------
-class TextComp final : public Component
+class TextComp final : public Component	//Args: Font font
 {
 public:
 	TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& font);				// Constructor

@@ -10,7 +10,7 @@ class TextComp;
 //-----------------------------------------------------
 // FPSComp Class									
 //-----------------------------------------------------
-class FPSComp final : public Component
+class FPSComp final : public Component	//Args: float refreshPeriod
 {
 public:
 	FPSComp(dae::GameObject& parent, float refeshPeriod = 1.f);				// Constructor
