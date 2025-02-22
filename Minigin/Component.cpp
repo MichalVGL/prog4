@@ -1,7 +1,6 @@
 //---------------------------
 // Include Files
 //---------------------------
-#include "GameObject.h"
 #include "Component.h"
 
 //---------------------------
@@ -11,11 +10,6 @@ Component::Component(dae::GameObject& parent)
 	:m_GObjectParent{parent}
 	, m_IsFlaggedForDeletion{ false }
 {
-}
-
-Component::~Component()
-{
-	// nothing to destroy
 }
 
 void Component::Start()
@@ -44,7 +38,7 @@ bool Component::IsFlaggedForDeletion() const
 	return m_IsFlaggedForDeletion;
 }
 
-const dae::GameObject& Component::GetOwner() const
+dae::GameObject& Component::GetOwner() const
 {
 	return m_GObjectParent;
 }

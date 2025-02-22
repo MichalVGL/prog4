@@ -20,16 +20,9 @@ FPSComp::FPSComp(dae::GameObject& parent, float refeshPeriod)
 {
 }
 
-FPSComp::~FPSComp()
-{
-	// nothing to destroy
-}
-
 void FPSComp::Start()
 {
-	m_pTextComp = GetOwner().GetComponent<TextComp>();
-
-	assert(m_pTextComp != nullptr && "FPSComp could not find TextComp");		//todo, use a protected templated GetOwnerComponent that automatically asserts (in the component class)
+	m_pTextComp = GetOwnerComponent<TextComp>();
 }
 
 void FPSComp::Update(float deltaTime)
@@ -38,11 +31,7 @@ void FPSComp::Update(float deltaTime)
 	{
 		m_FPS = 1.f / deltaTime;
 
-		auto* tComp = GetOwner().GetComponent<TextComp>();
-		if (tComp != nullptr)
-		{
-			tComp->SetText(std::format("{:.2f}", m_FPS));
-		}
+		m_pTextComp->SetText(std::format("{:.2f}", m_FPS));
 
 		m_RefreshCounter = 0.f;
 	}

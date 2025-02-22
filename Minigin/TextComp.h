@@ -25,7 +25,6 @@ class TextComp final : public Component	//Args: Font font
 {
 public:
 	TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& font);				// Constructor
-	~TextComp() override;				// Destructor
 
 	// -------------------------
 	// Copy/move constructors and assignment operators
@@ -35,16 +34,15 @@ public:
 	TextComp& operator=(const TextComp& other)			= delete;
 	TextComp& operator=(TextComp&& other)	noexcept	= delete;
 
-	//-------------------------------------------------
-	// Member functions						
-	//-------------------------------------------------
-
+	// -------------------------
+	// Base Functions
+	// -------------------------  
 	void Start() override;
 	//void FixedUpdate(float deltaFixedTime) override;
 	void Update(float deltaTime) override;
 	//void LateUpdate(float deltaTime) override;
-
 	//void Render() const override;
+	//--------------------------
 
 	void SetText(const std::string& text);
 	void SetFont(const std::shared_ptr<dae::Font>& font);

@@ -17,8 +17,7 @@ class TransformComp;
 class RenderComp final : public Component
 {
 public:
-	RenderComp(dae::GameObject& parent);	// Constructor
-	~RenderComp() override;					// Destructor
+	RenderComp(dae::GameObject& parent);
 
 	// -------------------------
 	// Copy/move constructors and assignment operators
@@ -29,7 +28,7 @@ public:
 	RenderComp& operator=(RenderComp&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
-	// Member functions						
+	// Base functions						
 	//-------------------------------------------------
 
 	void Start() override;

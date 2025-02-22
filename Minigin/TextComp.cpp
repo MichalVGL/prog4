@@ -21,19 +21,11 @@ TextComp::TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& fo
 	, m_TextTexture{}
 	, m_NeedsUpdate{ false }
 {
-	// nothing to create
-}
-
-TextComp::~TextComp()
-{
-	// nothing to destroy
 }
 
 void TextComp::Start()
 {
-	m_pRenderComp = GetOwner().GetComponent<RenderComp>();
-
-	assert(m_pRenderComp != nullptr && "TextComp could not find RenderComp");
+	m_pRenderComp = GetOwnerComponent<RenderComp>();
 }
 
 void TextComp::Update(float)

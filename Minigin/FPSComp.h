@@ -14,7 +14,6 @@ class FPSComp final : public Component	//Args: float refreshPeriod
 {
 public:
 	FPSComp(dae::GameObject& parent, float refeshPeriod = 1.f);				// Constructor
-	~FPSComp() override;				// Destructor
 
 	// -------------------------
 	// Copy/move constructors and assignment operators
@@ -25,14 +24,14 @@ public:
 	FPSComp& operator=(FPSComp&& other)	noexcept	= delete;
 
 	//-------------------------------------------------
-	// Member functions						
+	// Base Functions						
 	//-------------------------------------------------
-
 	void Start() override;
-
 	//void FixedUpdate(float deltaFixedTime) override;
 	void Update(float deltaTime) override;
 	//void LateUpdate(float deltaTime) override;
+	//void Render() const override;
+	//-------------------------------------------------
 
 
 private: 

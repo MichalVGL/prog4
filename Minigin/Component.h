@@ -1,17 +1,21 @@
-#pragma once
 
+/*========================README==========================================================================
+
+todo add info here
+
+========================================================================================================*/
+#pragma once
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
-
+#include <iostream>
+#include <cassert>
+#include "GameObject.h"
 //-----------------------------------------------------
 // Forward Declarations
 //-----------------------------------------------------
 
-namespace dae
-{
-	class GameObject;
-}
+
 
 //-----------------------------------------------------
 // Component Class									
@@ -19,8 +23,10 @@ namespace dae
 class Component
 {
 public:
-	Component(dae::GameObject& parent);		// Constructor
-	virtual ~Component() = 0;				// Destructor
+
+	// Constructor is protected
+	Component() = delete;
+	virtual ~Component() = default;
 
 	// -------------------------
 	// Copy/move constructors and assignment operators
@@ -44,12 +50,33 @@ public:
 	void FlagForDeletion();
 	bool IsFlaggedForDeletion() const;
 
-	const dae::GameObject& GetOwner() const;
+
+protected:
+
+	Component(dae::GameObject& parent);	//protected to make sure this class cannot be created outside of derived classes
+
+	template<typename compType>
+	compType* GetOwnerComponent()
+	{
+		static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
+		
+		compType* pComponent = GetOwner().GetComponent<compType>();
+
+#ifdef _DEBUG
+		if (pComponent == nullptr) 
+		{
+			std::cerr << "\nComponent error: Owner does not own a " << typeid(compType).name() << ", requested by " << typeid(*this).name() << '\n';
+			assert(false);
+		}
+#endif // _DEBUG
+
+		return pComponent;
+	}
+
+	dae::GameObject& GetOwner() const;
 
 private: 
 
 	bool m_IsFlaggedForDeletion;
-	const dae::GameObject& m_GObjectParent;
+	dae::GameObject& m_GObjectParent;
 };
-
- 

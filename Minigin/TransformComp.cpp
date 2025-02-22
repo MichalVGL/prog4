@@ -2,6 +2,7 @@
 // Include Files
 //---------------------------
 #include "TransformComp.h"
+#include "GameObject.h"
 
 //---------------------------
 // Constructor & Destructor
@@ -13,20 +14,21 @@ TransformComp::TransformComp(dae::GameObject& parent)
 	// nothing to create
 }
 
-TransformComp::~TransformComp()
-{
-	// nothing to destroy
-}
-
-const glm::vec2& TransformComp::GetPosition() const
+const glm::vec2& TransformComp::GetLocalPosition() const
 {
 	return m_Position;
 }
 
-void TransformComp::SetPosition(float x, float y)
+void TransformComp::SetLocalPosition(float x, float y)
 {
-	m_Position.x = x;
-	m_Position.y = y;
+	SetLocalPosition(glm::vec2(x, y));
+}
+
+void TransformComp::SetLocalPosition(const glm::vec2& newPos)
+{
+	m_Position = newPos;
+
+	GetOwner().InvalidateWorldPos();
 }
 
 

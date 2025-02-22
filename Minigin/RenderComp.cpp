@@ -18,26 +18,17 @@ RenderComp::RenderComp(dae::GameObject& parent)
 	// nothing to create
 }
 
-RenderComp::~RenderComp()
-{
-	// nothing to destroy
-}
-
 void RenderComp::Start()
 {
-	m_pTransformComp = GetOwner().GetComponent<TransformComp>();
-
-	assert(m_pTransformComp != nullptr && "RenderComp could not find TransformComp");
+	m_pTransformComp = GetOwnerComponent<TransformComp>();
 }
 
 void RenderComp::Render() const
 {
-	glm::vec2 pos{};
+	glm::vec2 pos{GetOwner().GetWorldPos()};
 
 	if (m_Texture_sPtr.get() != nullptr)
 	{
-		pos += m_pTransformComp->GetPosition();
-
 		dae::Renderer::GetInstance().RenderTexture(*m_Texture_sPtr, pos.x, pos.y);
 	}
 }
