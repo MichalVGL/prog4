@@ -25,7 +25,7 @@ void RotationComp::Update(float deltaTime)
 		float cosAngle = std::cos(m_RadiansPerSecond * deltaTime);
 		float sinAngle = std::sin(m_RadiansPerSecond * deltaTime);
 
-		auto& pos = m_pTransformComp->GetLocalPosition();
+		const auto& pos = m_pTransformComp->GetLocalPosition();
 
 		m_pTransformComp->SetLocalPosition(
 			pos.x * cosAngle - pos.y * sinAngle,	// [ cos  -sin ]

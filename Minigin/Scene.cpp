@@ -70,3 +70,11 @@ void Scene::Render() const
 	}
 }
 
+void dae::Scene::UpdateImGui()
+{
+	for (const auto& object : m_objects)
+	{
+		object->UpdateImGui();
+	}
+}
+

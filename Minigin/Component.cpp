@@ -28,6 +28,14 @@ void Component::LateUpdate(float)
 {
 }
 
+void Component::UpdateImGui()
+{
+}
+
+void Component::Render() const
+{
+}
+
 void Component::FlagForDeletion()
 {
 	m_IsFlaggedForDeletion = true;

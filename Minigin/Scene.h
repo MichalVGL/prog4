@@ -17,6 +17,7 @@ namespace dae
 		void Update(float deltaTime);
 		void LateUpdate(float deltaTime);
 		void Render() const;
+		void UpdateImGui();
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -28,7 +29,7 @@ namespace dae
 		explicit Scene(const std::string& name);
 
 		std::string m_name;
-		std::vector <std::shared_ptr<GameObject>> m_objects{};
+		std::vector <std::shared_ptr<GameObject>> m_objects{};	//todo change to unique_ptr
 
 		static unsigned int m_idCounter; 
 	};

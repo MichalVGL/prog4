@@ -2,7 +2,10 @@
 /*========================README==========================================================================
 
 todo add info
-All GameObjects come automatically with a transformComp
+
+GameObject Class
+
+	=> All GameObjects come automatically with a transformComp	
 
 ========================================================================================================*/
 #pragma once
@@ -36,6 +39,7 @@ namespace dae
 		void Update(float deltaTime);
 		void LateUpdate(float deltaTime);
 		void Render() const;
+		void UpdateImGui();
 
 		template<typename compType>
 		compType* GetComponent() const
@@ -70,7 +74,7 @@ namespace dae
 		bool RemoveComponent()	//returns true if a component has been removed
 		{
 			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
-			static_assert(std::is_same<compType, TransformComp>::value == false, "Cannot remove TransformComp from a GameObject");
+			static_assert(!std::is_same<compType, TransformComp>::value, "Cannot remove TransformComp from a GameObject");
 
 			auto loc = std::find_if(m_Components.begin(), m_Components.end(), [](const std::unique_ptr<Component>& comp) {
 				return dynamic_cast<compType*>(comp.get()) != nullptr;

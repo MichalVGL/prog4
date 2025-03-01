@@ -78,14 +78,29 @@ void dae::GameObject::Render() const
 	}
 }
 
+void dae::GameObject::UpdateImGui()
+{
+	for (auto& comp : m_Components)
+	{
+		comp->UpdateImGui();
+	}
+}
+
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 {
-	//ensure the worldpos is calculated correctly
-	GetWorldPos();
-
 	//check if parent is valid
 	assert(parent != this && "Tried to set the parent GameObject to itself");
-	assert(!HasChild(parent) && "Cannot set the parent to one of its child GameObjects");	//todo possibly change to if() return; (and maybe with bool return)
+	assert(!HasChild(parent) && "Cannot set the parent to one of its child GameObjects");
+
+	//update position
+	InvalidateWorldPos();
+	if (keepWorldPos)
+	{
+		if (parent != nullptr)
+			m_pTransformComp->SetLocalPosition(GetWorldPos() - parent->GetWorldPos());
+		else
+			m_pTransformComp->SetLocalPosition(GetWorldPos());
+	}
 
 	//assign/unassign other gameObjects
 	if (m_pParentGameObj != nullptr)
@@ -95,16 +110,6 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 
 	if(m_pParentGameObj != nullptr)
 		m_pParentGameObj->AddChild(this);
-
-	//update position
-	InvalidateWorldPos();
-	if (keepWorldPos)
-	{
-		if (m_pParentGameObj != nullptr)
-			m_pTransformComp->SetLocalPosition(m_WorldPos - m_pParentGameObj->GetWorldPos());
-		else
-			m_pTransformComp->SetLocalPosition(m_WorldPos);
-	}
 }
 
 dae::GameObject* dae::GameObject::GetParent() const
@@ -182,10 +187,15 @@ void dae::GameObject::AddChild(GameObject* child)
 
 void dae::GameObject::RemoveChild(GameObject* child)
 {
-	auto loc = std::find(m_ChildrenGameObj.begin(), m_ChildrenGameObj.end(), child);
-	assert(loc != m_ChildrenGameObj.end() && "Tried to remove a child that the GameObject doesn't have");
+	//old version
+	//auto loc = std::find(m_ChildrenGameObj.begin(), m_ChildrenGameObj.end(), child);
+	//assert(loc != m_ChildrenGameObj.end() && "Tried to remove a child that the GameObject doesn't have");
+	//
+	//m_ChildrenGameObj.erase(loc);
 
-	m_ChildrenGameObj.erase(loc);
+	assert(HasChild(child) && "Tried to remove a child that the GameObject doesn't have");
+
+	std::erase(m_ChildrenGameObj, child);
 }
 
 const glm::vec2& dae::GameObject::CalculateWorldPos()

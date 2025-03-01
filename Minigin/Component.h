@@ -1,7 +1,14 @@
 
 /*========================README==========================================================================
 
-todo add info here
+Base Component Class
+
+	=>
+
+//todo 
+//SubComponent creation
+//Component creation in the gameobject
+//debug only checks (duplicate components,...)
 
 ========================================================================================================*/
 #pragma once
@@ -44,8 +51,9 @@ public:
 	virtual void FixedUpdate(float deltaFixedTime);
 	virtual void Update(float deltaTime);
 	virtual void LateUpdate(float deltaTime);
+	virtual void UpdateImGui();
 
-	virtual void Render() const {};
+	virtual void Render() const;
 
 	void FlagForDeletion();
 	bool IsFlaggedForDeletion() const;

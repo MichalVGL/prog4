@@ -33,11 +33,19 @@ void dae::SceneManager::LateUpdate(float deltaTime)
 	}
 }
 
-void dae::SceneManager::Render()
+void dae::SceneManager::Render() const 
 {
 	for (const auto& scene : m_scenes)
 	{
 		scene->Render();
+	}
+}
+
+void dae::SceneManager::UpdateImGui()
+{
+	for (const auto& scene : m_scenes)
+	{
+		scene->UpdateImGui();
 	}
 }
 

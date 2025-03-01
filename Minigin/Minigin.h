@@ -2,6 +2,8 @@
 #include <string>
 #include <functional>
 
+//todo change push_back to emplace_back
+
 namespace dae
 {
 	class Minigin
