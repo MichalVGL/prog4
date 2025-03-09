@@ -10,13 +10,14 @@
 #include <thread>
 
 #include "Minigin.h"
+#include "Time.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 
 int dae::Minigin::m_MsPerFrame{ 16 };	//+-60 fps	(as a minimum)
-float dae::Minigin::m_SecondsPerFixedUpdate{ 0.02f };	//+-60 fps
+float dae::Minigin::m_SecondsPerFixedUpdate{ 0.02f };
 
 SDL_Window* g_window{};
 
@@ -61,8 +62,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		1000,						//640,	//base settings
-		580,						//480,
+		640,						//640,	//base settings
+		480,						//480,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
@@ -86,6 +87,7 @@ dae::Minigin::~Minigin()
 void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
+	Time::fixedDeltaTime = m_SecondsPerFixedUpdate;
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
@@ -96,14 +98,14 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	bool doContinue{ true };
 	std::chrono::steady_clock::time_point lastTime{ std::chrono::high_resolution_clock::now() };
 	std::chrono::steady_clock::time_point currentTime{};
-	float deltaTime{ 0.f };
 	float lag{ 0.f };
 	while (doContinue)
 	{
 		currentTime = std::chrono::high_resolution_clock::now();
-		deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+		Time::deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+		
 		lastTime = currentTime;
-		lag += deltaTime;
+		lag += Time::deltaTime;
 
 		doContinue = input.ProcessInput();
 
@@ -112,8 +114,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			sceneManager.FixedUpdate(m_SecondsPerFixedUpdate);
 			lag -= m_SecondsPerFixedUpdate;
 		}
-		sceneManager.Update(deltaTime);
-		sceneManager.LateUpdate(deltaTime);
+		sceneManager.Update(Time::deltaTime);
+		sceneManager.LateUpdate(Time::deltaTime);
 
 		renderer.Render();
 

@@ -1,7 +1,7 @@
 #include "Scene.h"
-#include "GameObject.h"
 
 #include <algorithm>
+#include <memory>
 
 using namespace dae;
 
@@ -15,14 +15,16 @@ Scene::Scene(const std::string& name)
 
 Scene::~Scene() = default;
 
-void Scene::Add(std::shared_ptr<GameObject> object)
+GameObject* Scene::Add(std::unique_ptr<GameObject> object)
 {
 	m_objects.emplace_back(std::move(object));
+	return m_objects.back().get();
 }
 
-void Scene::Remove(std::shared_ptr<GameObject> object)
+void Scene::Remove(GameObject* object)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(), [&object](const auto& gameObject) { return gameObject.get() == object; })
+		, m_objects.end());
 }
 
 void Scene::RemoveAll()

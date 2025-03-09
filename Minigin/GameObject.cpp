@@ -12,7 +12,7 @@ dae::GameObject::GameObject()
 	, m_IsWorldPosValid{}
 {
 	//do not use AddComponent() due to that function not accepting transformComp
-	m_Components.push_back(std::make_unique<TransformComp>(*this));
+	m_Components.emplace_back(std::make_unique<TransformComp>(*this));
 	m_pTransformComp = static_cast<TransformComp*>(m_Components.at(0).get());
 }
 
@@ -182,17 +182,11 @@ void dae::GameObject::SetLocalPosition(float x, float y)
 
 void dae::GameObject::AddChild(GameObject* child)
 {
-	m_ChildrenGameObj.push_back(child);
+	m_ChildrenGameObj.emplace_back(child);
 }
 
 void dae::GameObject::RemoveChild(GameObject* child)
 {
-	//old version
-	//auto loc = std::find(m_ChildrenGameObj.begin(), m_ChildrenGameObj.end(), child);
-	//assert(loc != m_ChildrenGameObj.end() && "Tried to remove a child that the GameObject doesn't have");
-	//
-	//m_ChildrenGameObj.erase(loc);
-
 	assert(HasChild(child) && "Tried to remove a child that the GameObject doesn't have");
 
 	std::erase(m_ChildrenGameObj, child);

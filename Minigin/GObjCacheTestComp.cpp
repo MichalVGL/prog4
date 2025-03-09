@@ -57,7 +57,7 @@ void GObjCacheTestComp::UpdateImGui()
 	//measuring
 	if (!m_GObjMeasuring)
 	{
-		if (ImGui::Button("Trash the Cache with GameObject"))
+		if (ImGui::Button("Thrash the Cache with GameObject"))
 		{
 			std::thread(std::bind(&GObjCacheTestComp::MeasureGobj, this, m_Samples)).detach();
 		}
@@ -83,7 +83,7 @@ void GObjCacheTestComp::UpdateImGui()
 	//measuring
 	if (!m_GObjAltMeasuring)
 	{
-		if (ImGui::Button("Trash the Cache with GameObjectAlt"))
+		if (ImGui::Button("Thrash the Cache with GameObjectAlt"))
 		{
 			std::thread(std::bind(&GObjCacheTestComp::MeasureGobjAlt, this, m_Samples)).detach();
 		}
@@ -113,7 +113,7 @@ void GObjCacheTestComp::UpdateImGui()
 		const float* compResults[2] = { gObjResults.get()->data(), gObjAltResults.get()->data()};
 		m_CombiPlotConfig.values.ys_list = compResults;
 		m_CombiPlotConfig.grid_y.size = gObjResults->front() / 10.f;	//10 lines
-		m_CombiPlotConfig.values.count = static_cast<int>(gObjAltResults->size());
+		m_CombiPlotConfig.values.count = static_cast<int>(gObjResults->size());
 		m_CombiPlotConfig.scale.max = gObjResults->front();
 
 		ImGui::Plot("Combination plot", m_CombiPlotConfig);

@@ -40,6 +40,7 @@ void IntCacheTestComp::MeasureInt(int samples)
 	auto end = std::chrono::high_resolution_clock::now();
 
 	std::vector<int> arr{};
+	arr.reserve(ARRSIZE);
 
 	for (int i = 0; i < ARRSIZE; ++i)
 	{
@@ -94,7 +95,7 @@ void IntCacheTestComp::UpdateImGui()
 
 	if (!m_Measuring)
 	{
-		if (ImGui::Button("Trash the Cache with integers"))
+		if (ImGui::Button("Thrash the Cache with integers"))
 		{
 			std::thread(std::bind(&IntCacheTestComp::MeasureInt, this, m_Samples)).detach();
 		}

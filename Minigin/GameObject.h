@@ -65,7 +65,7 @@ namespace dae
 			assert(GetComponent<compType>() == nullptr && "Duplicate components are not allowed on the same GameObject");
 			//assert(&(comp->GetOwner()) == this && "Attempted to add component that didn't set the owner to the correct GameObject");	//todo check this doesnt throw an (false) error
 
-			m_Components.push_back(std::make_unique<compType>(*this, std::forward<compArgs>(args)...));
+			m_Components.emplace_back(std::make_unique<compType>(*this, std::forward<compArgs>(args)...));
 			
 			return static_cast<compType*>(m_Components.back().get());
 		}

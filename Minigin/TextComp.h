@@ -21,14 +21,14 @@ class RenderComp;
 //-----------------------------------------------------
 // TextComp Class									
 //-----------------------------------------------------
-class TextComp final : public Component	//Args: Font font
+class TextComp final : public Component	//Args: Font& font	//todo change to Font*
 {
 public:
 	TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& font);				// Constructor
 
 	// -------------------------
 	// Copy/move constructors and assignment operators
-	// -------------------------    
+	// -------------------------
 	TextComp(const TextComp& other)						= delete;
 	TextComp(TextComp&& other) noexcept					= delete;
 	TextComp& operator=(const TextComp& other)			= delete;
@@ -36,7 +36,7 @@ public:
 
 	// -------------------------
 	// Base Functions
-	// -------------------------  
+	// -------------------------
 	void Start() override;
 	//void FixedUpdate(float deltaFixedTime) override;
 	void Update(float deltaTime) override;
@@ -52,7 +52,7 @@ private:
 	RenderComp* m_pRenderComp;
 
 	std::string m_Text;
-	std::shared_ptr<dae::Font> m_Font;
+	std::shared_ptr<dae::Font> m_Font;	//todo change to non owning pointer
 	std::shared_ptr<dae::Texture2D> m_TextTexture;
 	bool m_NeedsUpdate;
 };
