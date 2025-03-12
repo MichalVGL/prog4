@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RENDERCOMP_H
+#define RENDERCOMP_H
 
 //-----------------------------------------------------
 // Include Files
@@ -53,3 +54,4 @@ private:
 };
 
  
+#endif // RENDERCOMP_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRANSFORMCOMP_H
+#define TRANSFORMCOMP_H
 
 //-----------------------------------------------------
 // Include Files
@@ -42,3 +43,4 @@ private:
 };
 
  
+#endif // TRANSFORMCOMP_H

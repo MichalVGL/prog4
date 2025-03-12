@@ -47,15 +47,15 @@ bool dae::InputManager::ProcessInput()
 		switch (keyboardBind->KeyState)
 		{
 		case KeyState::down:
-			if (Keyboard::GetInstance().IsButtonDown(keyboardBind->SDLScanCode))
+			if (Keyboard::GetInstance().IsButtonDown(keyboardBind->Key))
 				keyboardBind->Command->Execute();
 			break;
 		case KeyState::up:
-			if (Keyboard::GetInstance().IsButtonUp(keyboardBind->SDLScanCode))
+			if (Keyboard::GetInstance().IsButtonUp(keyboardBind->Key))
 				keyboardBind->Command->Execute();
 			break;
 		case KeyState::pressed:
-			if (Keyboard::GetInstance().IsButtonPressed(keyboardBind->SDLScanCode))
+			if (Keyboard::GetInstance().IsButtonPressed(keyboardBind->Key))
 				keyboardBind->Command->Execute();
 			break;
 		}
@@ -84,13 +84,13 @@ bool dae::InputManager::ProcessInput()
 	return true;	//continue game
 }
 
-dae::KeyboardBinding dae::InputManager::CreateBinding(uint16_t SDLScanCode, KeyState keyState, std::unique_ptr<Command>&& command)
+dae::KeyboardBinding dae::InputManager::CreateBinding(Key key, KeyState keyState, std::unique_ptr<Command>&& command)	//change command to not use unique pointer here
 {
-	assert(SDLScanCode < SDL_NUM_SCANCODES && "Invalid SDLScancode given to keyboard binding");
+	assert(key < SDL_NUM_SCANCODES && "Invalid SDLScancode given to keyboard binding");
 	assert(command && "Command cannot be null when adding a binding");
 
 	KeyboardBinding binding{};
-	binding.SDLScanCode = SDLScanCode;
+	binding.Key = key;
 	binding.KeyState = keyState;
 	binding.Command = std::move(command);
 
@@ -98,7 +98,7 @@ dae::KeyboardBinding dae::InputManager::CreateBinding(uint16_t SDLScanCode, KeyS
 	return binding;
 }
 
-dae::GamepadBinding dae::InputManager::CreateBinding(uint8_t gamepadButton, int gamepadID, KeyState keyState, std::unique_ptr<Command>&& command)
+dae::GamepadBinding dae::InputManager::CreateBinding(GamepadButton gamepadButton, int gamepadID, KeyState keyState, std::unique_ptr<Command>&& command)
 {
 	assert(Gamepad::IsValidGamepadButton(gamepadButton) && "Invalid gamepadButton given to gamepad binding");
 	assert(command && "Command cannot be null when adding a binding");

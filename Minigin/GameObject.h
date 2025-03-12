@@ -1,3 +1,5 @@
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 
 /*========================README==========================================================================
 
@@ -8,7 +10,6 @@ GameObject Class
 	=> All GameObjects come automatically with a transformComp	
 
 ========================================================================================================*/
-#pragma once
 #include <glm.hpp>
 #include <memory>
 #include <vector>
@@ -141,3 +142,5 @@ namespace dae
 
 	};
 }
+
+#endif // GAMEOBJECT_H

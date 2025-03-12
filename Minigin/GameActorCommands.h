@@ -1,5 +1,8 @@
-#pragma once
+#ifndef GAMEACTORCOMMANDS_H
+#define GAMEACTORCOMMANDS_H
+
 #include "Command.h"
+#include <glm.hpp>
 
 class GameActorComp;
 
@@ -16,35 +19,15 @@ private:
 
 //==============================================================================
 
-class MoveUpCommand final : public GameActorCommand
+class DirectionCommand final : public GameActorCommand
 {
 public:
-	MoveUpCommand(GameActorComp* gameActorComp);
+	DirectionCommand(GameActorComp* gameActorComp, const glm::vec2& direction);
 
 	void Execute() override;
+
+private:
+	glm::vec2 m_Direction;
 };
 
-class MoveDownCommand final : public GameActorCommand
-{
-public:
-	MoveDownCommand(GameActorComp* gameActorComp);
-
-	void Execute() override;
-};
-
-class MoveLeftCommand final : public GameActorCommand
-{
-public:
-	MoveLeftCommand(GameActorComp* gameActorComp);
-
-	void Execute() override;
-};
-
-class MoveRightCommand final : public GameActorCommand
-{
-public:
-	MoveRightCommand(GameActorComp* gameActorComp);
-
-	void Execute() override;
-};
-
+#endif // !GAMEACTORCOMMANDS_H

@@ -21,42 +21,13 @@ GameActorComp* GameActorCommand::GetGameActor() const
 /// Implementations
 ///=========================
 
-MoveUpCommand::MoveUpCommand(GameActorComp* gameActorComp)
+DirectionCommand::DirectionCommand(GameActorComp* gameActorComp, const glm::vec2& direction)
 	:GameActorCommand(gameActorComp)
+	, m_Direction{direction}
 {
 }
 
-void MoveUpCommand::Execute()
+void DirectionCommand::Execute()
 {
-	GetGameActor()->MoveUp();
-}
-
-MoveDownCommand::MoveDownCommand(GameActorComp* gameActorComp)
-	:GameActorCommand(gameActorComp)
-{
-}
-
-void MoveDownCommand::Execute()
-{
-	GetGameActor()->MoveDown();
-}
-
-MoveLeftCommand::MoveLeftCommand(GameActorComp* gameActorComp)
-	:GameActorCommand(gameActorComp)
-{
-}
-
-void MoveLeftCommand::Execute()
-{
-	GetGameActor()->MoveLeft();
-}
-
-MoveRightCommand::MoveRightCommand(GameActorComp* gameActorComp)
-	:GameActorCommand(gameActorComp)
-{
-}
-
-void MoveRightCommand::Execute()
-{
-	GetGameActor()->MoveRight();
+	GetGameActor()->AddDirection(m_Direction);
 }

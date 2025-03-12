@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TEXTURE2D_H
+#define TEXTURE2D_H
+
 #include <vec2.hpp>
 #include <string>
 
@@ -26,3 +28,5 @@ namespace dae
 		SDL_Texture* m_texture;
 	};
 }
+
+#endif // TEXTURE2D_H

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ROTATIONCOMP_H
+#define ROTATIONCOMP_H
+
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
@@ -49,3 +51,4 @@ private:
 };
 
  
+#endif // ROTATIONCOMP_H

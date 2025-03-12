@@ -18,19 +18,23 @@ GameActorComp::GameActorComp(dae::GameObject& parent, float moveSpeed, bool useC
 	if (useController)
 	{
 		auto& inputMngr = dae::InputManager::GetInstance();
-		auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_UP, 0, dae::KeyState::pressed, std::make_unique<MoveUpCommand>(this)));
+		auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_UP, 0, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, -1.f))));
 		m_GamepadBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
-		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_DOWN, 0, dae::KeyState::pressed, std::make_unique<MoveDownCommand>(this)));
+		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_DOWN, 0, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, 1.f))));
 		m_GamepadBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
-		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_LEFT, 0, dae::KeyState::pressed, std::make_unique<MoveLeftCommand>(this)));
+		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_LEFT, 0, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(-1.f, 0.f))));
 		m_GamepadBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
-		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_RIGHT, 0, dae::KeyState::pressed, std::make_unique<MoveRightCommand>(this)));
+		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_RIGHT, 0, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(1.f, 0.f))));
 		m_GamepadBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 	}
@@ -38,19 +42,23 @@ GameActorComp::GameActorComp(dae::GameObject& parent, float moveSpeed, bool useC
 	{
 		auto& inputMngr = dae::InputManager::GetInstance();
 
-		auto binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_W, dae::KeyState::pressed, std::make_unique<MoveUpCommand>(this)));
+		auto binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_W, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, -1.f))));
 		m_KeyboardBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 
-		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_S, dae::KeyState::pressed, std::make_unique<MoveDownCommand>(this)));
+		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_S, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, 1.f))));
 		m_KeyboardBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 
-		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_A, dae::KeyState::pressed, std::make_unique<MoveLeftCommand>(this)));
+		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_A, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(-1.f, 0.f))));
 		m_KeyboardBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 
-		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_D, dae::KeyState::pressed, std::make_unique<MoveRightCommand>(this)));
+		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_D, dae::KeyState::pressed, 
+			std::make_unique<DirectionCommand>(this, glm::vec2(1.f, 0.f))));
 		m_KeyboardBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 	}
@@ -82,24 +90,9 @@ void GameActorComp::Update(float deltaTime)
 	}
 }
 
-void GameActorComp::MoveUp()
+void GameActorComp::AddDirection(const glm::vec2& direction)
 {
-	m_Direction.y = -1.f;
-}
-
-void GameActorComp::MoveDown()
-{
-	m_Direction.y = 1.f;
-}
-
-void GameActorComp::MoveLeft()
-{
-	m_Direction.x = -1.f;
-}
-
-void GameActorComp::MoveRight()
-{
-	m_Direction.x = 1.f;
+	m_Direction += direction;
 }
 
 

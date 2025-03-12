@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TEXTCOMP_H
+#define TEXTCOMP_H
 
 //-----------------------------------------------------
 // Include Files
@@ -58,3 +59,4 @@ private:
 };
 
  
+#endif // TEXTCOMP_H

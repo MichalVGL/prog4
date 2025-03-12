@@ -1,3 +1,6 @@
+#ifndef COMPONENT_H
+#define COMPONENT_H
+
 
 /*========================README==========================================================================
 
@@ -11,7 +14,6 @@ Base Component Class
 //debug only checks (duplicate components,...)
 
 ========================================================================================================*/
-#pragma once
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
@@ -88,3 +90,5 @@ private:
 	bool m_IsFlaggedForDeletion;
 	dae::GameObject& m_GObjectParent;
 };
+
+#endif // !COMPONENT_H

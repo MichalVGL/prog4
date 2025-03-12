@@ -1,8 +1,8 @@
-#pragma once
+#ifndef MINIGIN_H
+#define MINIGIN_H
+
 #include <string>
 #include <functional>
-
-//todo change push_back to emplace_back
 
 namespace dae
 {
@@ -22,3 +22,5 @@ namespace dae
 		static float m_SecondsPerFixedUpdate;
 	};
 }
+
+#endif // MINIGIN_H

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GOBJCACHETESTCOMP_H
+#define GOBJCACHETESTCOMP_H
+
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
@@ -98,3 +100,4 @@ public:
 };
 
  
+#endif // GOBJCACHETESTCOMP_H

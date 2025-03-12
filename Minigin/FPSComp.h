@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FPSCOMP_H
+#define FPSCOMP_H
 
 //-----------------------------------------------------
 // Include Files
@@ -44,3 +45,4 @@ private:
 };
 
  
+#endif // !FPSCOMP_H

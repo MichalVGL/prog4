@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GAMEPAD_H
+#define GAMEPAD_H
+
 #include <memory>
 
 class Gamepad final
@@ -16,11 +18,11 @@ public:
 
 	void UpdateInput();
 
-	bool IsButtonUp(uint8_t button);
-	bool IsButtonDown(uint8_t button);
-	bool IsButtonPressed(uint8_t button);
+	bool IsButtonUp(uint8_t button) const;
+	bool IsButtonDown(uint8_t button) const;
+	bool IsButtonPressed(uint8_t button) const;
 
-	bool IsConnected();
+	bool IsConnected() const;
 	static bool IsValidGamepadButton(uint8_t button);
 
 private:
@@ -29,3 +31,4 @@ private:
 	std::unique_ptr<XinputImpl> m_XinputImpl_Uptr;
 };
 
+#endif // GAMEPAD_H

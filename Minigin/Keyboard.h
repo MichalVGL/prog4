@@ -1,4 +1,6 @@
-#pragma once
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
+
 #include <memory>
 
 #include "Singleton.h"
@@ -29,3 +31,4 @@ private:
 
 };
 
+#endif // KEYBOARD_H

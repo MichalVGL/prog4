@@ -1,4 +1,6 @@
-#pragma once
+#ifndef INPUTMANAGER_H
+#define INPUTMANAGER_H
+
 #include <vector>
 #include <memory>
 
@@ -9,6 +11,9 @@
 namespace dae
 {
 
+	using Key = uint16_t;
+	using GamepadButton = uint8_t;
+
 	enum class KeyState
 	{
 		down,
@@ -18,14 +23,14 @@ namespace dae
 
 	struct KeyboardBinding
 	{
-		uint16_t SDLScanCode;
+		Key Key;
 		KeyState KeyState;
 		std::unique_ptr<Command> Command;
 	};
 
 	struct GamepadBinding
 	{
-		uint8_t GamepadButton;
+		GamepadButton GamepadButton;
 		int GamepadID;
 		KeyState KeyState;
 		std::unique_ptr<Command> Command;
@@ -39,9 +44,8 @@ namespace dae
 
 		bool ProcessInput();
 
-		//template<typename command>
-		KeyboardBinding CreateBinding(uint16_t SDLScanCode, KeyState keyState, std::unique_ptr<Command>&& command);
-		GamepadBinding CreateBinding(uint8_t gamepadButton, int gamepadID, KeyState keyState, std::unique_ptr<Command>&& command);
+		KeyboardBinding CreateBinding(Key key, KeyState keyState, std::unique_ptr<Command>&& command);
+		GamepadBinding CreateBinding(GamepadButton gamepadButton, int gamepadID, KeyState keyState, std::unique_ptr<Command>&& command);
 
 		void RegisterBinding(KeyboardBinding* keyboardBinding);
 		void RegisterBinding(GamepadBinding* gamepadBinding);
@@ -58,5 +62,5 @@ namespace dae
 		std::vector<GamepadBinding*> m_GamepadBindings;
 
 	};
-
 }
+#endif // !INPUTMANAGER_H

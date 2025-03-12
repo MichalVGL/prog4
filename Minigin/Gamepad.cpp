@@ -1,4 +1,5 @@
 
+//todo make sure to include lead and mean, lookup reason (decreases compile time)
 #include <cassert>
 #include <Windows.h>
 #include <Xinput.h>
@@ -17,11 +18,11 @@ public:
 
 	void UpdateInputImpl();
 
-	bool IsButtonUp(uint8_t button);
-	bool IsButtonDown(uint8_t button);
-	bool IsButtonPressed(uint8_t button);
+	bool IsButtonUp(uint8_t button) const;
+	bool IsButtonDown(uint8_t button) const;
+	bool IsButtonPressed(uint8_t button) const;
 
-	bool IsConnected();
+	bool IsConnected() const;
 	static bool IsValidGamepadButton(uint8_t button);
 
 private:
@@ -71,22 +72,22 @@ void Gamepad::XinputImpl::UpdateInputImpl()
 	}
 }
 
-bool Gamepad::XinputImpl::IsButtonUp(uint8_t button)
+bool Gamepad::XinputImpl::IsButtonUp(uint8_t button) const
 {
 	return m_ReleasedButtons & static_cast<WORD>(button);
 }
 
-bool Gamepad::XinputImpl::IsButtonDown(uint8_t button)
+bool Gamepad::XinputImpl::IsButtonDown(uint8_t button) const
 {
 	return m_PressedButtons & static_cast<WORD>(button);
 }
 
-bool Gamepad::XinputImpl::IsButtonPressed(uint8_t button)
+bool Gamepad::XinputImpl::IsButtonPressed(uint8_t button) const
 {
 	return m_Buttons & static_cast<WORD>(button);
 }
 
-bool Gamepad::XinputImpl::IsConnected()
+bool Gamepad::XinputImpl::IsConnected() const
 {
 	return m_IsConnected;
 }
@@ -123,22 +124,22 @@ void Gamepad::UpdateInput()
 	m_XinputImpl_Uptr->UpdateInputImpl();
 }
 
-bool Gamepad::IsButtonUp(uint8_t button)
+bool Gamepad::IsButtonUp(uint8_t button) const
 {
 	return m_XinputImpl_Uptr->IsButtonUp(button);
 }
 
-bool Gamepad::IsButtonDown(uint8_t button)
+bool Gamepad::IsButtonDown(uint8_t button) const
 {
 	return m_XinputImpl_Uptr->IsButtonDown(button);
 }
 
-bool Gamepad::IsButtonPressed(uint8_t button)
+bool Gamepad::IsButtonPressed(uint8_t button) const
 {
 	return m_XinputImpl_Uptr->IsButtonPressed(button);
 }
 
-bool Gamepad::IsConnected()
+bool Gamepad::IsConnected() const
 {
 	return m_XinputImpl_Uptr->IsConnected();
 }

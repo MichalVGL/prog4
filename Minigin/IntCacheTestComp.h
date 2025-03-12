@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INTCACHETESTCOMP_H
+#define INTCACHETESTCOMP_H
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
@@ -49,5 +50,5 @@ private:
 	void MeasureInt(int samples);
 
 };
-
  
+#endif // INTCACHETESTCOMP_H

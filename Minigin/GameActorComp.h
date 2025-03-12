@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMEACTORCOMP_H
+#define GAMEACTORCOMP_H
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
@@ -37,10 +38,7 @@ public:
 	//void Render() const override;
 	//--------------------------
 
-	void MoveUp();
-	void MoveDown();
-	void MoveLeft();
-	void MoveRight();
+	void AddDirection(const glm::vec2& direction);
 
 private: 
 
@@ -53,3 +51,4 @@ private:
 };
 
  
+#endif // !GAMEACTORCOMP_H
