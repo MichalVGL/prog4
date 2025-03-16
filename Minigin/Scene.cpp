@@ -7,7 +7,7 @@ using namespace dae;
 
 unsigned int Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name) 
+Scene::Scene(const std::string& name)
 	: m_name{ name } 
 {
 
@@ -62,6 +62,13 @@ void dae::Scene::LateUpdate(float deltaTime)
 	{
 		object->LateUpdate(deltaTime);
 	}
+
+	m_objects.erase(
+		std::remove_if(m_objects.begin(), m_objects.end(), [](const std::unique_ptr<GameObject>& obj)
+			{
+				return obj->IsFlaggedForDeletion();
+			})
+		, m_objects.end());
 }
 
 void Scene::Render() const

@@ -92,6 +92,10 @@ namespace dae
 			}
 		}
 
+		//deletion========================================================
+		void FlagForDeletion();
+		bool IsFlaggedForDeletion() const;
+
 		//gameobject parent/children functions (public)===================
 		void SetParent(GameObject* parent, bool keepWorldPos = true);
 		GameObject* GetParent() const;
@@ -125,6 +129,10 @@ namespace dae
 		//---------------------------
 		// Variables
 		//---------------------------
+
+		//====================
+		//deletion
+		bool m_FlaggedForDeletion = false;
 
 		//====================
 		//components variables

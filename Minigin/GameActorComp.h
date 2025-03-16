@@ -14,10 +14,10 @@
 //-----------------------------------------------------
 
 //TODO change name without comp for all components
-class GameActorComp final : public Component	//Args: float:moveSpeed, bool:useController
+class GameActorComp final : public Component	//Args: float:moveSpeed, int:playerId
 {
 public:
-	GameActorComp(dae::GameObject& parent, float moveSpeed, bool useController);	
+	GameActorComp(dae::GameObject& parent, float moveSpeed, int playerId);	
 	~GameActorComp();
 
 	// -------------------------
@@ -31,7 +31,7 @@ public:
 	// -------------------------
 	// Base Functions
 	// -------------------------  
-	//void Start() override;
+	void Start() override;
 	//void FixedUpdate(float deltaFixedTime) override;
 	void Update(float deltaTime) override;
 	//void LateUpdate(float deltaTime) override;
@@ -42,8 +42,10 @@ public:
 
 private: 
 
-	std::vector<std::unique_ptr<dae::KeyboardBinding>> m_KeyboardBindings;
-	std::vector<std::unique_ptr<dae::GamepadBinding>> m_GamepadBindings;
+	int m_PlayerID;
+
+	std::vector<std::unique_ptr<dae::KeyboardBinding>> m_KeyboardBindings{};
+	std::vector<std::unique_ptr<dae::GamepadBinding>> m_GamepadBindings{};
 
 	glm::vec2 m_Direction;
 	float m_MoveSpeed;

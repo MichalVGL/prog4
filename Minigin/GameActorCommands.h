@@ -30,4 +30,25 @@ private:
 	glm::vec2 m_Direction;
 };
 
+//===============
+class DamageCommand final : public GameActorCommand
+{
+public:
+	DamageCommand(GameActorComp* gameActorComp);
+
+	void Execute() override;
+};
+
+//===============
+class AddScoreCommand final : public GameActorCommand
+{
+public:
+	AddScoreCommand(GameActorComp* gameActorComp, int amount);
+
+	void Execute() override;
+
+private:
+	int m_Amount;
+};
+
 #endif // !GAMEACTORCOMMANDS_H

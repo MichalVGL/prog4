@@ -1,5 +1,7 @@
 #include "GameActorCommands.h"
 #include "GameActorComp.h"
+#include "HealthComp.h"
+#include "ScoreComp.h"
 
 ///=========================
 /// Base Class
@@ -30,4 +32,33 @@ DirectionCommand::DirectionCommand(GameActorComp* gameActorComp, const glm::vec2
 void DirectionCommand::Execute()
 {
 	GetGameActor()->AddDirection(m_Direction);
+}
+
+//=====================
+DamageCommand::DamageCommand(GameActorComp* gameActorComp)
+	:GameActorCommand(gameActorComp)
+{
+}
+
+void DamageCommand::Execute()
+{
+	if (auto* hComp{ GetGameActor()->TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
+	{
+		hComp->Damage();
+	}
+}
+
+//=====================
+AddScoreCommand::AddScoreCommand(GameActorComp* gameActorComp, int amount)
+	:GameActorCommand(gameActorComp)
+	, m_Amount{ amount }
+{
+}
+
+void AddScoreCommand::Execute()
+{
+	if (auto* scoreComp{ GetGameActor()->TryGetOwnerComponent<ScoreComp>() }; scoreComp != nullptr)
+	{
+		scoreComp->AddScore(m_Amount);
+	}
 }

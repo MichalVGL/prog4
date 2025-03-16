@@ -12,7 +12,7 @@ namespace dae
 {
 
 	using Key = uint16_t;
-	using GamepadButton = uint8_t;
+	using GamepadButton = uint16_t;
 
 	enum class KeyState
 	{

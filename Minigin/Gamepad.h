@@ -18,12 +18,12 @@ public:
 
 	void UpdateInput();
 
-	bool IsButtonUp(uint8_t button) const;
-	bool IsButtonDown(uint8_t button) const;
-	bool IsButtonPressed(uint8_t button) const;
+	bool IsButtonUp(uint16_t button) const;
+	bool IsButtonDown(uint16_t button) const;
+	bool IsButtonPressed(uint16_t button) const;
 
 	bool IsConnected() const;
-	static bool IsValidGamepadButton(uint8_t button);
+	static bool IsValidGamepadButton(uint16_t button);
 
 private:
 

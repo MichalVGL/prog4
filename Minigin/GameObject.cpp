@@ -86,6 +86,16 @@ void dae::GameObject::UpdateImGui()
 	}
 }
 
+void dae::GameObject::FlagForDeletion()
+{
+	m_FlaggedForDeletion = true;
+}
+
+bool dae::GameObject::IsFlaggedForDeletion() const
+{
+	return m_FlaggedForDeletion;
+}
+
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 {
 	//check if parent is valid

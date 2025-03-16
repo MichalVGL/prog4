@@ -60,10 +60,7 @@ public:
 	void FlagForDeletion();
 	bool IsFlaggedForDeletion() const;
 
-
-protected:
-
-	Component(dae::GameObject& parent);	//protected to make sure this class cannot be created outside of derived classes
+	dae::GameObject& GetOwner() const;
 
 	template<typename compType>
 	compType* GetOwnerComponent()
@@ -83,7 +80,17 @@ protected:
 		return pComponent;
 	}
 
-	dae::GameObject& GetOwner() const;
+	template<typename compType>
+	compType* TryGetOwnerComponent()	//allows nullptr as valid usecase
+	{
+		static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
+
+		return GetOwner().GetComponent<compType>();
+	}
+
+protected:
+
+	Component(dae::GameObject& parent);	//protected to make sure this class cannot be created outside of derived classes
 
 private: 
 
