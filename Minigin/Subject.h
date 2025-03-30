@@ -3,23 +3,23 @@
 #include <vector>
 #include "Event.h"
 
-class Observer;
+class IObserver;
 class Component;
 
-class Subject	//only works with components
+class Subject final		//only works with components
 {
 public:
 	Subject(Component* parentComponent);
 
-	void AddObserver(Observer* observer);
-	void RemoveObserver(Observer* observer);
+	void AddObserver(IObserver* observer);
+	void RemoveObserver(IObserver* observer);
 
 	void NotifyObservers(Event event);
 
 private:
 	Component* m_pParentComponent;
 
-	std::vector<Observer*> m_Observers;
+	std::vector<IObserver*> m_Observers;
 };
 
 #endif // !SUBJECT_H

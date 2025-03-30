@@ -26,26 +26,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -114,6 +114,9 @@
       <AdditionalDependencies>opengl32.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -137,6 +140,9 @@
       <AdditionalDependencies>opengl32.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -164,6 +170,9 @@
       <AdditionalDependencies>opengl32.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -191,6 +200,9 @@
       <AdditionalDependencies>opengl32.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
+    <Lib>
+      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\3rdParty\imgui\imconfig.h" />
@@ -204,29 +216,22 @@
     <ClInclude Include="..\3rdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui\imstb_truetype.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="EngineComponents.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="GameActorCommands.h" />
-    <ClInclude Include="GameActorComp.h" />
     <ClInclude Include="Gamepad.h" />
-    <ClInclude Include="GObjCacheTestComp.h" />
-    <ClInclude Include="HealthComp.h" />
-    <ClInclude Include="IntCacheTestComp.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="RotationComp.h" />
     <ClInclude Include="Font.h" />
-    <ClInclude Include="FPSComp.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Component.h" />
-    <ClInclude Include="ScoreComp.h" />
     <ClInclude Include="sdbmHash.h" />
     <ClInclude Include="Subject.h" />
-    <ClInclude Include="Time.h" />
-    <ClInclude Include="TransformComp.h" />
+    <ClInclude Include="DaeTime.h" />
     <ClInclude Include="TextComp.h" />
+    <ClInclude Include="TransformComp.h" />
     <ClInclude Include="RenderComp.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -234,8 +239,6 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="UIHealthComp.h" />
-    <ClInclude Include="UIScoreComp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp" />
@@ -251,33 +254,23 @@
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="GameActorCommands.cpp" />
-    <ClCompile Include="GameActorComp.cpp" />
     <ClCompile Include="Gamepad.cpp" />
-    <ClCompile Include="GObjCacheTestComp.cpp" />
-    <ClCompile Include="HealthComp.cpp" />
-    <ClCompile Include="IntCacheTestComp.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="RotationComp.cpp" />
     <ClCompile Include="Font.cpp" />
-    <ClCompile Include="FPSComp.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="ScoreComp.cpp" />
     <ClCompile Include="Subject.cpp" />
-    <ClCompile Include="TransformComp.cpp" />
     <ClCompile Include="TextComp.cpp" />
+    <ClCompile Include="TransformComp.cpp" />
     <ClCompile Include="RenderComp.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="UIHealthComp.cpp" />
-    <ClCompile Include="UIScoreComp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc" />

@@ -5,10 +5,10 @@
 
 class Component;
 
-class Observer	//only works with component
+class IObserver	//only works with component
 {
 public:
-	virtual ~Observer() = default;
+	virtual ~IObserver() = default;
 	virtual void Notify(Event event, Component* comp) = 0;
 };
 

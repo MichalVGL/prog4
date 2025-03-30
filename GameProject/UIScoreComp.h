@@ -14,7 +14,7 @@
 class ScoreComp;
 class TextComp;
 
-class UIScoreComp final : public Component, public Observer 	//Args: 
+class UIScoreComp final : public Component, public IObserver 	//Args: 
 {
 public:
 	UIScoreComp(dae::GameObject& parent, ScoreComp* compToObserve);	

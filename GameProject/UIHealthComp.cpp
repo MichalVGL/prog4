@@ -19,7 +19,6 @@ void UIHealthComp::Start()
 	m_pTextComp->SetText("# lives: 3");	//hardcoded for now due to uncertainties/crashes due to initialization/start order 
 }
 
-
 void UIHealthComp::Notify(Event event, Component* comp)
 {
 	assert(comp != nullptr && "comp should not be nullptr here");
@@ -27,13 +26,9 @@ void UIHealthComp::Notify(Event event, Component* comp)
 	switch (event.id)
 	{
 	case (make_sdbm_hash("HealthChanged")):
-		assert(dynamic_cast<HealthComp*>(comp) != nullptr && "Error in notify of UIScoreComp, wrong component given to event (needs ScoreComp with event \"ScoreChanged\")");
+		assert(dynamic_cast<HealthComp*>(comp) != nullptr && "Error in notify of UIScoreComp, wrong component given to event (needs ScoreComp with event \"HealthChanged\")");
 		auto* healtComp = static_cast<HealthComp*>(comp);
 		m_pTextComp->SetText("# lives: " + std::to_string(healtComp->GetCurrentLives()));
 		break;
 	}
 }
-
-
-
-

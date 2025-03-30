@@ -15,7 +15,7 @@
 class HealthComp;
 class TextComp;
 
-class UIHealthComp final : public Component, public Observer	//Args: 
+class UIHealthComp final : public Component, public IObserver	//Args: 
 {
 public:
 	UIHealthComp(dae::GameObject& parent, HealthComp* compToObserve);
