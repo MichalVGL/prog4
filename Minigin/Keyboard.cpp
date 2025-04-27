@@ -11,6 +11,8 @@
 // SDL implementation
 //===============================
 
+using namespace dae;
+
 class Keyboard::SDLImpl final
 {
 public:

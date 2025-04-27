@@ -17,11 +17,10 @@ GameObject Class
 #include <type_traits>
 #include <utility>
 
-class Component;
-class TransformComp;
-
 namespace dae
 {
+	class Component;
+	class TransformComp;
 	class Texture2D;
 
 	class GameObject final

@@ -13,6 +13,9 @@
 //---------------------------
 // Constructor & Destructor
 //---------------------------
+
+using namespace dae;
+
 TextComp::TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& font)
 	: Component{ parent }
 	, m_pRenderComp{}
@@ -67,7 +70,3 @@ void TextComp::SetFont(const std::shared_ptr<dae::Font>& font)
 	m_Font = font;
 	m_NeedsUpdate = true;
 }
-
-
-
-

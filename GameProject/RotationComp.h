@@ -11,13 +11,16 @@
 // Class Forwards									
 //-----------------------------------------------------
 
-class TransformComp;
+namespace dae
+{
+	class TransformComp;
+}
 
 //==========================================================================
-//This component rotates the this gameobject around the parent (using this gameObjects local position)
+//This component rotates this gameobject around the parent (using this gameObjects local position)
 //==========================================================================
 
-class RotationComp final : public Component	//Args: float degr/s = 0.f
+class RotationComp final : public dae::Component	//Args: float degr/s = 0.f
 {
 public:
 	RotationComp(dae::GameObject& parent, float degreesPerSecond = 0.f);
@@ -44,7 +47,7 @@ public:
 
 private: 
 
-	TransformComp* m_pTransformComp;
+	dae::TransformComp* m_pTransformComp;
 
 	float m_RadiansPerSecond;
 	bool m_IsActive;	//if the rotation is set to 0 this will be false. To prevent spoiling the worldpos of the gameobject

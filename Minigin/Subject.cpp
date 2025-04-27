@@ -2,7 +2,9 @@
 #include <algorithm>
 
 #include "Subject.h"
-#include "Observer.h"
+#include "IObserver.h"
+
+using namespace dae;
 
 Subject::Subject(Component* parentComponent)
 	: m_pParentComponent{parentComponent}

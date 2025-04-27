@@ -15,7 +15,7 @@ RotationComp::RotationComp(dae::GameObject& parent, float degreesPerSecond)
 
 void RotationComp::Start()
 {
-	m_pTransformComp = GetOwnerComponent<TransformComp>();
+	m_pTransformComp = GetOwnerComponent<dae::TransformComp>();
 }
 
 void RotationComp::Update(float deltaTime)

@@ -6,7 +6,7 @@
 
 class GameActorComp;
 
-class GameActorCommand : public Command
+class GameActorCommand : public dae::Command
 {
 public:
 	GameActorCommand(GameActorComp* gameActorComp);

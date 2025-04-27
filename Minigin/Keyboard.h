@@ -5,30 +5,32 @@
 
 #include "Singleton.h"
 
-
-class Keyboard final : public dae::Singleton<Keyboard>
+namespace dae
 {
-public:
+	class Keyboard final : public dae::Singleton<Keyboard>
+	{
+	public:
 
-	Keyboard();
-	~Keyboard();
+		Keyboard();
+		~Keyboard();
 
-	Keyboard(const Keyboard& other) = delete;
-	Keyboard(Keyboard&& other) noexcept = delete;
-	Keyboard& operator=(const Keyboard& other) = delete;
-	Keyboard& operator=(Keyboard&& other) noexcept = delete;
+		Keyboard(const Keyboard& other) = delete;
+		Keyboard(Keyboard&& other) noexcept = delete;
+		Keyboard& operator=(const Keyboard& other) = delete;
+		Keyboard& operator=(Keyboard&& other) noexcept = delete;
 
-	void UpdateInput();
+		void UpdateInput();
 
-	bool IsButtonUp(uint16_t key);
-	bool IsButtonDown(uint16_t key);
-	bool IsButtonPressed(uint16_t key);
+		bool IsButtonUp(uint16_t key);
+		bool IsButtonDown(uint16_t key);
+		bool IsButtonPressed(uint16_t key);
 
-private:
+	private:
 
-	class SDLImpl;
-	std::unique_ptr<SDLImpl> m_SDLImpl_Uptr;
+		class SDLImpl;
+		std::unique_ptr<SDLImpl> m_SDLImpl_Uptr;
 
-};
+	};
+}
 
 #endif // KEYBOARD_H

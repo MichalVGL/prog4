@@ -6,12 +6,15 @@
 //-----------------------------------------------------
 #include "Component.h"
 
-class TextComp;
+namespace dae
+{
+	class TextComp;
+}
 
 //-----------------------------------------------------
 // FPSComp Class									
 //-----------------------------------------------------
-class FPSComp final : public Component	//Args: float refreshPeriod
+class FPSComp final : public dae::Component	//Args: float refreshPeriod
 {
 public:
 	FPSComp(dae::GameObject& parent, float refeshPeriod = 1.f);				// Constructor
@@ -37,7 +40,7 @@ public:
 
 private: 
 
-	TextComp* m_pTextComp;
+	dae::TextComp* m_pTextComp;
 
 	float m_RefreshPeriod;
 	float m_RefreshCounter;

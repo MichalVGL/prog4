@@ -4,17 +4,20 @@
 //-----------------------------------------------------
 // Include Files
 //-----------------------------------------------------
-#include "Component.h"
-#include "Observer.h"
-#include "Event.h"
+#include <IObserver.h>
+#include <Component.h>
+#include <Event.h>
 
 //-----------------------------------------------------
 // Class Forwards									
 //-----------------------------------------------------
+namespace dae
+{
+	class TextComp;
+}
 class ScoreComp;
-class TextComp;
 
-class UIScoreComp final : public Component, public IObserver 	//Args: 
+class UIScoreComp final : public dae::Component, public dae::IObserver 	//Args: GameObject& parent, HealthComp* compToObserve
 {
 public:
 	UIScoreComp(dae::GameObject& parent, ScoreComp* compToObserve);	
@@ -37,11 +40,11 @@ public:
 	//void Render() const override;
 	//--------------------------
 
-	void Notify(Event event, Component* comp) override;
+	void Notify(dae::Event event, Component* comp) override;
 
 private: 
 
-	TextComp* m_pTextComp{};
+	dae::TextComp* m_pTextComp{};
 
 };
 

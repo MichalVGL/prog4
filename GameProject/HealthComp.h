@@ -3,6 +3,9 @@
 // Include Files
 //-----------------------------------------------------
 #include <memory>
+
+#include <Sound.h>
+
 #include "Component.h"
 #include "Subject.h"
 
@@ -11,7 +14,7 @@
 //-----------------------------------------------------
 
 
-class /*Component_Name*/HealthComp final : public Component	//Args: int maxLives
+class HealthComp final : public dae::Component	//Args: int maxLives
 {
 public:
 	HealthComp(dae::GameObject& parent, int maxLives);	
@@ -38,15 +41,16 @@ public:
 
 	int GetCurrentLives() const;
 
-	Subject& OnKilled();
+	dae::Subject& OnKilled();
 
 private: 
 
 	int m_MaxLives;
 	int m_CurrentLives;
 
-	std::unique_ptr<Subject> m_DamagedEvent;
+	std::unique_ptr<dae::Subject> m_DamagedEvent;
 
+	static constexpr dae::SoundEntry m_DamageSound{ "TestSounds/Bomberman SFX (3).wav" };
 };
 
  

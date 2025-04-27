@@ -9,12 +9,17 @@
 #include <iostream>
 #include <thread>
 
+#include <filesystem>
+
 #include "Minigin.h"
 #include "DaeTime.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+
+#include "ServiceLocator.h"
+#include "Sound.h"
 
 int dae::Minigin::m_MsPerFrame{ 16 };	//+-60 fps
 float dae::Minigin::m_SecondsPerFixedUpdate{ 0.02f };
@@ -52,7 +57,7 @@ void PrintSDLVersion()
 dae::Minigin::Minigin(const std::string &dataPath)
 {
 	PrintSDLVersion();
-	
+
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
@@ -74,6 +79,10 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	//ServiceLocator::RegisterSoundSystem(std::make_unique<Null_SoundSystem>());
+	ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(
+		std::make_unique<SDL_SoundSystem>(dataPath)));
 }
 
 dae::Minigin::~Minigin()
@@ -87,7 +96,7 @@ dae::Minigin::~Minigin()
 void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
-	DaeTime::fixedDeltaTime = m_SecondsPerFixedUpdate;
+	dae::fixedDeltaTime = m_SecondsPerFixedUpdate;
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
@@ -102,10 +111,10 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	while (doContinue)
 	{
 		currentTime = std::chrono::high_resolution_clock::now();
-		DaeTime::deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+		dae::deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
 		
 		lastTime = currentTime;
-		lag += DaeTime::deltaTime;
+		lag += dae::deltaTime;
 
 		doContinue = input.ProcessInput();
 
@@ -114,8 +123,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			sceneManager.FixedUpdate(m_SecondsPerFixedUpdate);
 			lag -= m_SecondsPerFixedUpdate;
 		}
-		sceneManager.Update(DaeTime::deltaTime);
-		sceneManager.LateUpdate(DaeTime::deltaTime);
+		sceneManager.Update(dae::deltaTime);
+		sceneManager.LateUpdate(dae::deltaTime);
 
 		renderer.Render();
 

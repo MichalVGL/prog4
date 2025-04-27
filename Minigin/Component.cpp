@@ -3,50 +3,47 @@
 //---------------------------
 #include "Component.h"
 
-//---------------------------
-// Constructor & Destructor
-//---------------------------
-Component::Component(dae::GameObject& parent)
+dae::Component::Component(dae::GameObject& parent)
 	:m_GObjectParent{parent}
 	, m_IsFlaggedForDeletion{ false }
 {
 }
 
-void Component::Start()
+void dae::Component::Start()
 {
 }
 
-void Component::FixedUpdate(float)
+void dae::Component::FixedUpdate(float)
 {
 }
 
-void Component::Update(float)
+void dae::Component::Update(float)
 {
 }
 
-void Component::LateUpdate(float)
+void dae::Component::LateUpdate(float)
 {
 }
 
-void Component::UpdateImGui()
+void dae::Component::UpdateImGui()
 {
 }
 
-void Component::Render() const
+void dae::Component::Render() const
 {
 }
 
-void Component::FlagForDeletion()
+void dae::Component::FlagForDeletion()
 {
 	m_IsFlaggedForDeletion = true;
 }
 
-bool Component::IsFlaggedForDeletion() const
+bool dae::Component::IsFlaggedForDeletion() const
 {
 	return m_IsFlaggedForDeletion;
 }
 
-dae::GameObject& Component::GetOwner() const
+dae::GameObject& dae::Component::GetOwner() const
 {
 	return m_GObjectParent;
 }

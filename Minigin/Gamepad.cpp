@@ -1,6 +1,6 @@
 
-//todo make sure to include lead and mean, lookup reason (decreases compile time)
 #include <cassert>
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <Xinput.h>
 #include "Gamepad.h"
@@ -8,6 +8,8 @@
 //===============================
 // Xinput implementation
 //===============================
+
+using namespace dae;
 
 class Gamepad::XinputImpl final
 {

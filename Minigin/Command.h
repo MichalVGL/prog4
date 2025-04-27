@@ -4,11 +4,15 @@
 //==========================
 //Base Class 
 //==========================
-class Command
+
+namespace dae
 {
-public:
-	virtual ~Command() = default;
-	virtual void Execute() = 0;
-};
+	class Command
+	{
+	public:
+		virtual ~Command() = default;
+		virtual void Execute() = 0;
+	};
+}
 
 #endif // !COMMAND_H

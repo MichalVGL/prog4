@@ -5,16 +5,15 @@
 //-----------------------------------------------------
 #include <glm.hpp>
 #include <vector>
+
 #include "Component.h"
 #include "InputManager.h"
-
 
 //-----------------------------------------------------
 // Class Forwards									
 //-----------------------------------------------------
 
-//TODO change name without comp for all components
-class GameActorComp final : public Component	//Args: float:moveSpeed, int:playerId
+class GameActorComp final : public dae::Component	//Args: float:moveSpeed, int:playerId
 {
 public:
 	GameActorComp(dae::GameObject& parent, float moveSpeed, int playerId);	
@@ -49,7 +48,6 @@ private:
 
 	glm::vec2 m_Direction;
 	float m_MoveSpeed;
-
 };
 
  

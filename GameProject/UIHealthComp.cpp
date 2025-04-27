@@ -15,17 +15,17 @@ UIHealthComp::UIHealthComp(dae::GameObject& parent, HealthComp* compToObserve)
 
 void UIHealthComp::Start()
 {
-	m_pTextComp = GetOwnerComponent<TextComp>();
+	m_pTextComp = GetOwnerComponent<dae::TextComp>();
 	m_pTextComp->SetText("# lives: 3");	//hardcoded for now due to uncertainties/crashes due to initialization/start order 
 }
 
-void UIHealthComp::Notify(Event event, Component* comp)
+void UIHealthComp::Notify(dae::Event event, Component* comp)
 {
 	assert(comp != nullptr && "comp should not be nullptr here");
 
 	switch (event.id)
 	{
-	case (make_sdbm_hash("HealthChanged")):
+	case (dae::make_sdbm_hash("HealthChanged")):
 		assert(dynamic_cast<HealthComp*>(comp) != nullptr && "Error in notify of UIScoreComp, wrong component given to event (needs ScoreComp with event \"HealthChanged\")");
 		auto* healtComp = static_cast<HealthComp*>(comp);
 		m_pTextComp->SetText("# lives: " + std::to_string(healtComp->GetCurrentLives()));

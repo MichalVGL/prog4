@@ -22,7 +22,7 @@ FPSComp::FPSComp(dae::GameObject& parent, float refeshPeriod)
 
 void FPSComp::Start()
 {
-	m_pTextComp = GetOwnerComponent<TextComp>();
+	m_pTextComp = GetOwnerComponent<dae::TextComp>();
 }
 
 void FPSComp::Update(float deltaTime)

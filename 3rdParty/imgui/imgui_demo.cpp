@@ -157,7 +157,7 @@ Index of this file:
 #pragma GCC diagnostic ignored "-Wcast-qual"                        // warning: cast from type 'const xxxx *' to type 'xxxx *' casts away qualifiers
 #endif
 
-// Play it nice with Windows users (Update: May 2018, Notepad now supports Unix-style carriage returns!)
+// PlayEffect it nice with Windows users (Update: May 2018, Notepad now supports Unix-style carriage returns!)
 #ifdef _WIN32
 #define IM_NEWLINE  "\r\n"
 #else

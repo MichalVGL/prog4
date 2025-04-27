@@ -3,8 +3,9 @@
 // Include Files
 //-----------------------------------------------------
 #include <memory>
-#include "Component.h"
-#include "Subject.h"
+#include <Component.h>
+#include <Subject.h>
+#include <Sound.h>
 
 
 //-----------------------------------------------------
@@ -12,7 +13,7 @@
 //-----------------------------------------------------
 
 
-class ScoreComp final : public Component	//Args: 
+class ScoreComp final : public dae::Component	//Args: 
 {
 public:
 	ScoreComp(dae::GameObject& parent);	
@@ -39,13 +40,15 @@ public:
 
 	int GetScore() const;
 
-	Subject& OnScoreChanged();
+	dae::Subject& OnScoreChanged();
 
 private: 
 
 	int m_Score{ 0 };
 
-	std::unique_ptr<Subject> m_ScoreChangedEvent;
+	std::unique_ptr<dae::Subject> m_ScoreChangedEvent;
+
+	static constexpr dae::SoundEntry m_ScoreChangedSound{ "TestSounds/Bomberman SFX (6).wav" };
 
 };
 

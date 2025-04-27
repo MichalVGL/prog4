@@ -1,7 +1,7 @@
 #ifndef DAETIME_H
 #define DAETIME_H
 
-namespace DaeTime
+namespace dae
 {
 	inline float deltaTime{};
 	inline float fixedDeltaTime{};

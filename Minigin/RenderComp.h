@@ -10,48 +10,51 @@
 #include "Component.h"
 #include "Texture2D.h"
 
-class TransformComp;
-
-//-----------------------------------------------------
-// RenderComp Class									
-//-----------------------------------------------------
-class RenderComp final : public Component
+namespace dae
 {
-public:
-	RenderComp(dae::GameObject& parent);
 
-	// -------------------------
-	// Copy/move constructors and assignment operators
-	// -------------------------    
-	RenderComp(const RenderComp& other)						= delete;
-	RenderComp(RenderComp&& other) noexcept					= delete;
-	RenderComp& operator=(const RenderComp& other)			= delete;
-	RenderComp& operator=(RenderComp&& other)	noexcept	= delete;
+	class TransformComp;
 
-	//-------------------------------------------------
-	// Base functions						
-	//-------------------------------------------------
+	//-----------------------------------------------------
+	// RenderComp Class									
+	//-----------------------------------------------------
+	class RenderComp final : public Component
+	{
+	public:
+		RenderComp(dae::GameObject& parent);
 
-	void Start() override;
+		// -------------------------
+		// Copy/move constructors and assignment operators
+		// -------------------------    
+		RenderComp(const RenderComp& other) = delete;
+		RenderComp(RenderComp&& other) noexcept = delete;
+		RenderComp& operator=(const RenderComp& other) = delete;
+		RenderComp& operator=(RenderComp&& other)	noexcept = delete;
 
-	//void FixedUpdate(float deltaFixedTime) override;
-	//void Update(float deltaTime) override;
-	//void LateUpdate(float deltaTime) override;
+		//-------------------------------------------------
+		// Base functions						
+		//-------------------------------------------------
 
-	void Render() const override;
+		void Start() override;
 
-	std::shared_ptr<dae::Texture2D> LoadTexture(SDL_Texture* texture);
-	std::shared_ptr<dae::Texture2D> LoadTexture(const std::string& filename);
+		//void FixedUpdate(float deltaFixedTime) override;
+		//void Update(float deltaTime) override;
+		//void LateUpdate(float deltaTime) override;
 
-	void UnloadTexture();
+		void Render() const override;
 
-private: 
+		std::shared_ptr<dae::Texture2D> LoadTexture(SDL_Texture* texture);
+		std::shared_ptr<dae::Texture2D> LoadTexture(const std::string& filename);
 
-	TransformComp* m_pTransformComp;
+		void UnloadTexture();
 
-	std::shared_ptr<dae::Texture2D> m_Texture_sPtr;
+	private:
 
-};
+		TransformComp* m_pTransformComp;
 
+		std::shared_ptr<dae::Texture2D> m_Texture_sPtr;
+
+	};
+}
  
 #endif // RENDERCOMP_H

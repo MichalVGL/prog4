@@ -4,6 +4,9 @@
 #include <SDL.h>
 #include <Windows.h>
 #include <Xinput.h>
+
+#include <ServiceLocator.h>
+
 #include "GameActorComp.h"
 #include "GameActorCommands.h"
 #include "Time.h"
@@ -115,7 +118,7 @@ void GameActorComp::Start()
 		//damage
 		if (auto* hComp{ TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
 		{
-			auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_X, padId, dae::KeyState::down,	//todo change gamepadbutton to uint16
+			auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_X, padId, dae::KeyState::down,
 				std::make_unique<DamageCommand>(this)));
 			m_GamepadBindings.emplace_back(std::move(binding));
 			inputMngr.RegisterBinding(m_GamepadBindings.back().get());
@@ -124,12 +127,12 @@ void GameActorComp::Start()
 		//pickup
 		if (auto* hComp{ TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
 		{
-			auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_A, padId, dae::KeyState::down,	//todo change gamepadbutton to uint16
+			auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_A, padId, dae::KeyState::down,
 				std::make_unique<AddScoreCommand>(this, 50)));
 			m_GamepadBindings.emplace_back(std::move(binding));
 			inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
-			binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_B, padId, dae::KeyState::down,	//todo change gamepadbutton to uint16
+			binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_B, padId, dae::KeyState::down,
 				std::make_unique<AddScoreCommand>(this, 50)));
 			m_GamepadBindings.emplace_back(std::move(binding));
 			inputMngr.RegisterBinding(m_GamepadBindings.back().get());
