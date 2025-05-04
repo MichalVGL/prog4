@@ -19,6 +19,7 @@
 #include "ResourceManager.h"
 
 #include "ServiceLocator.h"
+#include "SoundSystem.h"
 #include "Sound.h"
 
 int dae::Minigin::m_MsPerFrame{ 16 };	//+-60 fps
@@ -80,9 +81,12 @@ dae::Minigin::Minigin(const std::string &dataPath)
 
 	ResourceManager::GetInstance().Init(dataPath);
 
-	//ServiceLocator::RegisterSoundSystem(std::make_unique<Null_SoundSystem>());
+#if _DEBUG
 	ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(
 		std::make_unique<SDL_SoundSystem>(dataPath)));
+#else
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>(dataPath));
+#endif
 }
 
 dae::Minigin::~Minigin()

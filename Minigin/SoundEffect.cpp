@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cassert>
 #include <algorithm>
+#include <format>
 
 
 class dae::SoundEffect::SDL_SoundEffectImpl final {
@@ -18,13 +19,12 @@ public:
 	void Load();
 	bool IsLoaded() const;
 
-	void SetVolume(sound_volume volume);
+	void SetVolume(sound_volume volume = 1.f);
 
 	void PlayEffect(int loops);
 
 private:
 
-	float m_Volume{ 1.0f };
 	std::string m_Path;
 
 	std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> m_pChunk{ nullptr, Mix_FreeChunk };
@@ -42,9 +42,9 @@ void dae::SoundEffect::SDL_SoundEffectImpl::Load()
 		m_pChunk.reset(Mix_LoadWAV(m_Path.c_str()));
 		if (!m_pChunk)
 		{
-			std::cout << "Failed to load sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+			std::cout << std::format("Failed to load sound effect! SDL_mixer Error: {}\n", Mix_GetError());
 		}
-		SetVolume(m_Volume);
+		SetVolume();
 	}
 }
 
@@ -55,11 +55,10 @@ bool dae::SoundEffect::SDL_SoundEffectImpl::IsLoaded() const
 
 void dae::SoundEffect::SDL_SoundEffectImpl::SetVolume(sound_volume volume)
 {
-	m_Volume = std::clamp(volume, 0.0f, 1.0f);
-
 	if (m_pChunk)
 	{
-		Mix_VolumeChunk(m_pChunk.get(), static_cast<int>(m_Volume * MIX_MAX_VOLUME));
+		volume = std::clamp(volume, 0.0f, 1.0f);
+		Mix_VolumeChunk(m_pChunk.get(), static_cast<int>(volume * MIX_MAX_VOLUME));
 	}
 }
 

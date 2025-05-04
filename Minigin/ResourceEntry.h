@@ -4,14 +4,14 @@
 #include <string_view>
 
 #include "sdbmHash.h"
-//todo determine wether to use this or just soundentry
+//todo determine whether to use this or just soundentry
 namespace dae
 {
 	template<typename idType>
 	struct ResourceEntry
 	{
-		std::string_view path;
-		idType id;
+		const std::string_view path;
+		const idType id;
 
 		template <size_t N>
 		constexpr ResourceEntry(const char(&path)[N])

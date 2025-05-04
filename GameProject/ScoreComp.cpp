@@ -16,8 +16,7 @@ void ScoreComp::AddScore(int amount)
 	m_Score += amount;
 	m_ScoreChangedEvent->NotifyObservers(dae::Event(dae::make_sdbm_hash("ScoreChanged")));
 
-	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.PlayEffect(m_ScoreChangedSound);
+	m_ScoreChangedSoundToken.Play();
 }
 
 int ScoreComp::GetScore() const

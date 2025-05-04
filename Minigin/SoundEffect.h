@@ -13,7 +13,7 @@ namespace dae
 	public:
 
 		SoundEffect(const std::string& path);
-		~SoundEffect();	//prevent compilation of default destructor in the header file. (which creater compiler errors with an incomplete class like the Impl)
+		~SoundEffect();	//prevent compilation of default destructor in the header file. (which creates compiler errors due to the unique_ptr with its destructor)
 
 		SoundEffect(const SoundEffect&) = delete;
 		SoundEffect& operator=(const SoundEffect&) = delete;

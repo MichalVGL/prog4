@@ -16,7 +16,7 @@ UIHealthComp::UIHealthComp(dae::GameObject& parent, HealthComp* compToObserve)
 void UIHealthComp::Start()
 {
 	m_pTextComp = GetOwnerComponent<dae::TextComp>();
-	m_pTextComp->SetText("# lives: 3");	//hardcoded for now due to uncertainties/crashes due to initialization/start order 
+	m_pTextComp->SetText("# lives: 3");	
 }
 
 void UIHealthComp::Notify(dae::Event event, Component* comp)

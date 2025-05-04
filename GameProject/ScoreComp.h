@@ -47,9 +47,9 @@ private:
 	int m_Score{ 0 };
 
 	std::unique_ptr<dae::Subject> m_ScoreChangedEvent;
+	dae::SoundToken m_ScoreChangedSoundToken{m_ScoreChangedSoundEntry};
 
-	static constexpr dae::SoundEntry m_ScoreChangedSound{ "TestSounds/Bomberman SFX (6).wav" };
-
+	static constexpr dae::SoundEntry m_ScoreChangedSoundEntry{ "TestSounds/Bomberman SFX (6).wav" };
 };
 
  

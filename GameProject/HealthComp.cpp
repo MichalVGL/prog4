@@ -19,8 +19,7 @@ bool HealthComp::Damage()
 {
  	--m_CurrentLives;
 
-	auto& ss = dae::ServiceLocator::GetSoundSystem();
-	ss.PlayEffect(m_DamageSound);
+	m_DamageSoundToken.Play();
 
 	m_DamagedEvent->NotifyObservers(dae::Event(dae::make_sdbm_hash("HealthChanged")));
 	if (m_CurrentLives <= 0)

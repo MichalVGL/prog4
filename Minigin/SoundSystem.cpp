@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <cassert>
 
+#include "SoundToken.h"
+
 //===================================================================================================================================================
 //SDL_SoundSystem
 //===================================================================================================================================================
@@ -32,18 +34,40 @@ dae::SDL_SoundSystem::SDL_SoundSystem(std::filesystem::path dataPath)
 
 dae::SDL_SoundSystem::~SDL_SoundSystem()
 {
+	//notify thread to stop
 	m_SDLThread.request_stop();
-	m_CV.notify_all(); 
+	m_CV.notify_all();
 
 	// Clean up SDL_mixer
 	Mix_CloseAudio();
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
-void dae::SDL_SoundSystem::PlayEffect(const SoundEntry& soundEntry, sound_volume volume)
+void dae::SDL_SoundSystem::SetGlobalVolume(sound_volume volume)
+{
+	volume = std::clamp(volume, 0.0f, 1.0f);
+	m_GlobalVolume = volume;
+}
+
+void dae::SDL_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume)
+{
+	volume = std::clamp(volume, 0.0f, 1.0f);
+	std::lock_guard<std::mutex> lock(m_Mtx);
+	m_SoundPlayQueue.push(std::make_pair(soundToken.GetId(), volume * m_GlobalVolume));
+	m_CV.notify_one();
+}
+
+void dae::SDL_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
 {
 	std::lock_guard<std::mutex> lock(m_Mtx);
-	m_SoundQueue.push(std::make_pair(soundEntry, volume));
+	m_SoundLoadQueue.push(soundEntry);
+	m_CV.notify_one();
+}
+
+void dae::SDL_SoundSystem::UnregisterSound(sound_effect_id id)
+{
+	std::lock_guard<std::mutex> lock(m_Mtx);
+	m_SoundUnloadQueue.push(id);
 	m_CV.notify_one();
 }
 
@@ -54,39 +78,70 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 		std::unique_lock<std::mutex> lock(m_Mtx);
 
 		m_CV.wait(lock, [&]() {
-			return m_SoundQueue.size() != 0 or stopToken.stop_requested(); });
+			return m_SoundPlayQueue.size() != 0 or m_SoundLoadQueue.size() != 0 or m_SoundUnloadQueue.size() != 0
+				or stopToken.stop_requested(); });
 
 		if (stopToken.stop_requested())
 			break;
 
-		auto [soundEntry, volume] = m_SoundQueue.front();
-		m_SoundQueue.pop();
-		lock.unlock();
-
-		//find/insert the sound effect
-		auto loc = m_SoundEffects.find(soundEntry.id);
-		if (loc == m_SoundEffects.end())
+		if (m_SoundLoadQueue.size() != 0)	//load sound (priority)
 		{
-			std::string path = m_DataPath.string();
-			path += soundEntry.path;
-			auto [newLoc, succes] = m_SoundEffects.emplace(soundEntry.id, SoundEffect(path));
+			auto soundEntry = m_SoundLoadQueue.front();
+			m_SoundLoadQueue.pop();
+			lock.unlock();
 
-			if (!succes)
+			auto loc = m_Sounds.find(soundEntry.id);
+			if (loc == m_Sounds.end())
 			{
-				std::cout << "Failed to insert sound effect into map" << std::endl;
+				std::string path = m_DataPath.string();
+				path += soundEntry.path;
+				auto [newLoc, succes] = m_Sounds.emplace(soundEntry.id, SoundResource(path));
+				if (!succes)
+				{
+					std::cout << std::format("Failed to insert sound effect into map. (id: {}, path: {}\n)", soundEntry.id, path);
+					continue;
+				}
+				loc = newLoc;
+				loc->second.pSoundEffect->Load();
+			}
+			loc->second.tokenAmount++;
+		}
+		else if (m_SoundUnloadQueue.size() != 0)	//unload sound
+		{
+			auto soundId = m_SoundUnloadQueue.front();
+			m_SoundUnloadQueue.pop();
+			lock.unlock();
+
+			auto loc = m_Sounds.find(soundId);
+			if (loc == m_Sounds.end())
+			{
+				std::cout << std::format("Failed to find sound effect to unload with id: {}\n", soundId);
 				continue;
 			}
-			loc = newLoc;
-		}
 
-		//load and play the sound effect
-		auto& audioEffect = loc->second;
-		if (!audioEffect.IsLoaded())
-		{
-			audioEffect.Load();
+			loc->second.tokenAmount--;
+			if (loc->second.tokenAmount <= 0)
+			{
+				m_Sounds.erase(loc);
+			}
 		}
-		audioEffect.SetVolume(volume);
-		audioEffect.PlayEffect(0);
+		else //play sound
+		{
+			auto [soundId, volume] = m_SoundPlayQueue.front();
+			m_SoundPlayQueue.pop();
+			lock.unlock();
+
+			auto loc = m_Sounds.find(soundId);
+			if (loc == m_Sounds.end())
+			{
+				std::cout << std::format("Failed to find sound effect to play with id: {}\n", soundId);
+				continue;
+			}
+
+			auto& audioEffect = *(loc->second.pSoundEffect);
+			audioEffect.SetVolume(volume);
+			audioEffect.PlayEffect(0);
+		}
 	}
 }
 
@@ -99,10 +154,26 @@ dae::Logger_SoundSystem::Logger_SoundSystem(std::unique_ptr<ISoundSystem>&& soun
 {
 }
 
-void dae::Logger_SoundSystem::PlayEffect(const SoundEntry& soundEntry, sound_volume volume)
+void dae::Logger_SoundSystem::SetGlobalVolume(sound_volume volume)
 {
-	m_pSoundSystem->PlayEffect(soundEntry, volume);
+	std::cout << std::format("Setting global volume to: {}\n", volume);
+	m_pSoundSystem->SetGlobalVolume(volume);
+}
 
-	//todo prevent cout from having unpredictable output due to threading, (maybe seperate namespace for "global" locks for cout?)
-	std::cout << std::format("Playing sound effect: {} (id: {})", soundEntry.path, soundEntry.id) << std::endl;	
+void dae::Logger_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume)
+{
+	std::cout << std::format("Playing sound effect with id: {}\n", soundToken.GetId());
+	m_pSoundSystem->PlayEffect(soundToken, volume);
+}
+
+void dae::Logger_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
+{
+	std::cout << std::format("Registering sound effect\n\t\"{}\"\tid: {}\n", soundEntry.path, soundEntry.id);
+	m_pSoundSystem->RegisterSound(soundEntry);
+}
+
+void dae::Logger_SoundSystem::UnregisterSound(sound_effect_id id)
+{
+	std::cout << std::format("Unregistering sound effect with id: {}\n", id);
+	m_pSoundSystem->UnregisterSound(id);
 }

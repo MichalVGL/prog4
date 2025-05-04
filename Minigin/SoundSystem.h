@@ -10,14 +10,31 @@
 
 #include "ISoundSystem.h"
 #include "SoundEffect.h"
+#include "SoundToken.h"
 
 namespace dae
 {
+	struct SoundResource
+	{
+		std::unique_ptr<SoundEffect> pSoundEffect;
+		int tokenAmount{ 0 };
+
+		SoundResource(const std::string& path)
+			: pSoundEffect{ std::make_unique<SoundEffect>(path) }
+		{
+		}
+	};
+
+		
 	//Null_SoundSystem=====================================================================================================
 	class Null_SoundSystem final : public ISoundSystem
 	{
 	public:
-		void PlayEffect(const SoundEntry&, float) override {};
+		void SetGlobalVolume(sound_volume) override {};
+	private:
+		void PlayEffect(const SoundToken&, sound_volume) override {};
+		void RegisterSound(const SoundEntry&) override {};
+		void UnregisterSound(sound_effect_id) override {};
 	};
 
 	//SDL_SoundSystem======================================================================================================
@@ -32,14 +49,26 @@ namespace dae
 		SDL_SoundSystem& operator=(const SDL_SoundSystem&) = delete;
 		SDL_SoundSystem& operator=(SDL_SoundSystem&&) = delete;
 
-		void PlayEffect(const SoundEntry& soundEntry, sound_volume volume) override;
+		void SetGlobalVolume(sound_volume volume) override;
 
 	private:
 
-		std::filesystem::path m_DataPath;
-		std::queue<std::pair<SoundEntry, sound_volume>> m_SoundQueue{};
-		std::unordered_map<sound_effect_id, SoundEffect> m_SoundEffects{};
+		void PlayEffect(const SoundToken& soundToken, sound_volume volume) override;
 
+		void RegisterSound(const SoundEntry& soundEntry) override;
+		void UnregisterSound(sound_effect_id id) override;
+		
+		//base resources
+		std::filesystem::path m_DataPath;
+		sound_volume m_GlobalVolume{ 1.f };
+		std::unordered_map<sound_effect_id, SoundResource> m_Sounds{};
+
+		//shared resources with thread
+		std::queue<std::pair<sound_effect_id, sound_volume>> m_SoundPlayQueue{};
+		std::queue<SoundEntry> m_SoundLoadQueue{};
+		std::queue<sound_effect_id> m_SoundUnloadQueue{};
+
+		//thread related vars
 		std::mutex m_Mtx{};
 		std::condition_variable m_CV{};
 		std::jthread m_SDLThread;
@@ -54,12 +83,16 @@ namespace dae
 
 		Logger_SoundSystem(std::unique_ptr<ISoundSystem>&& soundSystem);
 
-		void PlayEffect(const SoundEntry& soundEntry, sound_volume volume) override;
+		void SetGlobalVolume(sound_volume volume) override;
 
 	private:
 
-		std::unique_ptr<ISoundSystem> m_pSoundSystem;
+		void PlayEffect(const SoundToken& soundToken, sound_volume volume) override;
 
+		void RegisterSound(const SoundEntry& soundEntry) override;
+		void UnregisterSound(sound_effect_id id) override;
+	
+		std::unique_ptr<ISoundSystem> m_pSoundSystem;
 	};
 }
 

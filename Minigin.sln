@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameProject", "GameProject\
 		{41B0EC47-D48C-4B0F-951B-D98595FFAE0A} = {41B0EC47-D48C-4B0F-951B-D98595FFAE0A}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bomberman", "Bomberman\Bomberman.vcxproj", "{39A40FE1-E74A-4E00-84AB-CDBB473B3020}"
+	ProjectSection(ProjectDependencies) = postProject
+		{41B0EC47-D48C-4B0F-951B-D98595FFAE0A} = {41B0EC47-D48C-4B0F-951B-D98595FFAE0A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{C0C802C5-9567-4B85-97EE-2123721ECDD9}.Release|x64.Build.0 = Release|x64
 		{C0C802C5-9567-4B85-97EE-2123721ECDD9}.Release|x86.ActiveCfg = Release|Win32
 		{C0C802C5-9567-4B85-97EE-2123721ECDD9}.Release|x86.Build.0 = Release|Win32
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Debug|x64.ActiveCfg = Debug|x64
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Debug|x64.Build.0 = Debug|x64
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Debug|x86.ActiveCfg = Debug|Win32
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Debug|x86.Build.0 = Debug|Win32
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Release|x64.ActiveCfg = Release|x64
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Release|x64.Build.0 = Release|x64
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Release|x86.ActiveCfg = Release|Win32
+		{39A40FE1-E74A-4E00-84AB-CDBB473B3020}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
