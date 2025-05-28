@@ -38,6 +38,8 @@ namespace dae
 		Null_SoundSystem& operator=(const Null_SoundSystem&) = delete;
 		Null_SoundSystem& operator=(Null_SoundSystem&&) = delete;
 
+		void Quit() override {};
+
 		void SetGlobalVolume(sound_volume) override {};
 	private:
 		void PlayEffect(const SoundToken&, sound_volume, sound_loops) override {};
@@ -51,11 +53,13 @@ namespace dae
 	public:
 		SDL_SoundSystem(std::filesystem::path dataPath);
 
-		~SDL_SoundSystem();
+		~SDL_SoundSystem() = default;
 		SDL_SoundSystem(const SDL_SoundSystem&) = delete;
 		SDL_SoundSystem(SDL_SoundSystem&&) = delete;
 		SDL_SoundSystem& operator=(const SDL_SoundSystem&) = delete;
 		SDL_SoundSystem& operator=(SDL_SoundSystem&&) = delete;
+
+		void Quit() override;
 
 		void SetGlobalVolume(sound_volume volume) override;
 
@@ -96,6 +100,8 @@ namespace dae
 		Logger_SoundSystem(Logger_SoundSystem&&) = delete;
 		Logger_SoundSystem& operator=(const Logger_SoundSystem&) = delete;
 		Logger_SoundSystem& operator=(Logger_SoundSystem&&) = delete;
+
+		void Quit() override;
 
 		void SetGlobalVolume(sound_volume volume) override;
 

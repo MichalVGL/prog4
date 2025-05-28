@@ -18,6 +18,8 @@ namespace dae
 	public:
 		virtual ~IFontSystem() = default;
 
+		virtual void Quit() = 0;
+
 		virtual void UnloadUnusedResources() = 0;
 
 	protected:

@@ -15,8 +15,6 @@
 #include "DaeTime.h"
 #include "InputManager.h"
 #include "SceneManager.h"
-#include "Renderer.h"
-#include "ResourceManager.h"
 
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
@@ -63,38 +61,27 @@ void PrintSDLVersion()
 dae::Minigin::Minigin(const std::string &dataPath, const Window& window)
 {
 	PrintSDLVersion();
-
-	g_window = SDL_CreateWindow(
-		"Minigin",
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		640,						//640,	//base settings
-		480,						//480,
-		SDL_WINDOW_OPENGL
-	);
-	if (g_window == nullptr) 
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
-		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
+		throw std::runtime_error(std::format("SDL_Init failed: {}\n", SDL_GetError()));
 	}
 
-	Renderer::GetInstance().Init(g_window);
-
-	auto renderSystem = std::make_unique<SDL_RenderSystem>(window);	//first create rendersystem seperatly to be able to give it to the texturesystem
-	ServiceLocator::RegisterTextureSystem(std::make_unique<SDL_TextureSystem>(dataPath, renderSystem->GetSDLRenderer()));
-	ServiceLocator::RegisterRenderSystem(std::move(renderSystem));
-	ServiceLocator::RegisterFontSystem(std::make_unique<SDL_FontSystem>(dataPath));
-
-	ResourceManager::GetInstance().Init(dataPath);
-
-	//ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(std::make_unique<SDL_SoundSystem>(dataPath)));
-	ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>(dataPath));
+	{//systems init
+		auto renderSystem = std::make_unique<SDL_RenderSystem>(window);	//first create rendersystem seperatly to be able to give it to the texturesystem
+		ServiceLocator::RegisterTextureSystem(std::make_unique<SDL_TextureSystem>(dataPath, renderSystem->GetSDLRenderer()));
+		ServiceLocator::RegisterRenderSystem(std::move(renderSystem));
+		ServiceLocator::RegisterFontSystem(std::make_unique<SDL_FontSystem>(dataPath));
+		//ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(std::make_unique<SDL_SoundSystem>(dataPath)));
+		ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>(dataPath));
+	}
 }
 
 dae::Minigin::~Minigin()
 {
-	Renderer::GetInstance().Destroy();
-	SDL_DestroyWindow(g_window);
-	g_window = nullptr;
+	ServiceLocator::GetTextureSystem().Quit();
+	ServiceLocator::GetRenderSystem().Quit();
+	ServiceLocator::GetFontSystem().Quit();
+	ServiceLocator::GetSoundSystem().Quit();
 	SDL_Quit();
 }
 
@@ -103,7 +90,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	load();
 	dae::fixedDeltaTime = m_SecondsPerFixedUpdate;
 
-	auto& renderer2 = Renderer::GetInstance();
 	auto& renderer = ServiceLocator::GetRenderSystem();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
@@ -133,7 +119,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.LateUpdate(dae::deltaTime);
 
 		renderer.Render();
-		renderer2.Render();
 
 		std::this_thread::sleep_for(currentTime + std::chrono::milliseconds(m_MsPerFrame) - std::chrono::high_resolution_clock::now());
 	}

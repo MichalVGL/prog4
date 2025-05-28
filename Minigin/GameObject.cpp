@@ -1,6 +1,4 @@
 #include "GameObject.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
 #include "TransformComp.h"
 
 dae::GameObject::GameObject()

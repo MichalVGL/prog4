@@ -15,6 +15,8 @@ namespace dae
 	public:
 		virtual ~ISoundSystem() = default;
 
+		virtual void Quit() = 0;
+
 		virtual void SetGlobalVolume(sound_volume volume) = 0;
 
 	protected:

@@ -20,8 +20,7 @@ namespace dae
 	public:
 		virtual ~ITextureSystem() = default;
 
-		//Text is not owned by the texturesystem
-		virtual std::unique_ptr<Texture2D> CreateTextTexture() = 0;
+		virtual void Quit() = 0;
 
 		virtual void UnloadUnusedResources() = 0;
 

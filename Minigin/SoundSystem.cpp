@@ -15,11 +15,10 @@
 dae::SDL_SoundSystem::SDL_SoundSystem(std::filesystem::path dataPath)
 	: m_DataPath{ dataPath }
 {
-	// Initialize SDL audio subsystem
-	if (SDL_Init(SDL_INIT_AUDIO) < 0)
+	if ((SDL_WasInit(SDL_INIT_AUDIO) & SDL_INIT_AUDIO) == false)
 	{
-		std::cout << std::format("SDL audio could not initialize! SDL_Error: {}\n", SDL_GetError());
-		throw std::runtime_error("SDL audio could not initialize! SDL_Error: " + std::string(SDL_GetError()));
+		std::cout << "SDL audio was not initialized! Initialize SDL_INIT_AUDIO before creating SDL_Soundsystem\n";
+		throw std::runtime_error("SDL audio was not initialized! Initialize SDL_INIT_AUDIO before creating SDL_Soundsystem");
 	}
 
 	// Initialize SDL_mixer
@@ -32,15 +31,15 @@ dae::SDL_SoundSystem::SDL_SoundSystem(std::filesystem::path dataPath)
 	m_SDLThread = std::jthread([this](std::stop_token stopToken) { SoundThread(stopToken); }); //In body of the constructor to ensure that all the data is initialized before the thread starts
 }
 
-dae::SDL_SoundSystem::~SDL_SoundSystem()
+void dae::SDL_SoundSystem::Quit()
 {
-	//notify thread to stop
 	m_SDLThread.request_stop();
 	m_CV.notify_all();
 
-	// Clean up SDL_mixer
+	std::lock_guard<std::mutex> lock(m_Mtx);
+	m_Sounds.clear();
+
 	Mix_CloseAudio();
-	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
 void dae::SDL_SoundSystem::SetGlobalVolume(sound_volume volume)
@@ -151,6 +150,10 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 
 dae::Logger_SoundSystem::Logger_SoundSystem(std::unique_ptr<ISoundSystem>&& soundSystem)
 	:m_pSoundSystem{ std::move(soundSystem) }
+{
+}
+
+void dae::Logger_SoundSystem::Quit()
 {
 }
 

@@ -28,6 +28,8 @@ namespace dae
 	{
 	public:
 
+		void Quit() override {};
+
 		void UnloadUnusedResources() override {};
 
 	private:
@@ -47,12 +49,13 @@ namespace dae
 
 		SDL_FontSystem(const std::filesystem::path& dataPath);
 
-		~SDL_FontSystem();
-
+		~SDL_FontSystem() = default;
 		SDL_FontSystem(const SDL_FontSystem&) = delete;
 		SDL_FontSystem& operator=(const SDL_FontSystem&) = delete;
 		SDL_FontSystem(SDL_FontSystem&&) = default;
 		SDL_FontSystem& operator=(SDL_FontSystem&&) = default;
+
+		void Quit() override;
 
 		void UnloadUnusedResources() override;
 

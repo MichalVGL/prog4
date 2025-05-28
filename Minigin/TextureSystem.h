@@ -36,7 +36,8 @@ namespace dae
 	class Null_TextureSystem final : public ITextureSystem
 	{
 	public:
-		std::unique_ptr<Texture2D> CreateTextTexture() override { return nullptr; };
+
+		void Quit() override {};
 
 		void UnloadUnusedResources() override {};
 
@@ -60,7 +61,7 @@ namespace dae
 		SDL_TextureSystem(SDL_TextureSystem&&) = default;
 		SDL_TextureSystem& operator=(SDL_TextureSystem&&) = default;
 
-		std::unique_ptr<Texture2D> CreateTextTexture() override;
+		void Quit() override;
 
 		void UnloadUnusedResources() override;
 

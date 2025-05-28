@@ -10,7 +10,6 @@
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <InputManager.h>
-#include <ResourceManager.h>
 #include <EngineComponents.h>
 #include <Texture.h>
 
@@ -41,18 +40,15 @@ void RenderTest()
 	//background=============================
 	auto go = std::make_unique<dae::GameObject>();
 	auto rendComp = go->AddComponent<dae::ImageRenderComp>();
-	rendComp->LoadTexture(std::string("background.tga"));
 	rendComp->LoadImageTexture(g_BackgroundTextureEntry);
 	scene.Add(std::move(go));
 
 	//title==================================
-	auto titleFont = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 28);
-
 	go = std::make_unique<dae::GameObject>();
 	rendComp = go->AddComponent<dae::ImageRenderComp>();
 	auto tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(100, 100);
-	auto textComp = go->AddComponent<dae::TextComp>(titleFont);
+	auto textComp = go->AddComponent<dae::TextComp>();
 	textComp->SetFont(g_LinguaFont);
 	textComp->SetText("Programming 4 Assignment");
 	scene.Add(std::move(go));

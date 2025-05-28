@@ -28,7 +28,7 @@ namespace dae
 
 		void Render(float x, float y) const;
 		void Render(Rect srcRect, float x, float y) const;
-		void Render(Rect srcRect, Rect dstRect) const;	//todo, maybe mark explicit
+		void Render(Rect srcRect, Rect dstRect) const;
 
 	private:
 

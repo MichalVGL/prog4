@@ -6,6 +6,8 @@
 
 #include "SceneManager.h"
 #include "ServiceLocator.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_opengl3.h"
 
 //===================================================================================================================================================
 //SDL_RenderSystem
@@ -75,9 +77,10 @@ dae::SDL_RenderSystem::SDL_RenderSystemImpl::SDL_RenderSystemImpl(const Window& 
 	:m_Window{ window }
 	, m_RenderScale{ window.renderScale }
 {
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
+	if ((SDL_WasInit(SDL_INIT_VIDEO) & SDL_INIT_VIDEO) == false)
 	{
-		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+		std::cout << "SDL video was not initialized! Initialize SDL_INIT_VIDEO before creating SDL_Rendersystem\n";
+		throw std::runtime_error("SDL video was not initialized! Initialize SDL_INIT_VIDEO before creating SDL_Rendersystem");
 	}
 
 	m_pSDLWindow = std::unique_ptr<SDL_Window>{
@@ -89,6 +92,11 @@ dae::SDL_RenderSystem::SDL_RenderSystemImpl::SDL_RenderSystemImpl(const Window& 
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui_ImplSDL2_InitForOpenGL(m_pSDLWindow.get(), SDL_GL_GetCurrentContext());
+	ImGui_ImplOpenGL3_Init();
 }
 
 dae::SDL_RenderSystem::SDL_RenderSystemImpl::~SDL_RenderSystemImpl()
@@ -108,6 +116,15 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::Render() const
 	SDL_RenderClear(m_pRenderer.get());
 
 	SceneManager::GetInstance().Render();
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+	//ImGui::ShowDemoWindow();
+	SceneManager::GetInstance().UpdateImGui();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_RenderPresent(m_pRenderer.get());
 }
@@ -173,6 +190,13 @@ int dae::SDL_RenderSystem::SDL_RenderSystemImpl::GetOpenGLDriverIndex()
 dae::SDL_RenderSystem::SDL_RenderSystem(const Window& window)
 	: m_pSDLRenderSystemImpl{ std::make_unique<SDL_RenderSystemImpl>(window) }
 {
+}
+
+void dae::SDL_RenderSystem::Quit()
+{
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 }
 
 dae::SDL_RenderSystem::~SDL_RenderSystem() = default;

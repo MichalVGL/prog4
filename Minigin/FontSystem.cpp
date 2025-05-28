@@ -20,8 +20,9 @@ dae::SDL_FontSystem::SDL_FontSystem(const std::filesystem::path& dataPath)
 	}
 }
 
-dae::SDL_FontSystem::~SDL_FontSystem()
+void dae::SDL_FontSystem::Quit()
 {
+	m_Fonts.clear();
 	TTF_Quit();
 }
 

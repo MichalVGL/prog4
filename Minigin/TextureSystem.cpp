@@ -18,9 +18,9 @@ dae::SDL_TextureSystem::SDL_TextureSystem(const std::filesystem::path& dataPath,
 		throw std::runtime_error("nullprt passed as SDL renderer to SDL_TextureSystem");
 }
 
-std::unique_ptr<dae::Texture2D> dae::SDL_TextureSystem::CreateTextTexture()
+void dae::SDL_TextureSystem::Quit()
 {
-	return std::make_unique<Texture2D>(m_pRenderer);
+	m_ImageTextures.clear();
 }
 
 //Unload all textures where token amount is 0

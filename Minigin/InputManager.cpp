@@ -21,7 +21,7 @@ dae::InputManager::InputManager()
 
 bool dae::InputManager::ProcessInput()
 {
-	//Event based Input (Should only be used for special cases (Quit, imgui, ...))
+	//Event based Input
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {

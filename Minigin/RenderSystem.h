@@ -14,6 +14,8 @@ namespace dae
 
 		SDL_Renderer* GetSDLRenderer() const override { return nullptr; };
 
+		void Quit() override {};
+
 		void Render() const override {};
 		void SetBackgroundColor(Color) override {};
 
@@ -32,6 +34,8 @@ namespace dae
 	public:
 
 		SDL_RenderSystem(const Window& window);
+
+		void Quit() override;
 
 		~SDL_RenderSystem();	//defaulted in cpp
 

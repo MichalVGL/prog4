@@ -2,9 +2,7 @@
 // Include Files
 //---------------------------
 #include "ImageRenderComp.h"
-#include "Renderer.h"
 #include "GameObject.h"
-#include "ResourceManager.h"
 #include "TransformComp.h"
 
 #include "ServiceLocator.h"
@@ -14,7 +12,6 @@ using namespace dae;
 ImageRenderComp::ImageRenderComp(dae::GameObject& parent)
 	:Component{ parent }
 	, m_pTransformComp{}
-	, m_Texture_sPtr{}
 {
 }
 
@@ -27,11 +24,6 @@ void ImageRenderComp::Render() const
 {
 	glm::vec2 pos{GetOwner().GetWorldPos()};
 
-	if (m_Texture_sPtr.get() != nullptr)	//todo delete
-	{
-		Renderer::GetInstance().RenderTexture(*m_Texture_sPtr, pos.x, pos.y);
-	}
-
 	if (auto* pImage = std::get_if<TextureToken>(&m_TextureData); pImage != nullptr)	//rendercomp is in image "mode"
 	{
 		pImage->Render(m_SrcRect, pos.x, pos.y);
@@ -43,20 +35,6 @@ void ImageRenderComp::Render() const
 			m_pRenderSystem->RenderTexture(**pText, m_SrcRect, pos.x, pos.y);
 		}
 	}
-}
-
-std::shared_ptr<Texture2DO> ImageRenderComp::LoadTexture(SDL_Texture* texture)
-{
-	m_Texture_sPtr = std::make_shared<Texture2DO>(texture);
-
-	return m_Texture_sPtr;
-}
-
-std::shared_ptr<Texture2DO> ImageRenderComp::LoadTexture(const std::string& filename)
-{
-	m_Texture_sPtr = ResourceManager::GetInstance().LoadTexture(filename);
-
-	return m_Texture_sPtr;
 }
 
 void dae::ImageRenderComp::LoadImageTexture(const TextureEntry& entry)
@@ -85,8 +63,6 @@ void dae::ImageRenderComp::LoadTextTexture(Texture2D* text)
 void ImageRenderComp::UnloadTexture()
 {
 	m_TextureData = nullptr;
-
-	m_Texture_sPtr.reset();		//todo delete
 }
 
 void dae::ImageRenderComp::SetSrcRect(Rect srcRect)

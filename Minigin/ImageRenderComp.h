@@ -10,7 +10,6 @@
 #include <variant>
 
 #include "Component.h"
-#include "Texture2DO.h"
 #include "Texture.h"
 #include "ServiceLocator.h"
 
@@ -36,17 +35,11 @@ namespace dae
 
 		void Render() const override;
 
-		std::shared_ptr<dae::Texture2DO> LoadTexture(SDL_Texture* texture);	//todo delete
-		std::shared_ptr<dae::Texture2DO> LoadTexture(const std::string& filename); //todo delete
-
 		void LoadImageTexture(const TextureEntry& entry);	//todo change name (and filename)
 		void LoadTextTexture(Texture2D* text);
 		void UnloadTexture();
 
 		void SetSrcRect(Rect srcRect);
-
-		//todo start here
-		//change to also include text vars, and render both image and text in the same component (in order)
 
 	private:
 
@@ -59,9 +52,6 @@ namespace dae
 		> m_TextureData{ nullptr };
 
 		Rect m_SrcRect{ 0, 0, 0, 0 };
-
-		//TextureToken m_TextureToken{};
-		std::shared_ptr<dae::Texture2DO> m_Texture_sPtr;	//todo delete
 	};
 }
  

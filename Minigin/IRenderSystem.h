@@ -15,6 +15,8 @@ namespace dae
 
 		virtual ~IRenderSystem() = default;
 
+		virtual void Quit() = 0;
+
 		virtual SDL_Renderer* GetSDLRenderer() const = 0;
 
 		virtual void Render() const = 0;

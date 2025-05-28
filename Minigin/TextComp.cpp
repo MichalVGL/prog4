@@ -7,9 +7,6 @@
 #include "Font.h"
 #include "GameObject.h"
 #include "ImageRenderComp.h"
-#include "Renderer.h"
-#include "Texture2DO.h"
-
 #include "ServiceLocator.h"
 
 //---------------------------
@@ -18,10 +15,8 @@
 
 using namespace dae;
 
-TextComp::TextComp(dae::GameObject& parent, const std::shared_ptr<dae::Font>& font)
+TextComp::TextComp(dae::GameObject& parent)
 	: Component{ parent }
-	, m_OldFont{ font }
-	, m_OldTextTexture{}
 	, m_pTextTexture{ std::make_unique<Texture2D>(ServiceLocator::GetRenderSystem().GetSDLRenderer()) }
 {
 }
@@ -56,37 +51,12 @@ void TextComp::Update(float)
 
 		m_pTextTexture->LoadText(m_Text, m_FontToken.GetFont(), m_FgColor);
 		m_pRenderComp->LoadTextTexture(m_pTextTexture.get());
-
-		//todo delete
-		const SDL_Color color = { m_FgColor.r, m_FgColor.g, m_FgColor.b, m_FgColor.a };
-		const auto surf = TTF_RenderText_Blended(m_OldFont->GetSDLFont(), m_Text.c_str(), color);
-		if (surf == nullptr)
-		{
-			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
-		}
-		auto texture = SDL_CreateTextureFromSurface(dae::Renderer::GetInstance().GetSDLRenderer(), surf);
-		if (texture == nullptr)
-		{
-			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-		}
-		SDL_FreeSurface(surf);
-		
-		m_OldTextTexture = m_pRenderComp->LoadTexture(texture);
-		//
-
-		//m_pRenderComp
 	}
 }
 
 void TextComp::SetText(const std::string& text)
 {
 	m_Text = text;
-	m_NeedsUpdate = true;
-}
-
-void TextComp::SetFont(const std::shared_ptr<dae::Font>& font)
-{	//todo delete
-	m_OldFont = font;
 	m_NeedsUpdate = true;
 }
 

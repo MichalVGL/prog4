@@ -257,12 +257,9 @@
     <ClInclude Include="TextureToken.h" />
     <ClInclude Include="TransformComp.h" />
     <ClInclude Include="ImageRenderComp.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="Texture2DO.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -301,11 +298,8 @@
     <ClCompile Include="TextureToken.cpp" />
     <ClCompile Include="TransformComp.cpp" />
     <ClCompile Include="ImageRenderComp.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Texture2DO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc" />
