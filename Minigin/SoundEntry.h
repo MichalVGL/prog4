@@ -7,7 +7,7 @@
 
 namespace dae
 {
-	struct SoundEntry final : public ResourceEntry<dae::sound_effect_id>
+	struct SoundEntry final : public ResourceEntry<dae::sound_id>
 	{
 		// path is used as a relative path, the base path is set in the SoundSystem
 

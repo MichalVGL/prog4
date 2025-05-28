@@ -37,6 +37,18 @@
     <Filter Include="Header Files\Interfaces">
       <UniqueIdentifier>{5e851fae-b06d-4cf1-9db1-ab37abfdf4d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Render">
+      <UniqueIdentifier>{6993cc46-76a5-468e-a589-f213e2c5ebde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Render">
+      <UniqueIdentifier>{0fa4bd69-c5d3-4ba4-8b97-354f03c47d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Texture/Font/Text">
+      <UniqueIdentifier>{f4ef5c8c-2b28-49a7-a415-01420bd13617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Texture/Font/Text">
+      <UniqueIdentifier>{baffcf9b-f95a-4200-8aff-6eb784bff515}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -48,7 +60,7 @@
     <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
+    <ClInclude Include="Texture2DO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
@@ -72,7 +84,7 @@
     <ClInclude Include="Component.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="RenderComp.h">
+    <ClInclude Include="ImageRenderComp.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="TransformComp.h">
@@ -132,9 +144,6 @@
     <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EngineComponents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextComp.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
@@ -168,6 +177,57 @@
     <ClInclude Include="SoundToken.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="ITextureSystem.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureEntry.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDefines.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureSystem.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureToken.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderSystem.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderStructs.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Header Files\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IFontSystem.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="FontEntry.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="FontDefines.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="FontSystem.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="FontToken.h">
+      <Filter>Header Files\Texture/Font/Text</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineComponents.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -176,7 +236,7 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
+    <ClCompile Include="Texture2DO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
@@ -200,7 +260,7 @@
     <ClCompile Include="Component.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="RenderComp.cpp">
+    <ClCompile Include="ImageRenderComp.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="TransformComp.cpp">
@@ -256,6 +316,24 @@
     </ClCompile>
     <ClCompile Include="SoundToken.cpp">
       <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureSystem.cpp">
+      <Filter>Source Files\Texture/Font/Text</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureToken.cpp">
+      <Filter>Source Files\Texture/Font/Text</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Source Files\Texture/Font/Text</Filter>
+    </ClCompile>
+    <ClCompile Include="FontSystem.cpp">
+      <Filter>Source Files\Texture/Font/Text</Filter>
+    </ClCompile>
+    <ClCompile Include="FontToken.cpp">
+      <Filter>Source Files\Texture/Font/Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

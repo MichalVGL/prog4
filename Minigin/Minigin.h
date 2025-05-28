@@ -4,12 +4,14 @@
 #include <string>
 #include <functional>
 
+#include "RenderStructs.h"
+
 namespace dae
 {
-	class Minigin
+	class Minigin final
 	{
 	public:
-		explicit Minigin(const std::string& dataPath);
+		explicit Minigin(const std::string& dataPath, const Window& window);
 		~Minigin();
 		void Run(const std::function<void()>& load);
 

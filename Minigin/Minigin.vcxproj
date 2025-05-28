@@ -218,10 +218,19 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="EngineComponents.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="FontDefines.h" />
+    <ClInclude Include="FontEntry.h" />
+    <ClInclude Include="FontSystem.h" />
+    <ClInclude Include="FontToken.h" />
     <ClInclude Include="Gamepad.h" />
+    <ClInclude Include="IFontSystem.h" />
+    <ClInclude Include="IRenderSystem.h" />
     <ClInclude Include="ISoundSystem.h" />
+    <ClInclude Include="ITextureSystem.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="IObserver.h" />
+    <ClInclude Include="RenderStructs.h" />
+    <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameObject.h" />
@@ -240,14 +249,21 @@
     <ClInclude Include="Subject.h" />
     <ClInclude Include="DaeTime.h" />
     <ClInclude Include="TextComp.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="TextureDefines.h" />
+    <ClInclude Include="TextureEntry.h" />
+    <ClInclude Include="TextureSystem.h" />
+    <ClInclude Include="TextureToken.h" />
     <ClInclude Include="TransformComp.h" />
-    <ClInclude Include="RenderComp.h" />
+    <ClInclude Include="ImageRenderComp.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Texture2DO.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp" />
@@ -263,6 +279,8 @@
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="FontSystem.cpp" />
+    <ClCompile Include="FontToken.cpp" />
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -270,6 +288,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
@@ -277,13 +296,16 @@
     <ClCompile Include="SoundToken.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComp.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="TextureSystem.cpp" />
+    <ClCompile Include="TextureToken.cpp" />
     <ClCompile Include="TransformComp.cpp" />
-    <ClCompile Include="RenderComp.cpp" />
+    <ClCompile Include="ImageRenderComp.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="Texture2DO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc" />

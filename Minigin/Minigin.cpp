@@ -20,6 +20,11 @@
 
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
+#include "RenderSystem.h"
+#include "TextureSystem.h"
+#include "FontSystem.h"
+
+#include "Texture.h"
 #include "Sound.h"
 
 int dae::Minigin::m_MsPerFrame{ 16 };	//+-60 fps
@@ -55,14 +60,9 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string &dataPath)
+dae::Minigin::Minigin(const std::string &dataPath, const Window& window)
 {
 	PrintSDLVersion();
-
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
-	{
-		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
-	}
 
 	g_window = SDL_CreateWindow(
 		"Minigin",
@@ -79,14 +79,15 @@ dae::Minigin::Minigin(const std::string &dataPath)
 
 	Renderer::GetInstance().Init(g_window);
 
+	auto renderSystem = std::make_unique<SDL_RenderSystem>(window);	//first create rendersystem seperatly to be able to give it to the texturesystem
+	ServiceLocator::RegisterTextureSystem(std::make_unique<SDL_TextureSystem>(dataPath, renderSystem->GetSDLRenderer()));
+	ServiceLocator::RegisterRenderSystem(std::move(renderSystem));
+	ServiceLocator::RegisterFontSystem(std::make_unique<SDL_FontSystem>(dataPath));
+
 	ResourceManager::GetInstance().Init(dataPath);
 
-#if _DEBUG
-	ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(
-		std::make_unique<SDL_SoundSystem>(dataPath)));
-#else
+	//ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(std::make_unique<SDL_SoundSystem>(dataPath)));
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>(dataPath));
-#endif
 }
 
 dae::Minigin::~Minigin()
@@ -102,7 +103,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	load();
 	dae::fixedDeltaTime = m_SecondsPerFixedUpdate;
 
-	auto& renderer = Renderer::GetInstance();
+	auto& renderer2 = Renderer::GetInstance();
+	auto& renderer = ServiceLocator::GetRenderSystem();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
@@ -131,6 +133,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.LateUpdate(dae::deltaTime);
 
 		renderer.Render();
+		renderer2.Render();
 
 		std::this_thread::sleep_for(currentTime + std::chrono::milliseconds(m_MsPerFrame) - std::chrono::high_resolution_clock::now());
 	}

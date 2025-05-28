@@ -12,32 +12,69 @@
 #include <InputManager.h>
 #include <ResourceManager.h>
 #include <EngineComponents.h>
+#include <Texture.h>
 
 #include "GameComponents.h"
 
-void LoadDemo();
+//todo delete statics
+static dae::TextureEntry g_BackgroundTextureEntry{ "background.tga" };
+static dae::TextureEntry g_PlayerIcon{ "playerIcon.png" };
+static dae::TextureEntry g_BalloomIcon{ "balloonIcon.png" };
+static dae::FontEntry g_LinguaFont{ "Lingua.otf" };
+
+void LoadDemo() {};
+void RenderTest();
 
 int main(int, char* []) {
-	dae::Minigin engine("../Data/");
-	engine.Run(&LoadDemo);
+
+	dae::Window window{ .title = "Minigin V2", .w = 640, .h = 480, .renderScale = 1.5f };
+
+	dae::Minigin engine("../Data/", window);
+	engine.Run(&RenderTest);
 	return 0;
 }
 
-void LoadDemo()
+void RenderTest()
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	//background=============================
 	auto go = std::make_unique<dae::GameObject>();
-	auto rendComp = go->AddComponent<dae::RenderComp>();
-	rendComp->LoadTexture("background.tga");
+	auto rendComp = go->AddComponent<dae::ImageRenderComp>();
+	rendComp->LoadTexture(std::string("background.tga"));
+	rendComp->LoadImageTexture(g_BackgroundTextureEntry);
 	scene.Add(std::move(go));
 
 	//title==================================
 	auto titleFont = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 28);
 
 	go = std::make_unique<dae::GameObject>();
-	rendComp = go->AddComponent<dae::RenderComp>();
+	rendComp = go->AddComponent<dae::ImageRenderComp>();
+	auto tranComp = go->GetComponent<dae::TransformComp>();
+	tranComp->SetLocalPosition(100, 100);
+	auto textComp = go->AddComponent<dae::TextComp>(titleFont);
+	textComp->SetFont(g_LinguaFont);
+	textComp->SetText("Programming 4 Assignment");
+	scene.Add(std::move(go));
+}
+
+/*
+void LoadDemo()
+{
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
+
+	//background=============================
+	auto go = std::make_unique<dae::GameObject>();
+	auto rendComp = go->AddComponent<dae::ImageRenderComp>();
+	rendComp->LoadTexture(std::string("background.tga"));
+	rendComp->LoadImageTexture(g_BackgroundTextureEntry);
+	scene.Add(std::move(go));
+
+	//title==================================
+	auto titleFont = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 28);
+
+	go = std::make_unique<dae::GameObject>();
+	rendComp = go->AddComponent<dae::ImageRenderComp>();
 	auto tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(50, 20);
 	auto textComp = go->AddComponent<dae::TextComp>(titleFont);
@@ -48,8 +85,9 @@ void LoadDemo()
 	go = std::make_unique<dae::GameObject>();
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(200, 200);
-	rendComp = go->AddComponent<dae::RenderComp>();
-	rendComp->LoadTexture("playerIcon.png");
+	rendComp = go->AddComponent<dae::ImageRenderComp>();
+	rendComp->LoadTexture(std::string("playerIcon.png"));
+	rendComp->LoadImageTexture(g_PlayerIcon);
 	go->AddComponent<GameActorComp>(50.f, 0);
 	auto* healtComp = go->AddComponent<HealthComp>(3);
 	auto* scoreComp = go->AddComponent<ScoreComp>();
@@ -61,14 +99,14 @@ void LoadDemo()
 
 	//HealthUI
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent<dae::RenderComp>();
+	go->AddComponent<dae::ImageRenderComp>();
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(20, 100);
 	textComp = go->AddComponent<dae::TextComp>(uiFont);
 	go->AddComponent<UIHealthComp>(healtComp);
 	//ScoreUI
 	auto go2 = std::make_unique<dae::GameObject>();
-	go2->AddComponent<dae::RenderComp>();
+	go2->AddComponent<dae::ImageRenderComp>();
 	tranComp = go2->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(0, 15);
 	textComp = go2->AddComponent<dae::TextComp>(uiFont);
@@ -82,8 +120,9 @@ void LoadDemo()
 	go = std::make_unique<dae::GameObject>();
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(220, 200);
-	rendComp = go->AddComponent<dae::RenderComp>();
-	rendComp->LoadTexture("balloonIcon.png");
+	rendComp = go->AddComponent<dae::ImageRenderComp>();
+	rendComp->LoadTexture(std::string("balloonIcon.png"));
+	rendComp->LoadImageTexture(g_BalloomIcon);
 	go->AddComponent<GameActorComp>(100.f, 1);
 	healtComp = go->AddComponent<HealthComp>(3);
 	scoreComp = go->AddComponent<ScoreComp>();
@@ -93,14 +132,14 @@ void LoadDemo()
 	//Character02_UI=========================
 	//HealthUI
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent<dae::RenderComp>();
+	go->AddComponent<dae::ImageRenderComp>();
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(20, 140);
 	textComp = go->AddComponent<dae::TextComp>(uiFont);
 	go->AddComponent<UIHealthComp>(healtComp);
 	//ScoreUI
 	go2 = std::make_unique<dae::GameObject>();
-	go2->AddComponent<dae::RenderComp>();
+	go2->AddComponent<dae::ImageRenderComp>();
 	tranComp = go2->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(0, 15);
 	textComp = go2->AddComponent<dae::TextComp>(uiFont);
@@ -114,7 +153,7 @@ void LoadDemo()
 	//Keyboard controls======================
 
 	go = std::make_unique<dae::GameObject>();
-	rendComp = go->AddComponent<dae::RenderComp>();
+	rendComp = go->AddComponent<dae::ImageRenderComp>();
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(20, 60);
 	textComp = go->AddComponent<dae::TextComp>(uiFont);
@@ -123,13 +162,15 @@ void LoadDemo()
 
 	//Gamepad controls=======================
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent<dae::RenderComp>();
+	go->AddComponent<dae::ImageRenderComp>();
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(20, 75);
 	textComp = go->AddComponent<dae::TextComp>(uiFont);
 	textComp->SetText("Use D-pad to move balloon, X to inflict damage, A and B to pick up pellets");
 	scene.Add(std::move(go));
 };
+*/
+
 /*
 void LoadDemo()
 {
@@ -137,7 +178,7 @@ void LoadDemo()
 
 	//background=============================
 	auto go = std::make_unique<dae::GameObject>();
-	auto rendComp = go->AddComponent<RenderComp>();
+	auto rendComp = go->AddComponent<ImageRenderComp>();
 	rendComp->LoadTexture("background.tga");
 	scene.Add(std::move(go));
 
@@ -145,7 +186,7 @@ void LoadDemo()
 	auto titleFont = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 28);
 
 	go = std::make_unique<dae::GameObject>();
-	rendComp = go->AddComponent<RenderComp>();
+	rendComp = go->AddComponent<ImageRenderComp>();
 	auto tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(50, 20);
 	auto textComp = go->AddComponent<TextComp>(titleFont);
@@ -156,7 +197,7 @@ void LoadDemo()
 	go = std::make_unique<dae::GameObject>();
 	tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(200, 200);
-	rendComp = go->AddComponent<RenderComp>();
+	rendComp = go->AddComponent<ImageRenderComp>();
 	rendComp->LoadTexture("playerIcon.png");
 	go->AddComponent<GameActorComp>(50.f, 0);
 	auto* healtComp = go->AddComponent<HealthComp>(3);
@@ -169,14 +210,14 @@ void LoadDemo()
 
 	//HealthUI
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent<RenderComp>();
+	go->AddComponent<ImageRenderComp>();
 	tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(20, 100);
 	textComp = go->AddComponent<TextComp>(uiFont);
 	go->AddComponent<UIHealthComp>(healtComp);
 	//ScoreUI
 	auto go2 = std::make_unique<dae::GameObject>();
-	go2->AddComponent<RenderComp>();
+	go2->AddComponent<ImageRenderComp>();
 	tranComp = go2->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(0, 15);
 	textComp = go2->AddComponent<TextComp>(uiFont);
@@ -190,7 +231,7 @@ void LoadDemo()
 	go = std::make_unique<dae::GameObject>();
 	tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(220, 200);
-	rendComp = go->AddComponent<RenderComp>();
+	rendComp = go->AddComponent<ImageRenderComp>();
 	rendComp->LoadTexture("balloonIcon.png");
 	go->AddComponent<GameActorComp>(100.f, 1);
 	healtComp = go->AddComponent<HealthComp>(3);
@@ -201,14 +242,14 @@ void LoadDemo()
 	//Character02_UI=========================
 	//HealthUI
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent<RenderComp>();
+	go->AddComponent<ImageRenderComp>();
 	tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(20, 140);
 	textComp = go->AddComponent<TextComp>(uiFont);
 	go->AddComponent<UIHealthComp>(healtComp);
 	//ScoreUI
 	go2 = std::make_unique<dae::GameObject>();
-	go2->AddComponent<RenderComp>();
+	go2->AddComponent<ImageRenderComp>();
 	tranComp = go2->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(0, 15);
 	textComp = go2->AddComponent<TextComp>(uiFont);
@@ -222,7 +263,7 @@ void LoadDemo()
 	//Keyboard controls======================
 
 	go = std::make_unique<dae::GameObject>();
-	rendComp = go->AddComponent<RenderComp>();
+	rendComp = go->AddComponent<ImageRenderComp>();
 	tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(20, 60);
 	textComp = go->AddComponent<TextComp>(uiFont);
@@ -231,7 +272,7 @@ void LoadDemo()
 
 	//Gamepad controls=======================
 	go = std::make_unique<dae::GameObject>();
-	go->AddComponent<RenderComp>();
+	go->AddComponent<ImageRenderComp>();
 	tranComp = go->GetComponent<TransformComp>();
 	tranComp->SetLocalPosition(20, 75);
 	textComp = go->AddComponent<TextComp>(uiFont);

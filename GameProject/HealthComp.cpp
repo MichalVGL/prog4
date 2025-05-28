@@ -24,7 +24,7 @@ bool HealthComp::Damage()
 	m_DamagedEvent->NotifyObservers(dae::Event(dae::make_sdbm_hash("HealthChanged")));
 	if (m_CurrentLives <= 0)
 	{
-		//GetOwner().FlagForDeletion();	//todo determine health behaviour
+		//GetOwner().FlagForDeletion();	
 	}
 	return false;
 }

@@ -15,9 +15,9 @@ namespace dae
 		SoundEffect(const std::string& path);
 		~SoundEffect();	//prevent compilation of default destructor in the header file. (which creates compiler errors due to the unique_ptr with its destructor)
 
+		//defaulted in cpp
 		SoundEffect(const SoundEffect&) = delete;
 		SoundEffect& operator=(const SoundEffect&) = delete;
-		//moves are defaulted in cpp
 		SoundEffect(SoundEffect&&) noexcept; 
 		SoundEffect& operator=(SoundEffect&&) noexcept; 
 

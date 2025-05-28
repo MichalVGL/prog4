@@ -5,7 +5,6 @@
 
 #include "SoundDefines.h"
 #include "SoundEntry.h"
-//#include "SoundToken.h"
 
 namespace dae
 {
@@ -24,9 +23,9 @@ namespace dae
 		friend class Logger_SoundSystem;
 
 		//should only be called by the token
-		virtual void PlayEffect(const SoundToken& soundToken, sound_volume volume = 1.f) = 0;	
+		virtual void PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops) = 0;	
 		virtual void RegisterSound(const SoundEntry& soundEntry) = 0;
-		virtual void UnregisterSound(sound_effect_id id) = 0;
+		virtual void UnregisterSound(sound_id id) = 0;
 	};
 }	
 

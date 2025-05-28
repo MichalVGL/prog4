@@ -7,6 +7,14 @@
 #include <algorithm>
 #include <format>
 
+template <>
+struct std::default_delete<Mix_Chunk>
+{
+	void operator()(Mix_Chunk* p) const
+	{
+		Mix_FreeChunk(p);
+	}
+};
 
 class dae::SoundEffect::SDL_SoundEffectImpl final {
 
@@ -27,7 +35,7 @@ private:
 
 	std::string m_Path;
 
-	std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> m_pChunk{ nullptr, Mix_FreeChunk };
+	std::unique_ptr<Mix_Chunk> m_pChunk{ nullptr };
 };
 
 dae::SoundEffect::SDL_SoundEffectImpl::SDL_SoundEffectImpl(const std::string& path)

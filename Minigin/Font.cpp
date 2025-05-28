@@ -1,21 +1,66 @@
 #include <stdexcept>
-#include <SDL_ttf.h>
 #include "Font.h"
 
-TTF_Font* dae::Font::GetFont() const {
-	return m_font;
-}
+//========================================================================================================================================
+// SDL Impl
+//========================================================================================================================================
 
-dae::Font::Font(const std::string& fullPath, unsigned int size) : m_font(nullptr)
+#include <SDL.h>
+#include <SDL_ttf.h>
+
+template<>
+struct std::default_delete<_TTF_Font>
 {
-	m_font = TTF_OpenFont(fullPath.c_str(), size);
-	if (m_font == nullptr) 
+	void operator()(_TTF_Font* p) const
 	{
-		throw std::runtime_error(std::string("Failed to load font: ") + SDL_GetError());
+		TTF_CloseFont(p);
 	}
+};
+
+namespace dae
+{
+	class Font::SDL_FontImpl final
+	{
+	public:
+
+		SDL_FontImpl(const std::string& fullPath, font_size size);
+		_TTF_Font* GetSDLFont() const;
+	private:
+
+		std::unique_ptr<_TTF_Font> m_pFont;
+	};
+}
+//====================================================================
+// SDL Definitions
+//====================================================================
+
+dae::Font::SDL_FontImpl::SDL_FontImpl(const std::string& fullPath, font_size size)
+{
+	m_pFont = std::unique_ptr<_TTF_Font>(TTF_OpenFont(fullPath.c_str(), size));
+	if (m_pFont == nullptr)
+		throw std::runtime_error(std::string("Failed to load font: ") + TTF_GetError());
 }
 
-dae::Font::~Font()
+_TTF_Font* dae::Font::SDL_FontImpl::GetSDLFont() const
 {
-	TTF_CloseFont(m_font);
+	return m_pFont.get();
+}
+
+//========================================================================================================================================
+// Base Font
+//========================================================================================================================================
+
+dae::Font::Font(const std::string& fullPath, font_size size)
+	:m_pSDLFontImpl{ std::make_unique<SDL_FontImpl>(fullPath, size) }
+{
+}
+
+dae::Font::~Font() = default;
+dae::Font::Font(Font&&) noexcept = default;
+dae::Font& dae::Font::operator=(Font&&) noexcept = default;
+
+//SDL=======
+_TTF_Font* dae::Font::GetSDLFont() const
+{
+	return m_pSDLFontImpl->GetSDLFont();
 }

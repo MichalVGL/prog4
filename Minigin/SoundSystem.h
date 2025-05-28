@@ -16,11 +16,11 @@ namespace dae
 {
 	struct SoundResource
 	{
-		std::unique_ptr<SoundEffect> pSoundEffect;
+		std::unique_ptr<SoundEffect> pTexture;
 		int tokenAmount{ 0 };
 
 		SoundResource(const std::string& path)
-			: pSoundEffect{ std::make_unique<SoundEffect>(path) }
+			: pTexture{ std::make_unique<SoundEffect>(path) }
 		{
 		}
 	};
@@ -30,11 +30,19 @@ namespace dae
 	class Null_SoundSystem final : public ISoundSystem
 	{
 	public:
+
+		Null_SoundSystem() = default;
+		~Null_SoundSystem() = default;
+		Null_SoundSystem(const Null_SoundSystem&) = delete;
+		Null_SoundSystem(Null_SoundSystem&&) = delete;
+		Null_SoundSystem& operator=(const Null_SoundSystem&) = delete;
+		Null_SoundSystem& operator=(Null_SoundSystem&&) = delete;
+
 		void SetGlobalVolume(sound_volume) override {};
 	private:
-		void PlayEffect(const SoundToken&, sound_volume) override {};
+		void PlayEffect(const SoundToken&, sound_volume, sound_loops) override {};
 		void RegisterSound(const SoundEntry&) override {};
-		void UnregisterSound(sound_effect_id) override {};
+		void UnregisterSound(sound_id) override {};
 	};
 
 	//SDL_SoundSystem======================================================================================================
@@ -53,20 +61,20 @@ namespace dae
 
 	private:
 
-		void PlayEffect(const SoundToken& soundToken, sound_volume volume) override;
+		void PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops) override;
 
 		void RegisterSound(const SoundEntry& soundEntry) override;
-		void UnregisterSound(sound_effect_id id) override;
+		void UnregisterSound(sound_id id) override;
 		
 		//base resources
 		std::filesystem::path m_DataPath;
 		sound_volume m_GlobalVolume{ 1.f };
-		std::unordered_map<sound_effect_id, SoundResource> m_Sounds{};
+		std::unordered_map<sound_id, SoundResource> m_Sounds{};
 
 		//shared resources with thread
-		std::queue<std::pair<sound_effect_id, sound_volume>> m_SoundPlayQueue{};
+		std::queue<std::tuple<sound_id, sound_volume, sound_loops>> m_SoundPlayQueue{};
 		std::queue<SoundEntry> m_SoundLoadQueue{};
-		std::queue<sound_effect_id> m_SoundUnloadQueue{};
+		std::queue<sound_id> m_SoundUnloadQueue{};
 
 		//thread related vars
 		std::mutex m_Mtx{};
@@ -83,14 +91,19 @@ namespace dae
 
 		Logger_SoundSystem(std::unique_ptr<ISoundSystem>&& soundSystem);
 
+		~Logger_SoundSystem() = default;
+		Logger_SoundSystem(const Logger_SoundSystem&) = delete;
+		Logger_SoundSystem(Logger_SoundSystem&&) = delete;
+		Logger_SoundSystem& operator=(const Logger_SoundSystem&) = delete;
+		Logger_SoundSystem& operator=(Logger_SoundSystem&&) = delete;
+
 		void SetGlobalVolume(sound_volume volume) override;
 
 	private:
 
-		void PlayEffect(const SoundToken& soundToken, sound_volume volume) override;
-
+		void PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops) override;
 		void RegisterSound(const SoundEntry& soundEntry) override;
-		void UnregisterSound(sound_effect_id id) override;
+		void UnregisterSound(sound_id id) override;
 	
 		std::unique_ptr<ISoundSystem> m_pSoundSystem;
 	};

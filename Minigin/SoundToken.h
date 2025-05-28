@@ -20,8 +20,8 @@ namespace dae
 		SoundToken(SoundToken&&) = delete;
 		SoundToken& operator=(SoundToken&&) = delete;
 
-		void Play(sound_volume volume = 1.f, sound_loops loops = 1u);
-		sound_effect_id GetId() const;
+		void Play(sound_volume volume = 1.f, sound_loops loops = 0u);
+		sound_id GetId() const;
 		std::string_view GetPath() const;
 
 	private:

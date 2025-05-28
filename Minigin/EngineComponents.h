@@ -1,7 +1,7 @@
 #ifndef ENGINECOMPONENTS_H
 #define ENGINECOMPONENTS_H
 
-#include "RenderComp.h"
+#include "ImageRenderComp.h"
 #include "TransformComp.h"
 #include "TextComp.h"
 

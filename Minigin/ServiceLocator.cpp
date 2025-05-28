@@ -3,8 +3,14 @@
 #include <cassert>
 
 #include "SoundSystem.h"
+#include "TextureSystem.h"
+#include "RenderSystem.h"
+#include "FontSystem.h"
 
 std::unique_ptr<dae::ISoundSystem> dae::ServiceLocator::m_pSoundSystem{ std::make_unique<dae::Null_SoundSystem>() };
+std::unique_ptr<dae::ITextureSystem> dae::ServiceLocator::m_pTextureSystem{ std::make_unique<dae::Null_TextureSystem>() };
+std::unique_ptr<dae::IRenderSystem> dae::ServiceLocator::m_pRenderSystem{ std::make_unique<dae::Null_RenderSystem>() };
+std::unique_ptr<dae::IFontSystem> dae::ServiceLocator::m_pFontSystem{ std::make_unique<dae::Null_FontSystem>() };
 
 void dae::ServiceLocator::RegisterSoundSystem(std::unique_ptr<ISoundSystem>&& pSoundSystem)
 {
@@ -19,5 +25,50 @@ dae::ISoundSystem& dae::ServiceLocator::GetSoundSystem()
 		m_pSoundSystem = std::make_unique<dae::Null_SoundSystem>();
 	}
 	return *m_pSoundSystem;
+}
+
+void dae::ServiceLocator::RegisterTextureSystem(std::unique_ptr<ITextureSystem>&& pTextureSystem)
+{
+	assert(pTextureSystem != nullptr && "ServiceLocator::RegisterTextureSystem: Tried to register nullptr as TextureSystem");
+	m_pTextureSystem = std::move(pTextureSystem);
+}
+
+dae::ITextureSystem& dae::ServiceLocator::GetTextureSystem()
+{
+	if (!m_pTextureSystem)
+	{
+		m_pTextureSystem = std::make_unique<dae::Null_TextureSystem>();
+	}
+	return *m_pTextureSystem;
+}
+
+void dae::ServiceLocator::RegisterRenderSystem(std::unique_ptr<IRenderSystem>&& pRenderSystem)
+{
+	assert(pRenderSystem != nullptr && "ServiceLocator::RegisterRenderSystem: Tried to register nullptr as RenderSystem");
+	m_pRenderSystem = std::move(pRenderSystem);
+}
+
+dae::IRenderSystem& dae::ServiceLocator::GetRenderSystem()
+{
+	if (!m_pRenderSystem)
+	{
+		m_pRenderSystem = std::make_unique<dae::Null_RenderSystem>();
+	}
+	return *m_pRenderSystem;
+}
+
+void dae::ServiceLocator::RegisterFontSystem(std::unique_ptr<IFontSystem>&& pFontSystem)
+{
+	assert(pFontSystem != nullptr && "ServiceLocator::RegisterFontSystem: Tried to register nullptr as FontSystem");
+	m_pFontSystem = std::move(pFontSystem);
+}
+
+dae::IFontSystem& dae::ServiceLocator::GetFontSystem()
+{
+	if (!m_pFontSystem)
+	{
+		m_pFontSystem = std::make_unique<dae::Null_FontSystem>();
+	}
+	return *m_pFontSystem;
 }
  

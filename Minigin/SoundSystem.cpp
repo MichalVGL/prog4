@@ -18,14 +18,14 @@ dae::SDL_SoundSystem::SDL_SoundSystem(std::filesystem::path dataPath)
 	// Initialize SDL audio subsystem
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 	{
-		std::cout << "SDL audio could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+		std::cout << std::format("SDL audio could not initialize! SDL_Error: {}\n", SDL_GetError());
 		throw std::runtime_error("SDL audio could not initialize! SDL_Error: " + std::string(SDL_GetError()));
 	}
 
 	// Initialize SDL_mixer
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
-		std::cout << "SDL mixer could not initialize! SDLMix_Error: " << Mix_GetError() << std::endl;
+		std::cout << std::format("SDL mixer could not initialize! SDLMix_Error: {}\n", Mix_GetError());
 		throw std::runtime_error("SDL mixer could not initialize! SDLMix_Error: " + std::string(Mix_GetError()));
 	}
 
@@ -49,11 +49,11 @@ void dae::SDL_SoundSystem::SetGlobalVolume(sound_volume volume)
 	m_GlobalVolume = volume;
 }
 
-void dae::SDL_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume)
+void dae::SDL_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops)
 {
 	volume = std::clamp(volume, 0.0f, 1.0f);
 	std::lock_guard<std::mutex> lock(m_Mtx);
-	m_SoundPlayQueue.push(std::make_pair(soundToken.GetId(), volume * m_GlobalVolume));
+	m_SoundPlayQueue.push(std::make_tuple(soundToken.GetId(), volume * m_GlobalVolume, loops));
 	m_CV.notify_one();
 }
 
@@ -64,7 +64,7 @@ void dae::SDL_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
 	m_CV.notify_one();
 }
 
-void dae::SDL_SoundSystem::UnregisterSound(sound_effect_id id)
+void dae::SDL_SoundSystem::UnregisterSound(sound_id id)
 {
 	std::lock_guard<std::mutex> lock(m_Mtx);
 	m_SoundUnloadQueue.push(id);
@@ -102,7 +102,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 					continue;
 				}
 				loc = newLoc;
-				loc->second.pSoundEffect->Load();
+				loc->second.pTexture->Load();
 			}
 			loc->second.tokenAmount++;
 		}
@@ -127,7 +127,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 		}
 		else //play sound
 		{
-			auto [soundId, volume] = m_SoundPlayQueue.front();
+			auto [soundId, volume, loops] = m_SoundPlayQueue.front();
 			m_SoundPlayQueue.pop();
 			lock.unlock();
 
@@ -138,9 +138,9 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 				continue;
 			}
 
-			auto& audioEffect = *(loc->second.pSoundEffect);
+			auto& audioEffect = *(loc->second.pTexture);
 			audioEffect.SetVolume(volume);
-			audioEffect.PlayEffect(0);
+			audioEffect.PlayEffect(loops);
 		}
 	}
 }
@@ -160,10 +160,10 @@ void dae::Logger_SoundSystem::SetGlobalVolume(sound_volume volume)
 	m_pSoundSystem->SetGlobalVolume(volume);
 }
 
-void dae::Logger_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume)
+void dae::Logger_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops)
 {
 	std::cout << std::format("Playing sound effect with id: {}\n", soundToken.GetId());
-	m_pSoundSystem->PlayEffect(soundToken, volume);
+	m_pSoundSystem->PlayEffect(soundToken, volume, loops);
 }
 
 void dae::Logger_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
@@ -172,7 +172,7 @@ void dae::Logger_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
 	m_pSoundSystem->RegisterSound(soundEntry);
 }
 
-void dae::Logger_SoundSystem::UnregisterSound(sound_effect_id id)
+void dae::Logger_SoundSystem::UnregisterSound(sound_id id)
 {
 	std::cout << std::format("Unregistering sound effect with id: {}\n", id);
 	m_pSoundSystem->UnregisterSound(id);

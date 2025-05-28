@@ -7,7 +7,8 @@ namespace dae
 {
 	class Component;
 
-	class IObserver	//only works with component
+	//todo: make it a template
+	class IObserver	//only works with component;
 	{
 	public:
 		virtual ~IObserver() = default;

@@ -1,32 +1,45 @@
 #ifndef TEXTURE2D_H
 #define TEXTURE2D_H
 
-#include <vec2.hpp>
+#include <memory>
 #include <string>
 
+#include "RenderStructs.h"
+
 struct SDL_Texture;
+struct SDL_Renderer;
+
 namespace dae
 {
-	/**
-	 * Simple RAII wrapper for an SDL_Texture
-	 */
+	class Font;
 	class Texture2D final
 	{
 	public:
-		SDL_Texture* GetSDLTexture() const;
-		explicit Texture2D(SDL_Texture* texture);
-		explicit Texture2D(const std::string& fullPath);
+
+		Texture2D(SDL_Renderer* renderer);
+
 		~Texture2D();
 
-		glm::ivec2 GetSize() const;
+		Texture2D(const Texture2D&) = delete;
+		Texture2D& operator=(const Texture2D&) = delete;
+		//defaulted in cpp
+		Texture2D(Texture2D&&) noexcept;
+		Texture2D& operator=(Texture2D&&) noexcept;
 
-		Texture2D(const Texture2D &) = delete;
-		Texture2D(Texture2D &&) = delete;
-		Texture2D & operator= (const Texture2D &) = delete;
-		Texture2D & operator= (const Texture2D &&) = delete;
+		//returns true if succesfull
+		bool LoadImage2D(const std::string& fullPath);
+		bool LoadText(const std::string& text, const Font* font, Color color = {});
+
+		SDL_Texture* GetSDLTexture() const;
+
+		int GetHeight() const;
+		int GetWidth() const;
+
 	private:
-		SDL_Texture* m_texture;
+
+		class SDL_Texture2DImpl;
+		std::unique_ptr<SDL_Texture2DImpl> m_pSDLTextureImpl;
 	};
 }
 
-#endif // TEXTURE2D_H
+#endif

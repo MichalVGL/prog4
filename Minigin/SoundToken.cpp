@@ -19,17 +19,17 @@ dae::SoundToken::~SoundToken()
 	}
 }
 
-void dae::SoundToken::Play(sound_volume volume, sound_loops)	//todo add loops functionality
+void dae::SoundToken::Play(sound_volume volume, sound_loops loops)
 {
 	if (m_pInitSoundSystem != &ServiceLocator::GetSoundSystem())	//is the soundsystem still the same when created?
 	{
 		m_pInitSoundSystem = &ServiceLocator::GetSoundSystem();
 		m_pInitSoundSystem->RegisterSound(m_SoundEntry);	// Reregister the entry (and load)
 	}
-	m_pInitSoundSystem->PlayEffect(*this, volume);
+	m_pInitSoundSystem->PlayEffect(*this, volume, loops);
 }
 
-dae::sound_effect_id dae::SoundToken::GetId() const
+dae::sound_id dae::SoundToken::GetId() const
 {
 	return m_SoundEntry.id;
 }

@@ -21,7 +21,7 @@ namespace dae
 {
 	class Component;
 	class TransformComp;
-	class Texture2D;
+	class Texture2DO;
 
 	class GameObject final
 	{
