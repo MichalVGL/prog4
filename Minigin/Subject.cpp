@@ -1,5 +1,6 @@
 #include <cassert>
 #include <algorithm>
+#include <iostream>
 
 #include "Subject.h"
 #include "IObserver.h"

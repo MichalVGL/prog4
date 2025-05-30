@@ -1,17 +1,15 @@
 #include "GameObject.h"
 #include "TransformComp.h"
 
-dae::GameObject::GameObject()
-	:m_Components{}
-	, m_IsCompFlaggedForDeletion{}
-	, m_ChildrenGameObj{}
-	, m_pParentGameObj{}
-	, m_WorldPos{}
-	, m_IsWorldPosValid{}
+const std::string_view dae::GameObject::m_NullName{"___"};
+
+dae::GameObject::GameObject(const GobjID& name)
+	:m_Id{name}
+	, m_Components{}
 {
 	//do not use AddComponent() due to that function not accepting transformComp
 	m_Components.emplace_back(std::make_unique<TransformComp>(*this));
-	m_pTransformComp = static_cast<TransformComp*>(m_Components.at(0).get());
+	m_TransformComp = static_cast<TransformComp*>(m_Components.at(0).get());
 }
 
 dae::GameObject::~GameObject()
@@ -84,6 +82,14 @@ void dae::GameObject::UpdateImGui()
 	}
 }
 
+std::string_view dae::GameObject::GetName() const
+{
+	if (m_Id.name != m_NullName)
+		return m_Id.name;
+	else
+		return "unnamed";
+}
+
 void dae::GameObject::FlagForDeletion()
 {
 	m_FlaggedForDeletion = true;
@@ -105,9 +111,9 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPos)
 	if (keepWorldPos)
 	{
 		if (parent != nullptr)
-			m_pTransformComp->SetLocalPosition(GetWorldPos() - parent->GetWorldPos());
+			m_TransformComp->SetLocalPosition(GetWorldPos() - parent->GetWorldPos());
 		else
-			m_pTransformComp->SetLocalPosition(GetWorldPos());
+			m_TransformComp->SetLocalPosition(GetWorldPos());
 	}
 
 	//assign/unassign other gameObjects
@@ -175,12 +181,12 @@ void dae::GameObject::InvalidateWorldPos()
 
 const glm::vec2& dae::GameObject::GetLocalPosition()
 {
-	return m_pTransformComp->GetLocalPosition();
+	return m_TransformComp->GetLocalPosition();
 }
 
 void dae::GameObject::SetLocalPosition(const glm::vec2& pos)
 {
-	m_pTransformComp->SetLocalPosition(pos);
+	m_TransformComp->SetLocalPosition(pos);
 }
 
 void dae::GameObject::SetLocalPosition(float x, float y)
@@ -202,7 +208,7 @@ void dae::GameObject::RemoveChild(GameObject* child)
 
 const glm::vec2& dae::GameObject::CalculateWorldPos()
 {
-	m_WorldPos = m_pTransformComp->GetLocalPosition();
+	m_WorldPos = m_TransformComp->GetLocalPosition();
 	if (m_pParentGameObj != nullptr)
 	{
 		m_WorldPos += m_pParentGameObj->GetWorldPos();

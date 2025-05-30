@@ -83,5 +83,8 @@
     <ClInclude Include="GameActorCommands.h">
       <Filter>Header Files\Command</Filter>
     </ClInclude>
+    <ClInclude Include="..\Minigin\ComponentTemplate.h">
+      <Filter>Source Files\Command</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

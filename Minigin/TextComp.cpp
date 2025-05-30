@@ -6,7 +6,7 @@
 #include "TextComp.h"
 #include "Font.h"
 #include "GameObject.h"
-#include "ImageRenderComp.h"
+#include "RenderComp.h"
 #include "ServiceLocator.h"
 
 //---------------------------
@@ -23,7 +23,7 @@ TextComp::TextComp(dae::GameObject& parent)
 
 void TextComp::Start()
 {
-	m_pRenderComp = GetOwnerComponent<ImageRenderComp>();
+	m_RenderComp.Init(GetOwner());
 }
 
 void TextComp::Update(float)
@@ -50,7 +50,7 @@ void TextComp::Update(float)
 		}
 
 		m_pTextTexture->LoadText(m_Text, m_FontToken.GetFont(), m_FgColor);
-		m_pRenderComp->LoadTextTexture(m_pTextTexture.get());
+		m_RenderComp->LoadTextTexture(m_pTextTexture.get());
 	}
 }
 

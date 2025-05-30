@@ -15,8 +15,8 @@ UIScoreComp::UIScoreComp(dae::GameObject& parent, ScoreComp* compToObserve)
 
 void UIScoreComp::Start()
 {
-	m_pTextComp = GetOwnerComponent<dae::TextComp>();
-	m_pTextComp->SetText("Score: 0");
+	m_TextComp.Init(GetOwner());
+	m_TextComp->SetText("Score: 0");
 }
 
 void UIScoreComp::Notify(dae::Event event, Component* comp)
@@ -28,7 +28,7 @@ void UIScoreComp::Notify(dae::Event event, Component* comp)
 	case (dae::make_sdbm_hash("ScoreChanged")):
 		assert(dynamic_cast<ScoreComp*>(comp) != nullptr && "Error in notify of UIScoreComp, wrong component given to event (needs ScoreComp with event \"ScoreChanged\")");
 		auto* scoreComp = static_cast<ScoreComp*>(comp);
-		m_pTextComp->SetText("Score: " + std::to_string(scoreComp->GetScore()));
+		m_TextComp->SetText("Score: " + std::to_string(scoreComp->GetScore()));
 		break;
 	}
 }

@@ -47,7 +47,7 @@ public:
 
 private: 
 
-	dae::TransformComp* m_pTransformComp;
+	dae::ReqComp<dae::TransformComp> m_TransformComp;
 
 	float m_RadiansPerSecond;
 	bool m_IsActive;	//if the rotation is set to 0 this will be false. To prevent spoiling the worldpos of the gameobject

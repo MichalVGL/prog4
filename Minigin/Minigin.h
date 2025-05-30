@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 
-#include "RenderStructs.h"
+#include "RenderUtils.h"
 
 namespace dae
 {

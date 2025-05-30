@@ -170,6 +170,7 @@
     <ClCompile Include="UIScoreComp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Minigin\ComponentTemplate.h" />
     <ClInclude Include="FPSComp.h" />
     <ClInclude Include="GameActorCommands.h" />
     <ClInclude Include="GameActorComp.h" />

@@ -16,18 +16,37 @@ GameObject Class
 #include <string>
 #include <type_traits>
 #include <utility>
+#include <stdexcept>
+#include <iostream>
+#include <format>
+
+#include "sdbmHash.h"
 
 namespace dae
 {
 	class Component;
 	class TransformComp;
-	class Texture2DO;
+
+	using gameobject_id = unsigned int;
+
+	struct GobjID
+	{
+		const std::string_view name;
+		const gameobject_id id;
+
+		template <size_t N>
+		constexpr GobjID(const char(&name)[N])
+			:name{ name }
+			, id{ make_sdbm_hash(name) }
+		{
+		}
+	};
 
 	class GameObject final
 	{
 	public:
 
-		GameObject();
+		GameObject(const GobjID& name = {"___"});
 		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -43,6 +62,19 @@ namespace dae
 
 		template<typename compType>
 		compType* GetComponent() const
+		{
+			compType* pComponent = TryGetComponent<compType>();
+			if (pComponent == nullptr)
+			{
+				std::cout << std::format("GameObject does not own a {}\n", typeid(compType).name());
+				throw std::logic_error(std::string("GameObject does not own a ") + typeid(compType).name());	//todo, when gameobject have a name, add name to error message
+			}
+
+			return pComponent;
+		}
+
+		template<typename compType>
+		compType* TryGetComponent() const
 		{
 			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
 
@@ -62,8 +94,8 @@ namespace dae
 			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
 			static_assert(!std::is_same<compType, TransformComp>::value, "GameObject always has a TransformComp, no need to add it separatly");
 			static_assert(std::is_constructible<compType, GameObject&, compArgs...>::value, "Invalid constructor arguments for compType");
-			assert(GetComponent<compType>() == nullptr && "Duplicate components are not allowed on the same GameObject");
-			//assert(&(comp->GetOwner()) == this && "Attempted to add component that didn't set the owner to the correct GameObject");	//todo check this doesnt throw an (false) error
+			assert(TryGetComponent<compType>() == nullptr && "Duplicate components are not allowed on the same GameObject (or derive from the same parent component)");
+			//assert(&(comp->GetOwner()) == this && "Attempted to add component that didn't set the owner to the correct GameObject");
 
 			m_Components.emplace_back(std::make_unique<compType>(*this, std::forward<compArgs>(args)...));
 			
@@ -91,6 +123,9 @@ namespace dae
 			}
 		}
 
+		//id related======================================================
+		std::string_view GetName() const;
+
 		//deletion========================================================
 		void FlagForDeletion();
 		bool IsFlaggedForDeletion() const;
@@ -113,10 +148,6 @@ namespace dae
 		void SetLocalPosition(float x, float y);
 
 	private:
-
-		//---------------------------
-		// Functions
-		//---------------------------
 		
 		//====================
 		//gameobject parent/children functions (private)
@@ -125,9 +156,10 @@ namespace dae
 		//world position
 		const glm::vec2& CalculateWorldPos();
 
-		//---------------------------
-		// Variables
-		//---------------------------
+		//====================================================
+		//id related
+		static const std::string_view m_NullName;
+		GobjID m_Id;
 
 		//====================
 		//deletion
@@ -136,16 +168,16 @@ namespace dae
 		//====================
 		//components variables
 		std::vector<std::unique_ptr<Component>> m_Components;
-		TransformComp* m_pTransformComp;
-		bool m_IsCompFlaggedForDeletion;
+		TransformComp* m_TransformComp{};
+		bool m_IsCompFlaggedForDeletion{ false };
 
 		//====================
 		//gameobject parent/children variables
-		std::vector<GameObject*> m_ChildrenGameObj;
-		GameObject* m_pParentGameObj;
+		std::vector<GameObject*> m_ChildrenGameObj{};
+		GameObject* m_pParentGameObj{};
 		//world position
-		glm::vec2 m_WorldPos;
-		bool m_IsWorldPosValid;
+		glm::vec2 m_WorldPos{};
+		bool m_IsWorldPosValid{};
 
 	};
 }

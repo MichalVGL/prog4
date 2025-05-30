@@ -13,7 +13,7 @@
 
 FPSComp::FPSComp(dae::GameObject& parent, float refeshPeriod)
 	:Component{ parent }
-	, m_pTextComp{}
+	, m_TextComp{}
 	, m_RefreshPeriod{ refeshPeriod }
 	, m_RefreshCounter{}
 	, m_FPS{}
@@ -22,7 +22,7 @@ FPSComp::FPSComp(dae::GameObject& parent, float refeshPeriod)
 
 void FPSComp::Start()
 {
-	m_pTextComp = GetOwnerComponent<dae::TextComp>();
+	m_TextComp.Init(GetOwner());
 }
 
 void FPSComp::Update(float deltaTime)
@@ -31,7 +31,7 @@ void FPSComp::Update(float deltaTime)
 	{
 		m_FPS = 1.f / deltaTime;
 
-		m_pTextComp->SetText(std::format("{:.2f}", m_FPS));
+		m_TextComp->SetText(std::format("{:.2f}", m_FPS));
 
 		m_RefreshCounter = 0.f;
 	}

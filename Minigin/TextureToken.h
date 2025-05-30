@@ -10,6 +10,7 @@
 
 namespace dae
 {
+	//used to count the amount of instances for a specific image (does not work for text!!!)
 	class TextureToken final
 	{
 	public:
@@ -24,16 +25,13 @@ namespace dae
 
 		void LoadImageTexture(const TextureEntry& entry);
 
-		glm::ivec2 GetSize() const;
-
-		void Render(float x, float y) const;
-		void Render(Rect srcRect, float x, float y) const;
-		void Render(Rect srcRect, Rect dstRect) const;
+		Texture2D* GetTexture() const;
+		//glm::ivec2 GetSize() const;
 
 	private:
 
 		const TextureEntry* m_pTextureEntry{ nullptr };
-		const Texture2D* m_pTexture{ nullptr };
+		Texture2D* m_pTexture{ nullptr };
 		IRenderSystem* m_pRenderSystem{ &ServiceLocator::GetRenderSystem() };
 	};
 }

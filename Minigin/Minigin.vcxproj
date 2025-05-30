@@ -216,6 +216,7 @@
     <ClInclude Include="..\3rdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui\imstb_truetype.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="SpriteComp.h" />
     <ClInclude Include="EngineComponents.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="FontDefines.h" />
@@ -229,7 +230,7 @@
     <ClInclude Include="ITextureSystem.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="IObserver.h" />
-    <ClInclude Include="RenderStructs.h" />
+    <ClInclude Include="RenderUtils.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Font.h" />
@@ -256,7 +257,7 @@
     <ClInclude Include="TextureSystem.h" />
     <ClInclude Include="TextureToken.h" />
     <ClInclude Include="TransformComp.h" />
-    <ClInclude Include="ImageRenderComp.h" />
+    <ClInclude Include="RenderComp.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
@@ -276,6 +277,7 @@
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="SpriteComp.cpp" />
     <ClCompile Include="FontSystem.cpp" />
     <ClCompile Include="FontToken.cpp" />
     <ClCompile Include="Gamepad.cpp" />
@@ -297,7 +299,7 @@
     <ClCompile Include="TextureSystem.cpp" />
     <ClCompile Include="TextureToken.cpp" />
     <ClCompile Include="TransformComp.cpp" />
-    <ClCompile Include="ImageRenderComp.cpp" />
+    <ClCompile Include="RenderComp.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>

@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "RenderUtils.h"
+
 namespace dae
 {
 	struct Rect

@@ -1,7 +1,7 @@
 #ifndef IRENDERSYSTEM_H
 #define IRENDERSYSTEM_H
 
-#include "RenderStructs.h"
+#include "RenderUtils.h"
 #include "Texture2D.h"
 #include "Utils.h"
 

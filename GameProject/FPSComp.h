@@ -40,7 +40,7 @@ public:
 
 private: 
 
-	dae::TextComp* m_pTextComp;
+	dae::OptComp<dae::TextComp> m_TextComp;
 
 	float m_RefreshPeriod;
 	float m_RefreshCounter;

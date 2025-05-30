@@ -7,57 +7,51 @@
 /// Base Class
 ///=========================
 
-GameActorCommand::GameActorCommand(GameActorComp* gameActorComp)
-	:m_pGameActorComp{gameActorComp}
+GameActorCommand::GameActorCommand(GameActorComp* pGameActor)
+	:m_GameObject{pGameActor->GetOwner()}
 {
+	m_GameActorComp.Init(pGameActor);
 }
-
-GameActorComp* GameActorCommand::GetGameActor() const
-{
-	return m_pGameActorComp;
-}
-
-
 
 ///=========================
 /// Implementations
 ///=========================
 
-DirectionCommand::DirectionCommand(GameActorComp* gameActorComp, const glm::vec2& direction)
-	:GameActorCommand(gameActorComp)
+DirectionCommand::DirectionCommand(GameActorComp* pGameActor, const glm::vec2& direction)
+	:GameActorCommand(pGameActor)
 	, m_Direction{direction}
 {
 }
 
 void DirectionCommand::Execute()
 {
-	GetGameActor()->AddDirection(m_Direction);
+	m_GameActorComp->AddDirection(m_Direction);
 }
 
 //=====================
-DamageCommand::DamageCommand(GameActorComp* gameActorComp)
-	:GameActorCommand(gameActorComp)
+DamageCommand::DamageCommand(GameActorComp* pGameActor)
+	:GameActorCommand(pGameActor)
 {
 }
 
 void DamageCommand::Execute()
 {
-	if (auto* hComp{ GetGameActor()->TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
+	if (auto* hComp{ m_GameObject.TryGetComponent<HealthComp>() }; hComp != nullptr)
 	{
 		hComp->Damage();
 	}
 }
 
 //=====================
-AddScoreCommand::AddScoreCommand(GameActorComp* gameActorComp, int amount)
-	:GameActorCommand(gameActorComp)
+AddScoreCommand::AddScoreCommand(GameActorComp* pGameActor, int amount)
+	:GameActorCommand(pGameActor)
 	, m_Amount{ amount }
 {
 }
 
 void AddScoreCommand::Execute()
 {
-	if (auto* scoreComp{ GetGameActor()->TryGetOwnerComponent<ScoreComp>() }; scoreComp != nullptr)
+	if (auto* scoreComp{ m_GameObject.TryGetComponent<ScoreComp>() }; scoreComp != nullptr)
 	{
 		scoreComp->AddScore(m_Amount);
 	}

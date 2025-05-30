@@ -1,20 +1,22 @@
 #ifndef GAMEACTORCOMMANDS_H
 #define GAMEACTORCOMMANDS_H
 
-#include "Command.h"
 #include <glm.hpp>
+#include <GameObject.h>
+#include <Component.h>
+
+#include "Command.h"
 
 class GameActorComp;
 
 class GameActorCommand : public dae::Command
 {
 public:
-	GameActorCommand(GameActorComp* gameActorComp);
+	GameActorCommand(GameActorComp* pGameActor);
 	virtual ~GameActorCommand() = default;
 protected:
-	GameActorComp* GetGameActor() const;
-private:
-	GameActorComp* m_pGameActorComp;
+	dae::ReqComp<GameActorComp> m_GameActorComp{};
+	dae::GameObject& m_GameObject;
 };
 
 //==============================================================================
@@ -22,7 +24,7 @@ private:
 class DirectionCommand final : public GameActorCommand
 {
 public:
-	DirectionCommand(GameActorComp* gameActorComp, const glm::vec2& direction);
+	DirectionCommand(GameActorComp* pGameActor, const glm::vec2& direction);
 
 	void Execute() override;
 
@@ -34,7 +36,7 @@ private:
 class DamageCommand final : public GameActorCommand
 {
 public:
-	DamageCommand(GameActorComp* gameActorComp);
+	DamageCommand(GameActorComp* pGameActor);
 
 	void Execute() override;
 };
@@ -43,7 +45,7 @@ public:
 class AddScoreCommand final : public GameActorCommand
 {
 public:
-	AddScoreCommand(GameActorComp* gameActorComp, int amount);
+	AddScoreCommand(GameActorComp* pGameActor, int amount);
 
 	void Execute() override;
 

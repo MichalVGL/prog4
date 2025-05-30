@@ -24,12 +24,12 @@ GameActorComp::GameActorComp(dae::GameObject& parent, float moveSpeed, int playe
 	if (playerId == 0)	//keyboard
 	{
 		auto binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_W, dae::KeyState::pressed,
-			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, -1.f))));
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, 1.f))));
 		m_KeyboardBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 
 		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_S, dae::KeyState::pressed,
-			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, 1.f))));
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, -1.f))));
 		m_KeyboardBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 
@@ -47,12 +47,12 @@ GameActorComp::GameActorComp(dae::GameObject& parent, float moveSpeed, int playe
 	{
 		auto gamepadID{ playerId - 1 };
 		auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_UP, gamepadID, dae::KeyState::pressed,
-			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, -1.f))));
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, 1.f))));
 		m_GamepadBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
 		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_DPAD_DOWN, gamepadID, dae::KeyState::pressed,
-			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, 1.f))));
+			std::make_unique<DirectionCommand>(this, glm::vec2(0.f, -1.f))));
 		m_GamepadBindings.emplace_back(std::move(binding));
 		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
@@ -89,54 +89,44 @@ void GameActorComp::Start()
 	if (m_PlayerID == 0)	//keyboard
 	{
 		//damage
-		if (auto* hComp{ TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
-		{
-			auto binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_C, dae::KeyState::down,
-				std::make_unique<DamageCommand>(this)));
-			m_KeyboardBindings.emplace_back(std::move(binding));
-			inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
-		}
+		auto binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_C, dae::KeyState::down,
+			std::make_unique<DamageCommand>(this)));
+		m_KeyboardBindings.emplace_back(std::move(binding));
+		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
+
 
 		//pickup
-		if (auto* scoreComp{ TryGetOwnerComponent<HealthComp>() }; scoreComp != nullptr)
-		{
-			auto binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_Z, dae::KeyState::down,
-				std::make_unique<AddScoreCommand>(this, 100)));
-			m_KeyboardBindings.emplace_back(std::move(binding));
-			inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
+		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_Z, dae::KeyState::down,
+			std::make_unique<AddScoreCommand>(this, 100)));
+		m_KeyboardBindings.emplace_back(std::move(binding));
+		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 
-			binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_X, dae::KeyState::down,
-				std::make_unique<AddScoreCommand>(this, 100)));
-			m_KeyboardBindings.emplace_back(std::move(binding));
-			inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
-		}
+		binding = std::make_unique<dae::KeyboardBinding>(inputMngr.CreateBinding(SDL_SCANCODE_X, dae::KeyState::down,
+			std::make_unique<AddScoreCommand>(this, 100)));
+		m_KeyboardBindings.emplace_back(std::move(binding));
+		inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 	}
 	else //gamepad
 	{
 		int padId{ m_PlayerID - 1 };
 
 		//damage
-		if (auto* hComp{ TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
-		{
-			auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_X, padId, dae::KeyState::down,
-				std::make_unique<DamageCommand>(this)));
-			m_GamepadBindings.emplace_back(std::move(binding));
-			inputMngr.RegisterBinding(m_GamepadBindings.back().get());
-		}
+		auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_X, padId, dae::KeyState::down,
+			std::make_unique<DamageCommand>(this)));
+		m_GamepadBindings.emplace_back(std::move(binding));
+		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
+
 
 		//pickup
-		if (auto* hComp{ TryGetOwnerComponent<HealthComp>() }; hComp != nullptr)
-		{
-			auto binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_A, padId, dae::KeyState::down,
-				std::make_unique<AddScoreCommand>(this, 50)));
-			m_GamepadBindings.emplace_back(std::move(binding));
-			inputMngr.RegisterBinding(m_GamepadBindings.back().get());
+		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_A, padId, dae::KeyState::down,
+			std::make_unique<AddScoreCommand>(this, 50)));
+		m_GamepadBindings.emplace_back(std::move(binding));
+		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 
-			binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_B, padId, dae::KeyState::down,
-				std::make_unique<AddScoreCommand>(this, 50)));
-			m_GamepadBindings.emplace_back(std::move(binding));
-			inputMngr.RegisterBinding(m_GamepadBindings.back().get());
-		}
+		binding = std::make_unique<dae::GamepadBinding>(inputMngr.CreateBinding(XINPUT_GAMEPAD_B, padId, dae::KeyState::down,
+			std::make_unique<AddScoreCommand>(this, 50)));
+		m_GamepadBindings.emplace_back(std::move(binding));
+		inputMngr.RegisterBinding(m_GamepadBindings.back().get());
 	}
 }
 
@@ -145,10 +135,10 @@ void GameActorComp::Update(float deltaTime)
 	if (std::abs(m_Direction.x) + std::abs(m_Direction.y) > 0.1f)
 	{
 		auto dir = glm::normalize(m_Direction);
-		
-		auto& pos =  GetOwner().GetLocalPosition();
+
+		auto& pos = GetOwner().GetLocalPosition();
 		GetOwner().SetLocalPosition(pos + (dir * m_MoveSpeed * deltaTime));
-		
+
 		m_Direction = { 0.f, 0.f };	//reset
 	}
 }

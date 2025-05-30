@@ -48,7 +48,7 @@ namespace dae
 		SDL_RenderSystemImpl(const SDL_RenderSystemImpl&) = delete;
 		SDL_RenderSystemImpl& operator=(const SDL_RenderSystemImpl&) = delete;
 		SDL_RenderSystemImpl(SDL_RenderSystemImpl&&) = delete;
-		SDL_RenderSystemImpl& operator=(SDL_RenderSystemImpl&&) = delete;	
+		SDL_RenderSystemImpl& operator=(SDL_RenderSystemImpl&&) = delete;
 
 		SDL_Renderer* GetSDLRenderer() const;
 
@@ -84,7 +84,7 @@ dae::SDL_RenderSystem::SDL_RenderSystemImpl::SDL_RenderSystemImpl(const Window& 
 	}
 
 	m_pSDLWindow = std::unique_ptr<SDL_Window>{
-		SDL_CreateWindow(window.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+		SDL_CreateWindow(window.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			static_cast<int>(window.w * window.renderScale), static_cast<int>(window.h * window.renderScale), SDL_WINDOW_SHOWN) };
 
 	m_pRenderer = std::unique_ptr<SDL_Renderer>{ SDL_CreateRenderer(m_pSDLWindow.get(), GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED) };
@@ -134,11 +134,11 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::SetBackgroundColor(SDL_Color c
 	m_BackgroundColor = color;
 }
 
-void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, float x, float y) const  
-{  
-   Rect srcRect{ 0, 0, texture.GetWidth(), texture.GetHeight() };  
-   Rect dstRect{ static_cast<int>(x), static_cast<int>(y), texture.GetWidth(), texture.GetHeight() };  
-   RenderTexture(texture, srcRect, dstRect);  
+void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, float x, float y) const
+{
+	Rect srcRect{ 0, 0, texture.GetWidth(), texture.GetHeight() };
+	Rect dstRect{ static_cast<int>(x), static_cast<int>(y), texture.GetWidth(), texture.GetHeight() };
+	RenderTexture(texture, srcRect, dstRect);
 }
 
 void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y) const
@@ -149,25 +149,35 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D&
 
 void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect) const
 {
+	//================================
 	SDL_Rect src{
 		.x = srcRect.x,
 		.y = texture.GetHeight() - srcRect.y - srcRect.h,	//change origin to bottom-left (in the texture itself)
 		.w = srcRect.w,
 		.h = srcRect.h };
-	
+
 	SDL_Rect dst{
 		.x = static_cast<int>(dstRect.x * m_RenderScale),
 		.y = static_cast<int>((m_Window.h - dstRect.y - dstRect.h) * m_RenderScale),	//change origin to bottom-left (of the window)
 		.w = static_cast<int>(dstRect.w * m_RenderScale),
 		.h = static_cast<int>(dstRect.h * m_RenderScale) };
 
+	//================================
+	Flip flip = texture.GetFlip();
+	SDL_RendererFlip sdlFlip = SDL_RendererFlip::SDL_FLIP_NONE;
+	if (flip.horizontal)
+		sdlFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+	if (flip.vertical)
+		sdlFlip = (SDL_RendererFlip)(sdlFlip | SDL_RendererFlip::SDL_FLIP_VERTICAL);
+
+	//================================
 #ifdef _DEBUG
-	if (SDL_RenderCopy(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst))	//if there is an error
+	if (SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, texture.GetAngle(), nullptr, sdlFlip))	//todo, copy to release mode aswell
 	{
-		std::cout << std::format("SDL_RenderCopy failed: {}\n", SDL_GetError());
+		std::cout << std::format("SDL_RenderCopyEx failed: {}\n", SDL_GetError());
 	}
 #else
-	SDL_RenderCopy(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst);
+	SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, texture.GetAngle(), nullptr, sdlFlip);
 #endif // DEBUG
 }
 

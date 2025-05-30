@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "RenderStructs.h"
+#include "RenderUtils.h"
 
 struct SDL_Texture;
 struct SDL_Renderer;
@@ -15,7 +15,6 @@ namespace dae
 	class Texture2D final
 	{
 	public:
-
 		Texture2D(SDL_Renderer* renderer);
 
 		~Texture2D();
@@ -34,6 +33,12 @@ namespace dae
 
 		int GetHeight() const;
 		int GetWidth() const;
+		Flip GetFlip() const;
+		texture_angle GetAngle() const;
+
+		void SetHorizontalFlip(bool flip);
+		void SetVerticalFlip(bool flip);
+		void SetAngle(texture_angle angle);
 
 	private:
 

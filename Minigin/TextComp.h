@@ -11,7 +11,7 @@ namespace dae
 {
 
 	class Font;
-	class ImageRenderComp;
+	class RenderComp;
 
 	class TextComp final : public Component	//Args:
 	{
@@ -37,7 +37,7 @@ namespace dae
 
 	private:
 
-		ImageRenderComp* m_pRenderComp{};
+		ReqComp<RenderComp> m_RenderComp{};
 
 		std::string m_Text{};
 		FontToken m_FontToken{};

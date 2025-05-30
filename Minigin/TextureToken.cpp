@@ -47,38 +47,19 @@ void dae::TextureToken::LoadImageTexture(const TextureEntry& entry)
 	m_pTexture = pTexture;
 }
 
-glm::ivec2 dae::TextureToken::GetSize() const
+dae::Texture2D* dae::TextureToken::GetTexture() const
 {
-	if (m_pTexture)
-	{
-		return { m_pTexture->GetWidth(), m_pTexture->GetHeight() };
-	}
-	else
-	{
-		return { 0, 0 };
-	}
+	return m_pTexture;
 }
 
-void dae::TextureToken::Render(float x, float y) const
-{
-	if (m_pTexture)
-	{
-		m_pRenderSystem->RenderTexture(*m_pTexture, x, y);
-	}
-}
-
-void dae::TextureToken::Render(Rect srcRect, float x, float y) const
-{
-	if (m_pTexture)
-	{
-		m_pRenderSystem->RenderTexture(*m_pTexture, srcRect, x, y);
-	}
-}
-
-void dae::TextureToken::Render(Rect srcRect, Rect dstRect) const
-{
-	if (m_pTexture)
-	{
-		m_pRenderSystem->RenderTexture(*m_pTexture, srcRect, dstRect);
-	}
-}
+//glm::ivec2 dae::TextureToken::GetSize() const
+//{
+//	if (m_pTexture)
+//	{
+//		return { m_pTexture->GetWidth(), m_pTexture->GetHeight() };
+//	}
+//	else
+//	{
+//		return { 0, 0 };
+//	}
+//}

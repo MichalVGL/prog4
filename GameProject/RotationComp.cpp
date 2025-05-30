@@ -6,7 +6,6 @@
 
 RotationComp::RotationComp(dae::GameObject& parent, float degreesPerSecond)
 	:Component(parent)
-	, m_pTransformComp{}
 	, m_RadiansPerSecond{}
 	, m_IsActive{}
 {
@@ -15,7 +14,7 @@ RotationComp::RotationComp(dae::GameObject& parent, float degreesPerSecond)
 
 void RotationComp::Start()
 {
-	m_pTransformComp = GetOwnerComponent<dae::TransformComp>();
+	m_TransformComp.Init(GetOwner());
 }
 
 void RotationComp::Update(float deltaTime)
@@ -25,9 +24,9 @@ void RotationComp::Update(float deltaTime)
 		float cosAngle = std::cos(m_RadiansPerSecond * deltaTime);
 		float sinAngle = std::sin(m_RadiansPerSecond * deltaTime);
 
-		const auto& pos = m_pTransformComp->GetLocalPosition();
+		const auto& pos = m_TransformComp->GetLocalPosition();
 
-		m_pTransformComp->SetLocalPosition(
+		m_TransformComp->SetLocalPosition(
 			pos.x * cosAngle - pos.y * sinAngle,	// [ cos  -sin ]
 			pos.x * sinAngle + pos.y * cosAngle);	// [ sin   cos ]
 	}

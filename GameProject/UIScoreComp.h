@@ -17,7 +17,7 @@ namespace dae
 }
 class ScoreComp;
 
-class UIScoreComp final : public dae::Component, public dae::IObserver 	//Args: GameObject& parent, HealthComp* compToObserve
+class UIScoreComp final : public dae::Component, public dae::IObserver 	//Args: HealthComp* compToObserve
 {
 public:
 	UIScoreComp(dae::GameObject& parent, ScoreComp* compToObserve);	
@@ -44,7 +44,7 @@ public:
 
 private: 
 
-	dae::TextComp* m_pTextComp{};
+	dae::ReqComp<dae::TextComp> m_TextComp{};
 
 };
 

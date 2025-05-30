@@ -4,6 +4,7 @@
 namespace dae
 {
 	using texture_id = unsigned int;
+	using texture_angle = double;
 }
 
 #endif // !TEXTUREDEFINES_H

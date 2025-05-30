@@ -75,7 +75,7 @@
     <ClInclude Include="Component.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ImageRenderComp.h">
+    <ClInclude Include="RenderComp.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="TransformComp.h">
@@ -189,7 +189,7 @@
     <ClInclude Include="IRenderSystem.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="RenderStructs.h">
+    <ClInclude Include="RenderUtils.h">
       <Filter>Header Files\Render</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
@@ -219,6 +219,9 @@
     <ClInclude Include="EngineComponents.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteComp.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -242,7 +245,7 @@
     <ClCompile Include="Component.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="ImageRenderComp.cpp">
+    <ClCompile Include="RenderComp.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="TransformComp.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="FontToken.cpp">
       <Filter>Source Files\Texture/Font/Text</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComp.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

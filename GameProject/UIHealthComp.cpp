@@ -15,8 +15,8 @@ UIHealthComp::UIHealthComp(dae::GameObject& parent, HealthComp* compToObserve)
 
 void UIHealthComp::Start()
 {
-	m_pTextComp = GetOwnerComponent<dae::TextComp>();
-	m_pTextComp->SetText("# lives: 3");	
+	m_TextComp.Init(GetOwner());
+	m_TextComp->SetText("# lives: 3");	
 }
 
 void UIHealthComp::Notify(dae::Event event, Component* comp)
@@ -28,7 +28,7 @@ void UIHealthComp::Notify(dae::Event event, Component* comp)
 	case (dae::make_sdbm_hash("HealthChanged")):
 		assert(dynamic_cast<HealthComp*>(comp) != nullptr && "Error in notify of UIScoreComp, wrong component given to event (needs ScoreComp with event \"HealthChanged\")");
 		auto* healtComp = static_cast<HealthComp*>(comp);
-		m_pTextComp->SetText("# lives: " + std::to_string(healtComp->GetCurrentLives()));
+		m_TextComp->SetText("# lives: " + std::to_string(healtComp->GetCurrentLives()));
 		break;
 	}
 }

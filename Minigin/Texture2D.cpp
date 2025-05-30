@@ -42,11 +42,19 @@ namespace dae
 
 		int GetWidth() const;
 		int GetHeight() const;
+		Flip GetFlip() const;
+		texture_angle GetAngle() const;
+
+		void SetHorizontalFlip(bool flip);
+		void SetVerticalFlip(bool flip);
+		void SetAngle(texture_angle angle);
 
 	private:
 
 		std::unique_ptr<SDL_Texture> m_pTexture{};
 		SDL_Renderer* m_pRenderer;
+		Flip m_Flip{};
+		texture_angle m_Angle{0.0};
 		glm::ivec2 m_Size{};
 	};
 }
@@ -122,6 +130,31 @@ int dae::Texture2D::SDL_Texture2DImpl::GetHeight() const
 	return m_Size.y;
 }
 
+dae::Flip dae::Texture2D::SDL_Texture2DImpl::GetFlip() const
+{
+	return m_Flip;
+}
+
+dae::texture_angle dae::Texture2D::SDL_Texture2DImpl::GetAngle() const
+{
+	return m_Angle;
+}
+
+void dae::Texture2D::SDL_Texture2DImpl::SetHorizontalFlip(bool flip)
+{
+	m_Flip.horizontal = flip;
+}
+
+void dae::Texture2D::SDL_Texture2DImpl::SetVerticalFlip(bool flip)
+{
+	m_Flip.vertical = flip;
+}
+
+void dae::Texture2D::SDL_Texture2DImpl::SetAngle(texture_angle angle)
+{
+	m_Angle = angle;
+}
+
 //====================================================================
 // Base Texture2D
 //====================================================================
@@ -153,6 +186,31 @@ SDL_Texture* dae::Texture2D::GetSDLTexture() const
 int dae::Texture2D::GetWidth() const
 {
 	return m_pSDLTextureImpl->GetWidth();
+}
+
+dae::Flip dae::Texture2D::GetFlip() const
+{
+	return m_pSDLTextureImpl->GetFlip();
+}
+
+dae::texture_angle dae::Texture2D::GetAngle() const
+{
+	return m_pSDLTextureImpl->GetAngle();
+}
+
+void dae::Texture2D::SetHorizontalFlip(bool flip)
+{
+	m_pSDLTextureImpl->SetHorizontalFlip(flip);
+}
+
+void dae::Texture2D::SetVerticalFlip(bool flip)
+{
+	m_pSDLTextureImpl->SetVerticalFlip(flip);
+}
+
+void dae::Texture2D::SetAngle(texture_angle angle)
+{
+	m_pSDLTextureImpl->SetAngle(angle);
 }
 
 int dae::Texture2D::GetHeight() const

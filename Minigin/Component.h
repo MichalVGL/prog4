@@ -14,21 +14,10 @@ Base Component Class
 //debug only checks (duplicate components,...)
 
 ========================================================================================================*/
-//-----------------------------------------------------
-// Include Files
-//-----------------------------------------------------
 #include <iostream>
 #include <cassert>
+#include <stdexcept>
 #include "GameObject.h"
-//-----------------------------------------------------
-// Forward Declarations
-//-----------------------------------------------------
-
-
-
-//-----------------------------------------------------
-// Component Class									
-//-----------------------------------------------------
 
 namespace dae
 {
@@ -40,17 +29,10 @@ namespace dae
 		Component() = delete;
 		virtual ~Component() = default;
 
-		// -------------------------
-		// Copy/move constructors and assignment operators
-		// -------------------------    
 		Component(const Component& other) = delete;
 		Component(Component&& other) noexcept = delete;
 		Component& operator=(const Component& other) = delete;
 		Component& operator=(Component&& other)	noexcept = delete;
-
-		//-------------------------------------------------
-		// Member functions						
-		//-------------------------------------------------
 
 		virtual void Start();
 		virtual void FixedUpdate(float deltaFixedTime);
@@ -63,42 +45,102 @@ namespace dae
 		void FlagForDeletion();
 		bool IsFlaggedForDeletion() const;
 
-		dae::GameObject& GetOwner() const;
+		GameObject& GetOwner() const;
 
 		template<typename compType>
 		compType* GetOwnerComponent()	//doesn't allow nullptr as valid return (but only checks in debug mode)
 		{
 			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
-
-			compType* pComponent = GetOwner().GetComponent<compType>();
-
-#ifdef _DEBUG
-			if (pComponent == nullptr)
-			{
-				std::cerr << "\nComponent error: Owner does not own a " << typeid(compType).name() << ", requested by " << typeid(*this).name() << '\n';
-				assert(false);
-			}
-#endif // _DEBUG
-
-			return pComponent;
+			return GetOwner().GetComponent<compType>();
 		}
 
 		template<typename compType>
 		compType* TryGetOwnerComponent()	//allows nullptr as valid return
 		{
 			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
-
-			return GetOwner().GetComponent<compType>();
+			return GetOwner().TryGetComponent<compType>();
 		}
 
 	protected:
 
-		Component(dae::GameObject& parent);	//protected to make sure this class cannot be created outside of derived classes
+		Component(GameObject& parent);	//protected to make sure this class cannot be created outside of derived classes
 
 	private:
 
 		bool m_IsFlaggedForDeletion;
-		dae::GameObject& m_GObjectParent;
+		GameObject& m_GObjectParent;
+	};
+
+	//=====================================================================================================================================================================
+	//=====================================================================================================================================================================
+	//=====================================================================================================================================================================
+
+	template<typename CompType>
+	class ReqComp final
+	{
+	public:
+		ReqComp() = default;
+		~ReqComp() = default;
+		ReqComp(const ReqComp& other) = delete;
+		ReqComp(ReqComp&& other) noexcept = delete;
+		ReqComp& operator=(const ReqComp& other) = delete;
+		ReqComp& operator=(ReqComp&& other)	noexcept = delete;
+
+		CompType* Init(GameObject& parent)
+		{
+#ifdef _DEBUG
+			try
+			{
+				m_pComponent = parent.GetComponent<CompType>();
+			}
+			catch (const std::logic_error& e)
+			{
+				throw std::logic_error(std::string("ReqComp<") + typeid(CompType).name() + "> initialization failed: " + e.what());
+			}
+#else
+			m_pComponent = parent.GetComponent<CompType>();
+#endif // _DEBUG
+			return m_pComponent;
+		}
+
+		CompType* Init(CompType* comp)	//can throw std::logic_error if the gObj doesnt have the component
+		{
+			if (comp == nullptr)
+			{
+				throw std::logic_error(std::string("ReqComp<") + typeid(CompType).name() + "> initialization failed: nullptr passed");
+			}
+			m_pComponent = comp;
+			return m_pComponent;
+		}
+
+		CompType* operator->() { return m_pComponent; }
+
+	private:
+		CompType* m_pComponent{ nullptr };
+	};
+
+	template<typename CompType>
+	class OptComp final
+	{
+	public:
+		OptComp() = default;
+		~OptComp() = default;
+		OptComp(const OptComp& other) = delete;
+		OptComp(OptComp&& other) noexcept = delete;
+		OptComp& operator=(const OptComp& other) = delete;
+		OptComp& operator=(OptComp&& other)	noexcept = delete;
+
+		CompType* Init(GameObject& parent)
+		{
+			m_pComponent = parent.TryGetComponent<CompType>();
+
+			return m_pComponent;
+		}
+
+		CompType* operator->() { return m_pComponent; }
+
+	private:
+		CompType* m_pComponent{ nullptr };
 	};
 }
 
