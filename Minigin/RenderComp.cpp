@@ -83,7 +83,7 @@ void dae::RenderComp::Unlock(RenderKey key)
 	if (key == m_SavedKey)
 		m_IsLocked = false;
 	else
-		std::cout << std::format("Warning: tried to unlock RenderComp with an invalid key");	//todo, add gobj name
+		std::cout << std::format("Warning: tried to unlock RenderComp with an invalid key. [GameObject: {}]\n", GetOwner().GetName());
 }
 
 void dae::RenderComp::SetSrcRect(Rect srcRect)

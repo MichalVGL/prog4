@@ -21,6 +21,7 @@ dae::SDL_TextureSystem::SDL_TextureSystem(const std::filesystem::path& dataPath,
 void dae::SDL_TextureSystem::Quit()
 {
 	m_ImageTextures.clear();
+	m_HasQuit = true;
 }
 
 //Unload all textures where token amount is 0
@@ -36,6 +37,9 @@ void dae::SDL_TextureSystem::UnloadUnusedResources()
 //Returns the pointer to the texture and increments the token amount
 std::pair<dae::Texture2D*, bool> dae::SDL_TextureSystem::RegisterTexture(const TextureEntry& textureEntry)
 {
+	if (m_HasQuit)
+		throw std::runtime_error("Cannot register textures when the texturesystem when Quit() has been called");
+
 	auto loc = m_ImageTextures.find(textureEntry.id);
 	if (loc != m_ImageTextures.end())
 	{
@@ -58,6 +62,9 @@ std::pair<dae::Texture2D*, bool> dae::SDL_TextureSystem::RegisterTexture(const T
 //Decrements the token amount of the texture
 void dae::SDL_TextureSystem::UnregisterTexture(texture_id id)
 {
+	if (m_HasQuit)
+		return;
+
 	auto loc = m_ImageTextures.find(id);
 	if (loc == m_ImageTextures.end())
 	{

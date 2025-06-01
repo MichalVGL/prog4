@@ -26,6 +26,7 @@ namespace dae
 {
 	class Component;
 	class TransformComp;
+	class Scene;
 
 	using gameobject_id = unsigned int;
 
@@ -66,8 +67,8 @@ namespace dae
 			compType* pComponent = TryGetComponent<compType>();
 			if (pComponent == nullptr)
 			{
-				std::cout << std::format("GameObject does not own a {}\n", typeid(compType).name());
-				throw std::logic_error(std::string("GameObject does not own a ") + typeid(compType).name());	//todo, when gameobject have a name, add name to error message
+				std::cout << std::format("GameObject ({}) does not own a {}\n", GetName(), typeid(compType).name());
+				throw std::logic_error(std::string("GameObject does not own a ") + typeid(compType).name());
 			}
 
 			return pComponent;
@@ -147,6 +148,11 @@ namespace dae
 		void SetLocalPosition(const glm::vec2& pos);
 		void SetLocalPosition(float x, float y);
 
+		//Scene===========================================================
+		Scene& GetScene();
+
+		static constexpr std::string_view s_NullName{"___"};
+
 	private:
 		
 		//====================
@@ -156,9 +162,13 @@ namespace dae
 		//world position
 		const glm::vec2& CalculateWorldPos();
 
+		//====================
+		//set the parent scene (should only be called by the scene itself)
+		friend class Scene;
+		void SetScene(Scene* scene);
+
 		//====================================================
 		//id related
-		static const std::string_view m_NullName;
 		GobjID m_Id;
 
 		//====================
@@ -179,6 +189,9 @@ namespace dae
 		glm::vec2 m_WorldPos{};
 		bool m_IsWorldPosValid{};
 
+		//====================
+		//scene of the gameobject
+		Scene* m_pScene{};
 	};
 }
 

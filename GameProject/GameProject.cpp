@@ -12,6 +12,7 @@
 #include <InputManager.h>
 #include <EngineComponents.h>
 #include <Texture.h>
+#include <ServiceLocator.h>
 
 #include "GameComponents.h"
 
@@ -20,16 +21,17 @@ static dae::TextureEntry g_BackgroundTextureEntry{ "background.tga" };
 static dae::TextureEntry g_PlayerIcon{ "playerIcon.png" };
 static dae::TextureEntry g_BalloomIcon{ "balloonIcon.png" };
 static dae::TextureEntry g_Bomberman{ "Bomberman.png" };
-static dae::FontEntry g_LinguaFont{ "Lingua.otf" };
+static dae::FontEntry g_PixelFont{ "KenneyPixel.ttf" };
 
 void LoadDemo() {};
 void RenderTest();
 
 int main(int, char* []) 
 {
-	dae::Window window{ .title = "Minigin V2", .w = 640, .h = 480, .renderScale = 2.f };
+	dae::Window window{ .title = "Minigin V2", .w = 256, .h = 240, .renderScale = 2.f };
 
 	dae::Minigin engine("../Data/", window);
+	dae::ServiceLocator::GetSoundSystem().SetGlobalVolume(0.1f);
 	engine.Run(&RenderTest);
 	return 0;
 }
@@ -42,7 +44,7 @@ void RenderTest()
 	auto go = std::make_unique<dae::GameObject>();
 	auto rendComp = go->AddComponent<dae::RenderComp>();
 	auto tranComp = go->GetComponent<dae::TransformComp>();
-	tranComp->SetLocalPosition(320, 240);	//320 240
+	tranComp->SetLocalPosition(128, 120);	//320 240
 	rendComp->LoadImageTexture(g_BackgroundTextureEntry);
 	rendComp->SetSrcRect(dae::Rect{ 0, 0, 640, 480 }); 
 	rendComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
@@ -54,12 +56,12 @@ void RenderTest()
 	//title==================================
 	go = std::make_unique<dae::GameObject>();
 	rendComp = go->AddComponent<dae::RenderComp>();
-	rendComp->SetHorizontalFlip(true);
+	rendComp->SetHorizontalFlip(false);
 	rendComp->SetVerticalFlip(false);
 	tranComp = go->GetComponent<dae::TransformComp>();
-	tranComp->SetLocalPosition(30, 420);
+	tranComp->SetLocalPosition(5, 200);
 	auto textComp = go->AddComponent<dae::TextComp>();
-	textComp->SetFont(g_LinguaFont);
+	textComp->SetFont(g_PixelFont);
 	textComp->SetText("Programming 4 Assignment");
 	scene.Add(std::move(go));
 
@@ -68,11 +70,14 @@ void RenderTest()
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(200, 200);
 	rendComp = go->AddComponent<dae::RenderComp>();
+	rendComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
+	rendComp->SetVerticalAlignment(dae::VerticalAlignment::center);
 	auto* spriteComp = go->AddComponent<dae::SpriteComp>();
 	spriteComp->LoadTexture(g_Bomberman);
-	spriteComp->AddSpriteEntry(dae::SpriteEntry("WalkDown", {0, 48, 64, 16}, 4, 1));
-	spriteComp->SetSpriteEntry(dae::SpriteId("WalkDown"));
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("WalkRight", {0, 16, 64, 16}, 4, 1));
+	spriteComp->SetSpriteEntry(dae::SpriteId("WalkRight"));
 	spriteComp->SetFPS(6.f);
+	spriteComp->FlipHorizontal(true);
 	go->AddComponent<GameActorComp>(50.f, 0);
 	auto* healtComp = go->AddComponent<HealthComp>(3);
 	auto* scoreComp = go->AddComponent<ScoreComp>();
@@ -86,7 +91,7 @@ void RenderTest()
 	tranComp = go->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(20, 100);
 	textComp = go->AddComponent<dae::TextComp>();
-	textComp->SetFont(g_LinguaFont);
+	textComp->SetFont(g_PixelFont);
 	textComp->SetSize(16);
 	go->AddComponent<UIHealthComp>(healtComp);
 	//ScoreUI
@@ -95,7 +100,7 @@ void RenderTest()
 	tranComp = go2->GetComponent<dae::TransformComp>();
 	tranComp->SetLocalPosition(0, 15);
 	textComp = go2->AddComponent<dae::TextComp>();
-	textComp->SetFont(g_LinguaFont);
+	textComp->SetFont(g_PixelFont);
 	textComp->SetSize(16);
 	go2->AddComponent<UIScoreComp>(scoreComp);
 

@@ -18,7 +18,7 @@ namespace dae
 
 	class TransformComp;
 
-	class RenderComp final : public Component
+	class RenderComp final : public Component //Args:
 	{
 	public:
 		RenderComp(dae::GameObject& parent);

@@ -76,6 +76,7 @@ namespace dae
 
 		std::unordered_map<texture_id, TextureResource> m_ImageTextures;
 
+		bool m_HasQuit{ false };	//if quit has been called, prevent warnings when tokens unregister;
 	};
 }
 

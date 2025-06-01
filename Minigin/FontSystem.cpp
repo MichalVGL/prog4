@@ -24,6 +24,7 @@ void dae::SDL_FontSystem::Quit()
 {
 	m_Fonts.clear();
 	TTF_Quit();
+	m_HasQuit = true;
 }
 
 void dae::SDL_FontSystem::UnloadUnusedResources()
@@ -35,6 +36,9 @@ void dae::SDL_FontSystem::UnloadUnusedResources()
 
 std::tuple<dae::Font*, dae::FontFullID, bool> dae::SDL_FontSystem::RegisterFont(const FontEntry& fontEntry, font_size size)
 {
+	if (m_HasQuit)
+		throw std::runtime_error("Cannot register fonts when the fontsystem when Quit() has been called");
+
 	auto loc = m_Fonts.find(FontFullID{ .id = fontEntry.id, .size = size });
 
 	if (loc != m_Fonts.end())
@@ -57,6 +61,9 @@ std::tuple<dae::Font*, dae::FontFullID, bool> dae::SDL_FontSystem::RegisterFont(
 
 void dae::SDL_FontSystem::UnregisterFont(FontFullID id)
 {
+	if (m_HasQuit)
+		return;
+
 	auto loc = m_Fonts.find(id);
 	if (loc == m_Fonts.end())
 	{

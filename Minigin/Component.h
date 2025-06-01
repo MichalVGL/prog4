@@ -79,7 +79,10 @@ namespace dae
 	class ReqComp final
 	{
 	public:
-		ReqComp() = default;
+		ReqComp()
+		{
+			static_assert(std::is_base_of<Component, CompType>::value, "CompType must derive of Component");
+		}
 		~ReqComp() = default;
 		ReqComp(const ReqComp& other) = delete;
 		ReqComp(ReqComp&& other) noexcept = delete;
@@ -123,7 +126,10 @@ namespace dae
 	class OptComp final
 	{
 	public:
-		OptComp() = default;
+		OptComp()
+		{
+			static_assert(std::is_base_of<Component, CompType>::value, "CompType must derive of Component");
+		}
 		~OptComp() = default;
 		OptComp(const OptComp& other) = delete;
 		OptComp(OptComp&& other) noexcept = delete;
@@ -138,6 +144,8 @@ namespace dae
 		}
 
 		CompType* operator->() { return m_pComponent; }
+
+		operator bool() const noexcept { return m_pComponent != nullptr; }	//for if statements (or any bool usage...)
 
 	private:
 		CompType* m_pComponent{ nullptr };

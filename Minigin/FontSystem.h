@@ -69,6 +69,8 @@ namespace dae
 
 		std::filesystem::path m_DataPath;
 		std::unordered_map<FontFullID, FontResource> m_Fonts;
+
+		bool m_HasQuit{ false };	//if quit has been called, prevent warnings when tokens unregister;
 	};
 
 }

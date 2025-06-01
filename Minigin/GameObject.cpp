@@ -1,7 +1,9 @@
 #include "GameObject.h"
-#include "TransformComp.h"
 
-const std::string_view dae::GameObject::m_NullName{"___"};
+#include <algorithm>
+
+#include "TransformComp.h"
+#include "Scene.h"
 
 dae::GameObject::GameObject(const GobjID& name)
 	:m_Id{name}
@@ -14,10 +16,10 @@ dae::GameObject::GameObject(const GobjID& name)
 
 dae::GameObject::~GameObject()
 {
-	for (auto& child : m_ChildrenGameObj)
-	{
-		child->SetParent(m_pParentGameObj);
-	}
+	std::for_each(m_ChildrenGameObj.rbegin(), m_ChildrenGameObj.rend(), [this](GameObject* child)
+		{
+			child->SetParent(m_pParentGameObj);
+		});
 
 	if(m_pParentGameObj != nullptr)
 		m_pParentGameObj->RemoveChild(this);
@@ -25,6 +27,9 @@ dae::GameObject::~GameObject()
 
 void dae::GameObject::Start()
 {
+	if (m_pScene == nullptr)
+		std::cout << std::format("Warning: GameObject ({}) doesn't have it's scene setup\n", GetName());
+
 	for (auto& comp : m_Components)
 	{
 		comp->Start();
@@ -84,7 +89,7 @@ void dae::GameObject::UpdateImGui()
 
 std::string_view dae::GameObject::GetName() const
 {
-	if (m_Id.name != m_NullName)
+	if (m_Id.name != s_NullName)
 		return m_Id.name;
 	else
 		return "unnamed";
@@ -194,6 +199,11 @@ void dae::GameObject::SetLocalPosition(float x, float y)
 	SetLocalPosition(glm::vec2(x, y));
 }
 
+dae::Scene& dae::GameObject::GetScene()
+{
+	return *m_pScene;	//this pointer is salways set. If not, a warning will be printed on start(). (When the scene gets an gameobject, it will set this variable)
+}
+
 void dae::GameObject::AddChild(GameObject* child)
 {
 	m_ChildrenGameObj.emplace_back(child);
@@ -216,4 +226,9 @@ const glm::vec2& dae::GameObject::CalculateWorldPos()
 
 	m_IsWorldPosValid = true;
 	return m_WorldPos;
+}
+
+void dae::GameObject::SetScene(Scene* scene)
+{
+	m_pScene = scene;
 }

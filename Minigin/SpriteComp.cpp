@@ -12,7 +12,7 @@ dae::SpriteComp::SpriteComp(dae::GameObject& parent)
 	}
 	catch (const std::logic_error&)
 	{
-		std::cout << std::format("Spritecomp could't find the RenderComp on the GameObject, make sure to add RenderComp before SpriteComp!!!\n");	//todo add gobj name
+		std::cout << std::format("\nSpritecomp could't find the RenderComp on the GameObject, make sure to add RenderComp before SpriteComp!!!\n GameObject: {}\n\n", GetOwner().GetName());
 		throw;
 	}
 }
@@ -78,7 +78,7 @@ void dae::SpriteComp::AddSpriteEntry(SpriteEntry entry)
 {
 	if (GetSpriteEntry(entry.id) != nullptr)
 	{
-		std::cout << std::format("Warning: tried adding a SpriteEntry that already exists\n");	//todo add gobj name
+		std::cout << std::format("Warning: tried adding a SpriteEntry that already exists. [GameObject {}]\n", GetOwner().GetName());
 		return;
 	}
 
@@ -110,7 +110,7 @@ void dae::SpriteComp::DeleteSpriteEntry(sprite_id id)
 	}
 	else
 	{
-		std::cout << std::format("Warning: tried deleting a SpriteEntry that doesn't exists\n");	//todo add gobj name
+		std::cout << std::format("Warning: tried deleting a SpriteEntry that doesn't exists. [GameObject {}]\n", GetOwner().GetName());
 	}
 }
 
@@ -127,7 +127,7 @@ void dae::SpriteComp::SetSpriteEntry(sprite_id id)
 	}
 	else
 	{
-		std::cout << std::format("Warning: tried setting a SpriteEntry active that doesn't exists\n");	//todo add gobj name
+		std::cout << std::format("Warning: tried setting a SpriteEntry active that doesn't exists. [GameObject {}]\n", GetOwner().GetName());
 	}
 }
 
@@ -147,7 +147,7 @@ void dae::SpriteComp::SetFPS(float fps)
 	}
 	else
 	{
-		std::cout << std::format("Warning: tried setting a negative fps on a sprite\n");	//todo add gobj name
+		std::cout << std::format("Warning: tried setting a negative fps on a sprite. [GameObject {}]\n", GetOwner().GetName());
 	}
 }
 
@@ -173,6 +173,16 @@ void dae::SpriteComp::SetFrame(int frame)
 	frame = std::clamp(frame, 0, max);
 
 	m_FrameIndex = frame;
+}
+
+void dae::SpriteComp::FlipHorizontal(bool flip)
+{
+	m_RenderComp->SetHorizontalFlip(flip);
+}
+
+void dae::SpriteComp::FlipVertical(bool flip)
+{
+	m_RenderComp->SetVerticalFlip(flip);
 }
 
 //===================================================================================

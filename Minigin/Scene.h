@@ -32,9 +32,11 @@ namespace dae
 		explicit Scene(const std::string& name);
 
 		std::string m_name;
-		std::vector <std::unique_ptr<GameObject>> m_objects{};
+		std::vector <std::unique_ptr<GameObject>> m_Objects{};
 
 		static unsigned int m_idCounter; 
+
+		bool m_HasStarted{ false };	//if start() has ben called, Add() will cal start() instead
 	};
 
 }

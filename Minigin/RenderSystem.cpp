@@ -172,7 +172,7 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D&
 
 	//================================
 #ifdef _DEBUG
-	if (SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, texture.GetAngle(), nullptr, sdlFlip))	//todo, copy to release mode aswell
+	if (SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, texture.GetAngle(), nullptr, sdlFlip))
 	{
 		std::cout << std::format("SDL_RenderCopyEx failed: {}\n", SDL_GetError());
 	}

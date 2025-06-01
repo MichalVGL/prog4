@@ -73,6 +73,8 @@ namespace dae
 		void Pause();
 		void Resume();
 		void SetFrame(int frame);
+		void FlipHorizontal(bool flip);
+		void FlipVertical(bool flip);
 
 	private:
 

@@ -176,6 +176,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp" />
+    <ClCompile Include="TimerComp.cpp" />
+    <ClCompile Include="TileComp.cpp" />
+    <ClCompile Include="LevelComp.cpp" />
+    <ClCompile Include="GameActorCommands.cpp" />
+    <ClCompile Include="GameActorComp.cpp" />
+    <ClCompile Include="HealthComp.cpp" />
+    <ClCompile Include="ObjectConstructions.cpp" />
+    <ClCompile Include="ScoreComp.cpp" />
+    <ClCompile Include="UIHealthComp.cpp" />
+    <ClCompile Include="UIScoreComp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BMComponents.h" />
+    <ClInclude Include="BMGameDefines.h" />
+    <ClInclude Include="TimerComp.h" />
+    <ClInclude Include="TileComp.h" />
+    <ClInclude Include="LevelComp.h" />
+    <ClInclude Include="GameActorCommands.h" />
+    <ClInclude Include="GameActorComp.h" />
+    <ClInclude Include="HealthComp.h" />
+    <ClInclude Include="ObjectConstructions.h" />
+    <ClInclude Include="ScoreComp.h" />
+    <ClInclude Include="UIHealthComp.h" />
+    <ClInclude Include="UIScoreComp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

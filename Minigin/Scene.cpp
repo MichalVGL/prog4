@@ -10,39 +10,43 @@ unsigned int Scene::m_idCounter = 0;
 Scene::Scene(const std::string& name)
 	: m_name{ name } 
 {
-
 }
 
 Scene::~Scene() = default;
 
 GameObject* Scene::Add(std::unique_ptr<GameObject> object)
 {
-	m_objects.emplace_back(std::move(object));
-	return m_objects.back().get();
+	object->SetScene(this);
+	if (m_HasStarted)
+		object->Start();
+
+	m_Objects.emplace_back(std::move(object));
+	return m_Objects.back().get();
 }
 
 void Scene::Remove(GameObject* object)
 {
-	m_objects.erase(std::remove_if(m_objects.begin(), m_objects.end(), [&object](const auto& gameObject) { return gameObject.get() == object; })
-		, m_objects.end());
+	m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(), [&object](const auto& gameObject) { return gameObject.get() == object; })
+		, m_Objects.end());
 }
 
 void Scene::RemoveAll()
 {
-	m_objects.clear();
+	m_Objects.clear();
 }
 
 void dae::Scene::Start()
 {
-	for (auto& object : m_objects)
+	for (auto& object : m_Objects)
 	{
 		object->Start();
 	}
+	m_HasStarted = true;
 }
 
 void dae::Scene::FixedUpdate(float deltaFixedTime)
 {
-	for (auto& object : m_objects)
+	for (auto& object : m_Objects)
 	{
 		object->FixedUpdate(deltaFixedTime);
 	}
@@ -50,7 +54,7 @@ void dae::Scene::FixedUpdate(float deltaFixedTime)
 
 void Scene::Update(float deltaTime)
 {
-	for(auto& object : m_objects)
+	for(auto& object : m_Objects)
 	{
 		object->Update(deltaTime);
 	}
@@ -58,22 +62,22 @@ void Scene::Update(float deltaTime)
 
 void dae::Scene::LateUpdate(float deltaTime)
 {
-	for (auto& object : m_objects)
+	for (auto& object : m_Objects)
 	{
 		object->LateUpdate(deltaTime);
 	}
 
-	m_objects.erase(
-		std::remove_if(m_objects.begin(), m_objects.end(), [](const std::unique_ptr<GameObject>& obj)
+	m_Objects.erase(
+		std::remove_if(m_Objects.begin(), m_Objects.end(), [](const std::unique_ptr<GameObject>& obj)
 			{
 				return obj->IsFlaggedForDeletion();
 			})
-		, m_objects.end());
+		, m_Objects.end());
 }
 
 void Scene::Render() const
 {
-	for (const auto& object : m_objects)
+	for (const auto& object : m_Objects)
 	{
 		object->Render();
 	}
@@ -81,7 +85,7 @@ void Scene::Render() const
 
 void dae::Scene::UpdateImGui()
 {
-	for (const auto& object : m_objects)
+	for (const auto& object : m_Objects)
 	{
 		object->UpdateImGui();
 	}
