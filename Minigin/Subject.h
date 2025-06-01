@@ -8,10 +8,10 @@ namespace dae
 	class IObserver;
 	class Component;
 
-	class Subject final		//only works with components
+	class Subject final	
 	{
 	public:
-		Subject(Component* parentComponent);
+		Subject();
 
 		void AddObserver(IObserver* observer);
 		void RemoveObserver(IObserver* observer);
@@ -19,7 +19,7 @@ namespace dae
 		void NotifyObservers(Event event);
 
 	private:
-		Component* m_pParentComponent;
+		//Component* m_pParentComponent;
 
 		std::vector<IObserver*> m_Observers;
 	};

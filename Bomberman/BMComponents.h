@@ -3,10 +3,6 @@
 
 //todo delete these
 #include "GameActorComp.h"
-#include "HealthComp.h"
-#include "UIHealthComp.h"
-#include "ScoreComp.h"
-#include "UIScoreComp.h"
 //
 
 #include "LevelComp.h"

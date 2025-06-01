@@ -7,9 +7,9 @@
 
 using namespace dae;
 
-Subject::Subject(Component* parentComponent)
-	: m_pParentComponent{parentComponent}
-	, m_Observers{}
+Subject::Subject()
+	//: m_pParentComponent{parentComponent}
+	: m_Observers{}
 {
 }
 
@@ -30,5 +30,5 @@ void Subject::RemoveObserver(IObserver* observer)
 void Subject::NotifyObservers(Event event)
 {
 	for (auto observer : m_Observers)
-		observer->Notify(event, m_pParentComponent);
+		observer->Notify(event);
 }

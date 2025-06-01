@@ -1,7 +1,5 @@
 #include "GameActorCommands.h"
 #include "GameActorComp.h"
-#include "HealthComp.h"
-#include "ScoreComp.h"
 
 ///=========================
 /// Base Class
@@ -36,9 +34,9 @@ DamageCommand::DamageCommand(GameActorComp* pGameActor)
 
 void DamageCommand::Execute()
 {
-	if (auto* hComp{ m_GameObject.TryGetComponent<HealthComp>() }; hComp != nullptr)
+	//if (auto* hComp{ m_GameObject.TryGetComponent<HealthComp>() }; hComp != nullptr)
 	{
-		hComp->Damage();
+		//hComp->Damage();
 	}
 }
 
@@ -51,8 +49,8 @@ AddScoreCommand::AddScoreCommand(GameActorComp* pGameActor, int amount)
 
 void AddScoreCommand::Execute()
 {
-	if (auto* scoreComp{ m_GameObject.TryGetComponent<ScoreComp>() }; scoreComp != nullptr)
+	//if (auto* scoreComp{ m_GameObject.TryGetComponent<ScoreComp>() }; scoreComp != nullptr)
 	{
-		scoreComp->AddScore(m_Amount);
+		//scoreComp->AddScore(m_Amount);
 	}
 }

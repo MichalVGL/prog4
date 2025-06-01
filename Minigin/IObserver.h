@@ -12,7 +12,7 @@ namespace dae
 	{
 	public:
 		virtual ~IObserver() = default;
-		virtual void Notify(Event event, Component* comp) = 0;
+		virtual void Notify(Event event) = 0;
 	};
 }
 

@@ -10,8 +10,6 @@
 #include "GameActorComp.h"
 #include "GameActorCommands.h"
 #include "Time.h"
-#include "HealthComp.h"
-#include "ScoreComp.h"
 
 GameActorComp::GameActorComp(dae::GameObject& parent, float moveSpeed, int playerId)
 	:Component(parent)

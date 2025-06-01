@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Commands">
       <UniqueIdentifier>{7b474761-48cf-409e-9d37-ac49a3dd0632}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MovementStates">
+      <UniqueIdentifier>{c16a6215-52dd-4124-a57d-1fbc591b06d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MovementStates">
+      <UniqueIdentifier>{5656d094-7d8b-475b-8cba-ece054a0816b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp">
@@ -34,18 +40,6 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="GameActorComp.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthComp.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreComp.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHealthComp.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UIScoreComp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="GameActorCommands.cpp">
@@ -60,24 +54,15 @@
     <ClCompile Include="TimerComp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="BaseEntityComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LevelComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="GameActorComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHealthComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="UIScoreComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="GameActorCommands.h">
@@ -96,6 +81,9 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="TimerComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEntityComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
