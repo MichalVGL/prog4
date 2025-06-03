@@ -56,8 +56,11 @@ void TextComp::Update(float)
 
 void TextComp::SetText(const std::string& text)
 {
-	m_Text = text;
-	m_NeedsUpdate = true;
+	if (m_Text != text)
+	{
+		m_NeedsUpdate = true;
+		m_Text = text;
+	}
 }
 
 void dae::TextComp::SetFont(const FontEntry& fontEntry)
@@ -68,8 +71,11 @@ void dae::TextComp::SetFont(const FontEntry& fontEntry)
 
 void dae::TextComp::SetSize(font_size size)
 {
-	m_FontSize = size;
-	m_FontNeedsUpdate = true;
+	if (m_FontSize != size)
+	{
+		m_FontSize = size;
+		m_FontNeedsUpdate = true;
+	}
 }
 
 void dae::TextComp::SetColor(Color color)

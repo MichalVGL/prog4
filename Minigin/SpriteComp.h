@@ -76,6 +76,8 @@ namespace dae
 		void FlipHorizontal(bool flip);
 		void FlipVertical(bool flip);
 
+		bool IsLoopComplete() const;
+
 	private:
 
 		void ValidateEntry(SpriteEntry& entry);	//Any abnormalities will be printed in console and set to a default value.

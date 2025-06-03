@@ -7,19 +7,15 @@
 #include <Texture.h>
 #include <EngineComponents.h>
 
+#include "BaseTile.h"
+#include "ITileMod.h"
+
 namespace bm
 {
-
-	enum class TileType
-	{
-		Ground,
-		Wall
-	};
-
-	class TileComp final : public dae::Component	//Args: TileType type, ivec2 indexPos
+	class TileComp final : public dae::Component	//Args: BaseTile* pBaseTile, ivec2 indexPos
 	{
 	public:
-		TileComp(dae::GameObject& parent, TileType type, glm::ivec2 indexPos);
+		TileComp(dae::GameObject& parent, const BaseTile* pBaseTile, glm::ivec2 indexPos);
 
 		~TileComp() = default;
 		TileComp(const TileComp& other) = default;
@@ -40,19 +36,32 @@ namespace bm
 		glm::vec2 GetPosition();
 		glm::ivec2 GetIndexPosition();
 
+		bool IsWalkable() const;
+		bool AllowSpawnables() const;
+
+		void RegisterTileMod(const ITileMod* pTileMod);
+		void UnregisterTileMod();
+
+		TileComp* GetUpTile() const;
+		TileComp* GetRightTile() const;
+		TileComp* GetDownTile() const;
+		TileComp* GetLeftTile() const;
+
+		void SetAdjescentTiles(TileComp* up, TileComp* right, TileComp* down, TileComp* left);	//should only be used for setup. (in the tilesystem)
+
 	private:
 
 
 		//========================================================================
 
-		static constexpr dae::TextureEntry s_GroundTexture{"EmptyTile.png"};
-		static constexpr dae::TextureEntry s_WallTexture{"IndestructableWall.png"};
-
 		dae::ReqComp<dae::TransformComp> m_TransformComp;
 		dae::ReqComp<dae::RenderComp> m_RenderComp;
 
+		const BaseTile* m_pBaseTile;
+		const ITileMod* m_pTileMod{};
+
 		const glm::ivec2 m_IndexPos;
-		const glm::vec2 m_Pos{};
+		const glm::vec2 m_Pos;
 
 		TileComp* m_pUpTile{};
 		TileComp* m_pRightTile{};

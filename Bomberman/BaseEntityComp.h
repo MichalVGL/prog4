@@ -3,13 +3,33 @@
 
 #include "Component.h"
 
+#include <glm.hpp>
+#include <memory>
+#include <EngineComponents.h>
+
 namespace bm
 {
-	class BaseEntityComp final : public dae::Component	//Args: 
+	class EntityState;
+
+	struct EntityStats
+	{
+		float movementSpeed;
+
+	};
+
+	struct EntityInput
+	{
+		glm::ivec2 direction;
+		bool action1;
+		bool action2;
+	};
+
+	class BaseEntityComp : public dae::Component	//Args: const EntityStats& entityStats
 	{
 	public:
-		BaseEntityComp(dae::GameObject& parent);
+		BaseEntityComp(dae::GameObject& parent, const EntityStats& entityStats);
 
+		virtual ~BaseEntityComp(); //defulted in cpp
 		BaseEntityComp(const BaseEntityComp& other) = default;
 		BaseEntityComp(BaseEntityComp&& other) noexcept = default;
 		BaseEntityComp& operator=(const BaseEntityComp& other) = default;
@@ -18,20 +38,27 @@ namespace bm
 		// -------------------------
 		// Base Functions
 		// -------------------------  
-		//void Start() override;
+		void Start() override;
 		//void FixedUpdate(float deltaFixedTime) override;
 		//void Update(float deltaTime) override;
 		//void LateUpdate(float deltaTime) override;
 		//void Render() const override;
 		//--------------------------
 
+		virtual void Kill();
 
-		virtual void Kill() = 0;
+	protected:
 
+		bool UpdateState(float deltaTime);	//return if the state has been changed
 
-	private:
+		//==========================
 
+		std::unique_ptr<EntityState> m_pCurrentState;
+		dae::ReqComp<dae::TransformComp> m_TransformComp{};
+		dae::ReqComp<dae::SpriteComp> m_SpriteComp{};
 
+		EntityStats m_EntityStats;
+		EntityInput m_EntityInput{};
 
 	};
 }

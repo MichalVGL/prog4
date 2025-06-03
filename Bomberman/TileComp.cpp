@@ -2,29 +2,25 @@
 
 #include "BMGameDefines.h"
 
-bm::TileComp::TileComp(dae::GameObject& parent, TileType type, glm::ivec2 posIndex)
+bm::TileComp::TileComp(dae::GameObject& parent, const BaseTile* pBaseTile, glm::ivec2 posIndex)
 	:Component{parent}
+	, m_pBaseTile{ pBaseTile }
 	, m_IndexPos{ posIndex }
 	, m_Pos{ static_cast<float>(TILE_SIZE / 2 + TILE_SIZE * posIndex.x), static_cast<float>(TILE_SIZE / 2 + TILE_SIZE * posIndex.y)}
 {
+	if (m_pBaseTile == nullptr)
+	{
+		std::cout << std::format("TileComp: Tried to initialize TileComp with nullptr at index ({}, {})\n", posIndex.x, posIndex.y);
+		throw std::runtime_error("TileComp: BaseTile pointer is null");
+	}
+
 	m_TransformComp.Init(GetOwner());
 	m_TransformComp->SetLocalPosition(m_Pos);
 
 	m_RenderComp.Init(GetOwner());
 	m_RenderComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
 	m_RenderComp->SetVerticalAlignment(dae::VerticalAlignment::center);
-	switch (type)
-	{
-	case bm::TileType::Ground:
-		m_RenderComp->LoadImageTexture(s_GroundTexture);
-		break;
-	case bm::TileType::Wall:
-		m_RenderComp->LoadImageTexture(s_WallTexture);
-		break;
-	default:
-		m_RenderComp->LoadImageTexture(ERROR_TEXTURE);
-		break;
-	}
+	m_RenderComp->LoadImageTexture(m_pBaseTile->GetTextureEntry());
 }
 
 glm::vec2 bm::TileComp::GetPosition()
@@ -35,4 +31,76 @@ glm::vec2 bm::TileComp::GetPosition()
 glm::ivec2 bm::TileComp::GetIndexPosition()
 {
 	return m_IndexPos;
+}
+
+bool bm::TileComp::IsWalkable() const
+{
+	if (m_pTileMod)
+	{
+		return m_pTileMod->IsWalkable() && m_pBaseTile->IsWalkable();
+	}
+	else
+	{
+		return m_pBaseTile->IsWalkable();
+	}
+}
+
+bool bm::TileComp::AllowSpawnables() const
+{
+	if (m_pTileMod)
+	{
+		return m_pTileMod->AllowSpawnables() && m_pBaseTile->AllowsSpawnables();
+	}
+	else
+	{
+		return m_pBaseTile->AllowsSpawnables();
+	}
+}
+
+void bm::TileComp::RegisterTileMod(const ITileMod* pTileMod)
+{
+	if (m_pTileMod != nullptr)
+	{
+		std::cout << std::format("TileComp: Tried to register a TileMod ({}) on tile ({}, {}) that already has a TileMod\n", typeid(*pTileMod).name(), m_IndexPos.x, m_IndexPos.y);
+		return;
+	}
+	m_pTileMod = pTileMod;
+}
+
+void bm::TileComp::UnregisterTileMod()
+{
+	if (m_pTileMod == nullptr)
+	{
+		std::cout << std::format("TileComp: Tried to unregister a TileMod on tile ({}, {}) that does not have a TileMod\n", m_IndexPos.x, m_IndexPos.y);
+		return;
+	}
+	m_pTileMod = nullptr;
+}
+
+bm::TileComp* bm::TileComp::GetUpTile() const
+{
+	return m_pUpTile;
+}
+
+bm::TileComp * bm::TileComp::GetRightTile() const
+{
+	return m_pRightTile;
+}
+
+bm::TileComp* bm::TileComp::GetDownTile() const
+{
+	return m_pDownTile;
+}
+
+bm::TileComp* bm::TileComp::GetLeftTile() const
+{
+	return m_pLeftTile;
+}
+
+void bm::TileComp::SetAdjescentTiles(TileComp* up, TileComp* right, TileComp* down, TileComp* left)
+{
+	m_pUpTile = up;
+	m_pRightTile = right;
+	m_pDownTile = down;
+	m_pLeftTile = left;
 }

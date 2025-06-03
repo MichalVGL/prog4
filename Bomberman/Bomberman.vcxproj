@@ -86,7 +86,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DATA_FOLDER_PATH="Data/"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -99,8 +99,7 @@
       <AdditionalDependencies>Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /E /Y /I "$(SolutionDir)Data" "$(OutDir)Data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -109,7 +108,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DATA_FOLDER_PATH="Data/"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -124,15 +123,14 @@
       <AdditionalDependencies>Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /E /Y /I "$(SolutionDir)Data" "$(OutDir)Data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DATA_FOLDER_PATH="Data/"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -145,8 +143,7 @@
       <AdditionalDependencies>Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /E /Y /I "$(SolutionDir)Data" "$(OutDir)Data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,7 +152,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DATA_FOLDER_PATH="Data/"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -170,27 +167,36 @@
       <AdditionalDependencies>Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /E /Y /I "$(SolutionDir)Data" "$(OutDir)Data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseTile.cpp" />
+    <ClCompile Include="BMServiceLocator.cpp" />
     <ClCompile Include="Bomberman.cpp" />
     <ClCompile Include="BaseEntityComp.cpp" />
+    <ClCompile Include="PlayerEntityComp.cpp" />
+    <ClCompile Include="EntityStates.cpp" />
+    <ClCompile Include="TileSystem.cpp" />
     <ClCompile Include="TimerComp.cpp" />
     <ClCompile Include="TileComp.cpp" />
-    <ClCompile Include="LevelComp.cpp" />
     <ClCompile Include="GameActorCommands.cpp" />
     <ClCompile Include="GameActorComp.cpp" />
     <ClCompile Include="ObjectConstructions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseTile.h" />
     <ClInclude Include="BMComponents.h" />
     <ClInclude Include="BMGameDefines.h" />
     <ClInclude Include="BaseEntityComp.h" />
+    <ClInclude Include="BMServiceLocator.h" />
+    <ClInclude Include="PlayerEntityComp.h" />
+    <ClInclude Include="EntityStates.h" />
+    <ClInclude Include="ITileMod.h" />
+    <ClInclude Include="ITileSystem.h" />
+    <ClInclude Include="TileSystem.h" />
     <ClInclude Include="TimerComp.h" />
     <ClInclude Include="TileComp.h" />
-    <ClInclude Include="LevelComp.h" />
     <ClInclude Include="GameActorCommands.h" />
     <ClInclude Include="GameActorComp.h" />
     <ClInclude Include="ObjectConstructions.h" />

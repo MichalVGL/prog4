@@ -13,6 +13,12 @@ namespace dae
 		virtual ~Command() = default;
 		virtual void Execute() = 0;
 	};
+
+	class NullCommand final : public Command
+	{
+	public:
+		void Execute() override {};
+	};
 }
 
 #endif // !COMMAND_H

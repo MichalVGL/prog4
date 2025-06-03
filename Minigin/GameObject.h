@@ -62,7 +62,7 @@ namespace dae
 		void UpdateImGui();
 
 		template<typename compType>
-		compType* GetComponent() const
+		compType* GetComponent() const	//never returns nullptr, will throw instead
 		{
 			compType* pComponent = TryGetComponent<compType>();
 			if (pComponent == nullptr)
@@ -75,7 +75,7 @@ namespace dae
 		}
 
 		template<typename compType>
-		compType* TryGetComponent() const
+		compType* TryGetComponent() const	//allows nullptr as a valid return
 		{
 			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
 

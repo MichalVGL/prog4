@@ -173,6 +173,7 @@ void dae::SpriteComp::SetFrame(int frame)
 	frame = std::clamp(frame, 0, max);
 
 	m_FrameIndex = frame;
+	SetCurrentFrame();
 }
 
 void dae::SpriteComp::FlipHorizontal(bool flip)
@@ -183,6 +184,11 @@ void dae::SpriteComp::FlipHorizontal(bool flip)
 void dae::SpriteComp::FlipVertical(bool flip)
 {
 	m_RenderComp->SetVerticalFlip(flip);
+}
+
+bool dae::SpriteComp::IsLoopComplete() const
+{
+	return m_LoopComplete;
 }
 
 //===================================================================================

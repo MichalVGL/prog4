@@ -7,9 +7,9 @@
 
 using namespace dae;
 
-Subject::Subject()
-	//: m_pParentComponent{parentComponent}
-	: m_Observers{}
+Subject::Subject(Event event)
+	: m_Event{ event }
+	, m_Observers{}
 {
 }
 
@@ -27,8 +27,8 @@ void Subject::RemoveObserver(IObserver* observer)
 	std::erase(m_Observers, observer);
 }
 
-void Subject::NotifyObservers(Event event)
+void Subject::NotifyObservers()
 {
 	for (auto observer : m_Observers)
-		observer->Notify(event);
+		observer->Notify(m_Event);
 }

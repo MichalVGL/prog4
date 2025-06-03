@@ -25,19 +25,22 @@
     <Filter Include="Source Files\Commands">
       <UniqueIdentifier>{7b474761-48cf-409e-9d37-ac49a3dd0632}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MovementStates">
+    <Filter Include="Header Files\EntityStates">
+      <UniqueIdentifier>{5656d094-7d8b-475b-8cba-ece054a0816b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EntityStates">
       <UniqueIdentifier>{c16a6215-52dd-4124-a57d-1fbc591b06d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MovementStates">
-      <UniqueIdentifier>{5656d094-7d8b-475b-8cba-ece054a0816b}</UniqueIdentifier>
+    <Filter Include="Source Files\Tile">
+      <UniqueIdentifier>{34967c4c-77bb-4aa6-9407-fd5a51528974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tile">
+      <UniqueIdentifier>{1b8f60e1-58ad-42e1-88a6-1e7f01f5b863}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelComp.cpp">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="GameActorComp.cpp">
       <Filter>Source Files\Components</Filter>
@@ -57,11 +60,23 @@
     <ClCompile Include="BaseEntityComp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="EntityStates.cpp">
+      <Filter>Source Files\EntityStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BMServiceLocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TileSystem.cpp">
+      <Filter>Source Files\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseTile.cpp">
+      <Filter>Source Files\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerEntityComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LevelComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="GameActorComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -84,6 +99,27 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="BaseEntityComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityStates.h">
+      <Filter>Header Files\EntityStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BMServiceLocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITileSystem.h">
+      <Filter>Header Files\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="TileSystem.h">
+      <Filter>Header Files\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTile.h">
+      <Filter>Header Files\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="ITileMod.h">
+      <Filter>Header Files\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEntityComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

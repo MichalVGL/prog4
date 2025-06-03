@@ -11,15 +11,17 @@ namespace dae
 	class Subject final	
 	{
 	public:
-		Subject();
+		Subject(Event event);
 
 		void AddObserver(IObserver* observer);
 		void RemoveObserver(IObserver* observer);
 
-		void NotifyObservers(Event event);
+		void NotifyObservers();
 
 	private:
 		//Component* m_pParentComponent;
+
+		Event m_Event;
 
 		std::vector<IObserver*> m_Observers;
 	};

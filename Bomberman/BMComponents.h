@@ -5,9 +5,8 @@
 #include "GameActorComp.h"
 //
 
-#include "LevelComp.h"
 #include "TileComp.h"
 #include "TimerComp.h"
-
+#include "PlayerEntityComp.h"
 
 #endif // !BMCOMPONENTS_H

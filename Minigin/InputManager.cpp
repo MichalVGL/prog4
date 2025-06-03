@@ -94,14 +94,13 @@ dae::KeyboardBinding dae::InputManager::CreateBinding(Key key, KeyState keyState
 	binding.KeyState = keyState;
 	binding.Command = std::move(command);
 
-	//m_KeyboadBindings.emplace_back(std::move(binding));
 	return binding;
 }
 
 dae::GamepadBinding dae::InputManager::CreateBinding(GamepadButton gamepadButton, int gamepadID, KeyState keyState, std::unique_ptr<Command>&& command)
 {
 	assert(Gamepad::IsValidGamepadButton(gamepadButton) && "Invalid gamepadButton given to gamepad binding");
-	assert(command && "Command cannot be null when adding a binding");
+	assert(command && "Command cannot be nullptr when adding a binding");
 
 	GamepadBinding binding{};
 	binding.GamepadButton = gamepadButton;
@@ -109,7 +108,6 @@ dae::GamepadBinding dae::InputManager::CreateBinding(GamepadButton gamepadButton
 	binding.KeyState = keyState;
 	binding.Command = std::move(command);
 
-	//m_GamepadBindings.emplace_back(std::move(binding));
 	return binding;
 }
 

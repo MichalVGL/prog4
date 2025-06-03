@@ -6,7 +6,7 @@
 namespace bm
 {
 	//Full gameobject functions
-	void MakeLevel(dae::Scene& scene);
+	//void MakeLevel(dae::Scene& scene);
 
 	//Helpers
 	std::unique_ptr<dae::GameObject> GOBJ(const dae::GobjID& name);

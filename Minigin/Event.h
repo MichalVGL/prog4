@@ -1,14 +1,20 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include "sdbmHash.h"
+
 namespace dae
 {
-	using EventId = unsigned int;
+	using event_id = unsigned int;
 
 	struct Event {
-		const EventId id;
+		const event_id id;
 
-		explicit Event(EventId _id) : id{ _id } {}\
+		template <size_t N>
+		constexpr explicit Event(const char(&path)[N])
+			: id{ make_sdbm_hash(path) }
+		{
+		}
 	};
 }
 

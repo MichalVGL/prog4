@@ -4,11 +4,11 @@
 
 #include "BMComponents.h"
 
-void bm::MakeLevel(dae::Scene& scene)
-{
-	auto pGo = scene.Add(std::move(RenderGOBJ("Level")));
-	pGo->AddComponent<LevelComp>();
-}
+//void bm::MakeLevel(dae::Scene& scene)
+//{
+//	auto pGo = scene.Add(std::move(RenderGOBJ("Level")));
+//	pGo->AddComponent<LevelComp>();
+//}
 
 //=====================HELPERS======================================================
 

@@ -8,10 +8,13 @@
 #include <Minigin.h>
 #include <Scene.h>
 #include <EngineComponents.h>
+#include <filesystem>
 
 #include "BMGameDefines.h"
 #include "BMComponents.h"
 #include "ObjectConstructions.h"
+#include "BMServiceLocator.h"
+#include "TileSystem.h"
 
 
 //todo delete statics
@@ -25,11 +28,27 @@ void Test();
 
 void LevelTest();
 
+std::filesystem::path GetDataPath()
+{
+	// Preferred path (e.g., when running from Visual Studio)
+	std::filesystem::path vsPath = "../" DATA_FOLDER_PATH;
+	if (std::filesystem::exists(vsPath))
+		return vsPath;
+
+	// Fallback (e.g., when running the .exe directly)
+	std::filesystem::path exePath = DATA_FOLDER_PATH;
+	if (std::filesystem::exists(exePath))
+		return exePath;
+
+	std::cout << "Data folder not found.\n";
+	throw std::runtime_error("Data folder not found.");
+}
+
 int main(int, char* []) {
 
 	dae::Window window{ .title = "Bomberman", .w = 256, .h = 240, .renderScale = 3.f };
 
-	dae::Minigin engine("../Data/", window);
+	dae::Minigin engine(GetDataPath().string(), window);
 	dae::ServiceLocator::GetSoundSystem().SetGlobalVolume(0.1f);
 	engine.Run(&LevelTest);
 	return 0;
@@ -43,7 +62,7 @@ void LevelTest()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	//Level==================================
-	bm::MakeLevel(scene);
+	bm::BMServiceLocator::RegisterTileSystem(std::make_unique<bm::Level_TileSystem>(scene));
 
 	//Timer==================================
 	auto go = bm::RenderGOBJ("TestTimer");
@@ -51,26 +70,34 @@ void LevelTest()
 	auto textComp = go->AddComponent<dae::TextComp>();
 	textComp->SetSize(16);
 	textComp->SetFont(g_PixelFont);
-	auto timerComp = go->AddComponent<bm::TimerComp>(20.f, true);
-	timerComp->SetFormatFunction([](float t) { return std::format("Nuke in: {:.0f}", t); });
+	auto timerComp = go->AddComponent<bm::TimerComp>(30.f, true);
+	timerComp->SetFormatFunction([](float t) { return std::format("Time left: {:.0f} h", t); });
 
 	scene.Add(std::move(go));
 
-	//Character01=======================================================================================
-	go = std::make_unique<dae::GameObject>("Bomberman");
-	auto tranComp = go->GetComponent<dae::TransformComp>();
-	tranComp->SetLocalPosition(100, 100);
-	auto rendComp = go->AddComponent<dae::RenderComp>();
-	rendComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
-	rendComp->SetVerticalAlignment(dae::VerticalAlignment::center);
-	auto* spriteComp = go->AddComponent<dae::SpriteComp>();
-	spriteComp->LoadTexture(g_Bomberman);
-	spriteComp->AddSpriteEntry(dae::SpriteEntry("WalkRight", { 0, bm::TILE_SIZE, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
-	spriteComp->SetSpriteEntry(dae::SpriteId("WalkRight"));
-	spriteComp->SetFPS(6.f);
-	spriteComp->FlipHorizontal(true);
-	go->AddComponent<GameActorComp>(50.f, 0);
+	//Player============================================================================
+	go = bm::SpriteGOBJ("Player");
+	go->AddComponent<bm::PlayerEntityComp>(bm::EntityStats{.movementSpeed = 25.f});
+	auto transComp = go->GetComponent<dae::TransformComp>();
+	transComp->SetLocalPosition(8, 8);
+
 	scene.Add(std::move(go));
+
+	////Character01=======================================================================================
+	//go = std::make_unique<dae::GameObject>("Bomberman");
+	//auto tranComp = go->GetComponent<dae::TransformComp>();
+	//tranComp->SetLocalPosition(100, 100);
+	//auto rendComp = go->AddComponent<dae::RenderComp>();
+	//rendComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
+	//rendComp->SetVerticalAlignment(dae::VerticalAlignment::center);
+	//auto* spriteComp = go->AddComponent<dae::SpriteComp>();
+	//spriteComp->LoadTexture(g_Bomberman);
+	//spriteComp->AddSpriteEntry(dae::SpriteEntry("WalkRight", { 0, bm::TILE_SIZE, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
+	//spriteComp->SetSpriteEntry(dae::SpriteId("WalkRight"));
+	//spriteComp->SetFPS(6.f);
+	//spriteComp->FlipHorizontal(true);
+	//go->AddComponent<GameActorComp>(50.f, 0);
+	//scene.Add(std::move(go));
 
 }
 
