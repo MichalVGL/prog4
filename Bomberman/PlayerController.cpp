@@ -1,31 +1,18 @@
-#include "PlayerEntityComp.h"
+#include "PlayerController.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <SDL.h>
 #include <Windows.h>
 #include <Xinput.h>
 
+#include <glm.hpp>
 
-#include "BMGameDefines.h"
-
-//todo, delete entire file
-
-/*
-
-bm::PlayerEntityComp::PlayerEntityComp(dae::GameObject& parent, const EntityStats& entityStats)
-	:BaseEntityComp(parent, entityStats)
+bm::PlayerController::PlayerController()
 {
 	SetupInput();
-
-	//setup the sprite
-	m_SpriteComp->LoadTexture(s_PlayerTextureEntry);
-	m_SpriteComp->AddSpriteEntry(dae::SpriteEntry("MoveDown", { 0, TILE_SIZE * 3, TILE_SIZE * 4, TILE_SIZE }, 4, 1));
-	m_SpriteComp->AddSpriteEntry(dae::SpriteEntry("MoveUp", { 0, TILE_SIZE * 2, TILE_SIZE * 4, TILE_SIZE }, 4, 1));
-	m_SpriteComp->AddSpriteEntry(dae::SpriteEntry("MoveRight", { 0, TILE_SIZE * 1, TILE_SIZE * 4, TILE_SIZE }, 4, 1));
-	m_SpriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { 0, 0, TILE_SIZE * 7, TILE_SIZE }, 7, 1));
 }
 
-bm::PlayerEntityComp::~PlayerEntityComp()
+bm::PlayerController::~PlayerController()
 {
 	auto& inputMngr = dae::InputManager::GetInstance();
 	for (auto& keyboardBinding : m_KeyboardBindings)
@@ -38,14 +25,7 @@ bm::PlayerEntityComp::~PlayerEntityComp()
 	}
 }
 
-void bm::PlayerEntityComp::Update(float deltaTime)
-{
-	UpdateState(deltaTime);
-}
-
-//HELPERS===============================================
-
-void bm::PlayerEntityComp::SetupInput()
+void bm::PlayerController::SetupInput()
 {
 	auto& inputMngr = dae::InputManager::GetInstance();
 
@@ -91,6 +71,3 @@ void bm::PlayerEntityComp::SetupInput()
 	m_KeyboardBindings.emplace_back(std::move(binding));
 	inputMngr.RegisterBinding(m_KeyboardBindings.back().get());
 }
-
-
-*/

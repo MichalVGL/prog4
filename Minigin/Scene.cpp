@@ -91,3 +91,15 @@ void dae::Scene::UpdateImGui()
 	}
 }
 
+std::vector<GameObjectHandle> dae::Scene::GetObjectByID(GobjID id) const
+{
+	std::vector<GameObjectHandle> handles{};
+	for (const auto& object : m_Objects)
+	{
+		if (object->GetId() == id)
+		{
+			handles.emplace_back(dae::GameObjectHandle(object.get()));
+		}
+	}
+	return handles;
+}

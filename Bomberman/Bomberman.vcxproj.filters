@@ -25,28 +25,34 @@
     <Filter Include="Source Files\Commands">
       <UniqueIdentifier>{7b474761-48cf-409e-9d37-ac49a3dd0632}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\EntityStates">
-      <UniqueIdentifier>{5656d094-7d8b-475b-8cba-ece054a0816b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\EntityStates">
-      <UniqueIdentifier>{c16a6215-52dd-4124-a57d-1fbc591b06d1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Tile">
       <UniqueIdentifier>{34967c4c-77bb-4aa6-9407-fd5a51528974}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Tile">
       <UniqueIdentifier>{1b8f60e1-58ad-42e1-88a6-1e7f01f5b863}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{5656d094-7d8b-475b-8cba-ece054a0816b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{c16a6215-52dd-4124-a57d-1fbc591b06d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Controllers">
+      <UniqueIdentifier>{c9683e14-c6de-4e8b-a1f3-d34548591914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Controllers">
+      <UniqueIdentifier>{6921e8dc-c3b8-4cd6-91b9-044186682d82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pathfinding">
+      <UniqueIdentifier>{3d699b20-f399-412f-814e-891cde224180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pathfinding">
+      <UniqueIdentifier>{3750955b-f4dd-423f-bb63-229a44bce5fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameActorComp.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="GameActorCommands.cpp">
-      <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="ObjectConstructions.cpp">
       <Filter>Source Files</Filter>
@@ -61,7 +67,7 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="EntityStates.cpp">
-      <Filter>Source Files\EntityStates</Filter>
+      <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="BMServiceLocator.cpp">
       <Filter>Source Files</Filter>
@@ -75,11 +81,26 @@
     <ClCompile Include="PlayerEntityComp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Source Files\Entity\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="AIController.cpp">
+      <Filter>Source Files\Entity\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="PathfinderSystem.cpp">
+      <Filter>Source Files\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="SpawnSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WallComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMod.cpp">
+      <Filter>Source Files\Tile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameActorComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="GameActorCommands.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -102,7 +123,7 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="EntityStates.h">
-      <Filter>Header Files\EntityStates</Filter>
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="BMServiceLocator.h">
       <Filter>Header Files</Filter>
@@ -116,10 +137,37 @@
     <ClInclude Include="BaseTile.h">
       <Filter>Header Files\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="ITileMod.h">
+    <ClInclude Include="TileMod.h">
       <Filter>Header Files\Tile</Filter>
     </ClInclude>
     <ClInclude Include="PlayerEntityComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityUtils.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityController.h">
+      <Filter>Header Files\Entity\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Header Files\Entity\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>Header Files\Entity\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="IPathfinderSystem.h">
+      <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfinderSystem.h">
+      <Filter>Header Files\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="ISpawnSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WallComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

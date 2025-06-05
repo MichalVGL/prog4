@@ -30,10 +30,12 @@ namespace bm
 	private:
 
 		glm::ivec2 GetTilePosition(glm::vec2 position) const;	//Get tile position from a world position
+		std::vector<BaseTileType> LoadTilesFromFile(std::string_view filePath);	//Load the tiles from a file
 
 		std::array<TileComp*, LEVELTILES_TOTAL> m_Tiles{};
 
-		const static std::array<BaseTile, static_cast<int>(BaseTileType::Count)> m_BaseTileTypes;
+		const static std::array<BaseTile, static_cast<int>(BaseTileType::Count)> s_BaseTileTypes;
+		constexpr static std::string_view s_BaseLevelFile{"Levels/main.bmlevel"};
 
 	};
 }

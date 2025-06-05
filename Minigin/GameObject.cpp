@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "GameObjectHandle.h"
 #include "TransformComp.h"
 #include "Scene.h"
 
@@ -16,6 +17,7 @@ dae::GameObject::GameObject(const GobjID& name)
 
 dae::GameObject::~GameObject()
 {
+	//parent/children system
 	std::for_each(m_ChildrenGameObj.rbegin(), m_ChildrenGameObj.rend(), [this](GameObject* child)
 		{
 			child->SetParent(m_pParentGameObj);
@@ -23,6 +25,12 @@ dae::GameObject::~GameObject()
 
 	if(m_pParentGameObj != nullptr)
 		m_pParentGameObj->RemoveChild(this);
+
+	//handles
+	for (auto& handle : m_RegisteredHandles)
+	{
+		handle->Invalidate();
+	}
 }
 
 void dae::GameObject::Start()
@@ -93,6 +101,11 @@ std::string_view dae::GameObject::GetName() const
 		return m_Id.name;
 	else
 		return "unnamed";
+}
+
+const dae::GobjID& dae::GameObject::GetId() const
+{
+	return m_Id;
 }
 
 void dae::GameObject::FlagForDeletion()
@@ -202,6 +215,34 @@ void dae::GameObject::SetLocalPosition(float x, float y)
 dae::Scene& dae::GameObject::GetScene()
 {
 	return *m_pScene;	//this pointer is salways set. If not, a warning will be printed on start(). (When the scene gets an gameobject, it will set this variable)
+}
+
+void dae::GameObject::RegisterHandle(GameObjectHandle* handle)
+{
+	if (handle == nullptr)
+	{
+		std::cout << "Warning: GameObjectHandle is nullptr, cannot register\n";
+		return;
+	}
+	m_RegisteredHandles.emplace_back(handle);
+}
+
+void dae::GameObject::UnregisterHandle(GameObjectHandle* handle)
+{
+	if (handle == nullptr)
+	{
+		std::cout << "Warning: GameObjectHandle is nullptr, cannot unregister\n";
+		return;
+	}
+	auto it = std::find(m_RegisteredHandles.begin(), m_RegisteredHandles.end(), handle);
+	if (it != m_RegisteredHandles.end())
+	{
+		m_RegisteredHandles.erase(it);
+	}
+	else
+	{
+		std::cout << "Warning: GameObjectHandle not found, cannot unregister\n";
+	}
 }
 
 void dae::GameObject::AddChild(GameObject* child)

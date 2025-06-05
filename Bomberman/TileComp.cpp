@@ -3,10 +3,10 @@
 #include "BMGameDefines.h"
 
 bm::TileComp::TileComp(dae::GameObject& parent, const BaseTile* pBaseTile, glm::ivec2 posIndex)
-	:Component{parent}
+	:Component{ parent }
 	, m_pBaseTile{ pBaseTile }
 	, m_IndexPos{ posIndex }
-	, m_Pos{ static_cast<float>(TILE_SIZE / 2 + TILE_SIZE * posIndex.x), static_cast<float>(TILE_SIZE / 2 + TILE_SIZE * posIndex.y)}
+	, m_Pos{ static_cast<float>(TILE_SIZE / 2 + TILE_SIZE * posIndex.x), static_cast<float>(TILE_SIZE / 2 + TILE_SIZE * posIndex.y) }
 {
 	if (m_pBaseTile == nullptr)
 	{
@@ -47,17 +47,20 @@ bool bm::TileComp::IsWalkable() const
 
 bool bm::TileComp::AllowSpawnables() const
 {
-	if (m_pTileMod)
-	{
-		return m_pTileMod->AllowSpawnables() && m_pBaseTile->AllowsSpawnables();
-	}
-	else
-	{
-		return m_pBaseTile->AllowsSpawnables();
-	}
+	return m_pTileMod == nullptr && m_pBaseTile->AllowsSpawnables();
 }
 
-void bm::TileComp::RegisterTileMod(const ITileMod* pTileMod)
+bool bm::TileComp::HasTileMod() const
+{
+	return m_pTileMod != nullptr;
+}
+
+const bm::TileMod* bm::TileComp::GetTileMod() const
+{
+	return m_pTileMod;
+}
+
+void bm::TileComp::RegisterTileMod(TileMod* pTileMod)
 {
 	if (m_pTileMod != nullptr)
 	{
@@ -67,11 +70,16 @@ void bm::TileComp::RegisterTileMod(const ITileMod* pTileMod)
 	m_pTileMod = pTileMod;
 }
 
-void bm::TileComp::UnregisterTileMod()
+void bm::TileComp::UnregisterTileMod(TileMod* pTileMod)
 {
-	if (m_pTileMod == nullptr)
+	if (m_pTileMod == nullptr )
 	{
 		std::cout << std::format("TileComp: Tried to unregister a TileMod on tile ({}, {}) that does not have a TileMod\n", m_IndexPos.x, m_IndexPos.y);
+		return;
+	}
+	else if (pTileMod != m_pTileMod)
+	{
+		std::cout << std::format("TileComp: Tried to unregister a TileMod ({}) on tile ({}, {}) that does not match the current TileMod ({})\n", typeid(*pTileMod).name(), m_IndexPos.x, m_IndexPos.y, typeid(*m_pTileMod).name());
 		return;
 	}
 	m_pTileMod = nullptr;
@@ -82,7 +90,7 @@ bm::TileComp* bm::TileComp::GetUpTile() const
 	return m_pUpTile;
 }
 
-bm::TileComp * bm::TileComp::GetRightTile() const
+bm::TileComp* bm::TileComp::GetRightTile() const
 {
 	return m_pRightTile;
 }

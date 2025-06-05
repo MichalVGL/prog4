@@ -7,6 +7,7 @@
 #include "ITextureSystem.h"
 #include "IRenderSystem.h"
 #include "IFontSystem.h"
+#include "IRandomSystem.h"
 
 namespace dae
 {
@@ -26,6 +27,9 @@ namespace dae
 		static void RegisterFontSystem(std::unique_ptr<IFontSystem>&& pFontSystem);
 		static IFontSystem& GetFontSystem();
 
+		static void RegisterRandomSystem(std::unique_ptr<IRandomSystem>&& pRandomSystem);
+		static IRandomSystem& GetRandomSystem();
+
 	private:
 
 		static std::unique_ptr<ISoundSystem> m_pSoundSystem;
@@ -35,6 +39,8 @@ namespace dae
 		static std::unique_ptr<IRenderSystem> m_pRenderSystem;
 
 		static std::unique_ptr<IFontSystem> m_pFontSystem;
+
+		static std::unique_ptr<IRandomSystem> m_pRandomSystem;
 	};
 }
 

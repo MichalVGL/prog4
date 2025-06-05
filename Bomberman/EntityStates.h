@@ -8,13 +8,14 @@
 #include <Subject.h>
 
 #include "BaseEntityComp.h"
+#include "EntityUtils.h"
 
 namespace bm
 {
 	class EntityState
 	{
 	public:
-		EntityState(dae::GameObject& gObj);
+		EntityState(dae::GameObject& gObj, EntityStateType type);
 		virtual ~EntityState() = default;
 
 		virtual void OnEnter() {};
@@ -26,17 +27,20 @@ namespace bm
 		virtual void SetCommand1(std::unique_ptr<dae::Command>&& command);
 		virtual void SetCommand2(std::unique_ptr<dae::Command>&& command);
 
+		EntityStateType GetStateType() const;
+
+		void ValidateSprite();	//helper to test if the sprite has been set correctly
+
 	protected:
 
 		void SetCommands(EntityState* state);	//for internal usage so commands are auto transferred
-
-		void ValidateSprite();
 
 		//===============================
 		std::unique_ptr<dae::Command> m_pCommand1;	//executes if Action1 == true (from EntityInput)
 		std::unique_ptr<dae::Command> m_pCommand2;	//executes if Action1 == true (from EntityInput)
 
 		dae::GameObject& m_GameObject;
+		EntityStateType m_StateType;
 	};
 
 	//=================================================================================================================================
@@ -46,7 +50,7 @@ namespace bm
 	class MovementState : public EntityState	//Update not implemented -> pure virtual
 	{
 	public:
-		MovementState(dae::GameObject& gObj);
+		MovementState(dae::GameObject& gObj, EntityStateType type);
 		virtual ~MovementState() = default;
 
 		virtual std::unique_ptr<EntityState> HandleInput(EntityInput& input);	//only handles Action1 and Action2, and sets the stored input (so update can use it for fluid state transitions)
@@ -141,13 +145,10 @@ namespace bm
 		float m_TargetX;
 	};
 
-	//todo, add left and right. first complete up/down (so add tilesystem and servicelocator)
-
 //=================================================================================================================================
 //Death
 //=================================================================================================================================
 
-	//todo, add death
 	class DeathState final : public EntityState
 	{
 	public:

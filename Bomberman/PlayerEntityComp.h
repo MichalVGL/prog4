@@ -7,7 +7,11 @@
 #include <Command.h>
 
 #include "BaseEntityComp.h"
+#include "EntityController.h"
 
+//todo, delete entire file
+
+/*
 namespace bm
 {
 	class PlayerEntityComp final : public BaseEntityComp	//Args: const EntityStats& entityStats
@@ -39,30 +43,12 @@ namespace bm
 
 		static constexpr dae::TextureEntry s_PlayerTextureEntry{"Bomberman.png"};
 
-		std::vector<std::unique_ptr<dae::KeyboardBinding>> m_KeyboardBindings{};
-		std::vector<std::unique_ptr<dae::GamepadBinding>> m_GamepadBindings{};
+		//std::vector<std::unique_ptr<dae::KeyboardBinding>> m_KeyboardBindings{};
+		//std::vector<std::unique_ptr<dae::GamepadBinding>> m_GamepadBindings{};
 
 	};
 
-	class DirectionCommand final : public dae::Command
-	{
-	public:
-		DirectionCommand(EntityInput& input, const glm::ivec2& direction)
-			:m_Direction{ direction }
-			, m_Input{ input }
-		{
-		}
-
-		void Execute() override
-		{
-			m_Input.direction = m_Direction;
-		}
-
-	private:
-
-		glm::ivec2 m_Direction;
-		EntityInput& m_Input;
-	};
 
 }
+*/
 #endif // !PLAYERENTITYCOMP_H

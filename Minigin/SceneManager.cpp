@@ -1,57 +1,52 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+{
+	//const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+	//m_scenes.push_back(scene);
+	//m_pScene = std::make_shared<Scene>(name);
+	m_pScene = std::shared_ptr<Scene>(new Scene(name));
+	return *m_pScene;
+}
+
+dae::Scene* dae::SceneManager::GetCurrentScene() const
+{
+	return m_pScene.get();
+}
+
 void dae::SceneManager::Start()
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->Start();
-	}
+	if (m_pScene)
+		m_pScene->Start();
 }
 
 void dae::SceneManager::FixedUpdate(float deltaFixedTime)
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->FixedUpdate(deltaFixedTime);
-	}
+	if (m_pScene)
+		m_pScene->FixedUpdate(deltaFixedTime);
 }
 
 void dae::SceneManager::Update(float deltaTime)
 {
-	for(auto& scene : m_scenes)
-	{
-		scene->Update(deltaTime);
-	}
+	if (m_pScene)
+		m_pScene->Update(deltaTime);
 }
 
 void dae::SceneManager::LateUpdate(float deltaTime)
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->LateUpdate(deltaTime);
-	}
+	if (m_pScene)
+		m_pScene->LateUpdate(deltaTime);
 }
 
-void dae::SceneManager::Render() const 
+void dae::SceneManager::Render() const
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->Render();
-	}
+	if (m_pScene)
+		m_pScene->Render();
 }
 
 void dae::SceneManager::UpdateImGui()
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->UpdateImGui();
-	}
-}
-
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
-{
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_scenes.push_back(scene);
-	return *scene;
+	if (m_pScene)
+		m_pScene->UpdateImGui();
 }

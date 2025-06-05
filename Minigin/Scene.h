@@ -1,8 +1,11 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <vector>
+
 #include "SceneManager.h"
 #include "GameObject.h"
+#include "GameObjectHandle.h"
 
 namespace dae
 {
@@ -11,6 +14,13 @@ namespace dae
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
+
+		~Scene();
+		Scene(const Scene& other) = delete;
+		Scene(Scene&& other) = delete;
+		Scene& operator=(const Scene& other) = delete;
+		Scene& operator=(Scene&& other) = delete;
+
 		GameObject* Add(std::unique_ptr<GameObject> object);
 		void Remove(GameObject* object);
 		void RemoveAll();
@@ -22,11 +32,7 @@ namespace dae
 		void Render() const;
 		void UpdateImGui();
 
-		~Scene();
-		Scene(const Scene& other) = delete;
-		Scene(Scene&& other) = delete;
-		Scene& operator=(const Scene& other) = delete;
-		Scene& operator=(Scene&& other) = delete;
+		std::vector<GameObjectHandle> GetObjectByID(GobjID id) const;
 
 	private: 
 		explicit Scene(const std::string& name);

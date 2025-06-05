@@ -6,11 +6,13 @@
 #include "TextureSystem.h"
 #include "RenderSystem.h"
 #include "FontSystem.h"
+#include "RandomSystem.h"
 
 std::unique_ptr<dae::ISoundSystem> dae::ServiceLocator::m_pSoundSystem{ std::make_unique<dae::Null_SoundSystem>() };
 std::unique_ptr<dae::ITextureSystem> dae::ServiceLocator::m_pTextureSystem{ std::make_unique<dae::Null_TextureSystem>() };
 std::unique_ptr<dae::IRenderSystem> dae::ServiceLocator::m_pRenderSystem{ std::make_unique<dae::Null_RenderSystem>() };
 std::unique_ptr<dae::IFontSystem> dae::ServiceLocator::m_pFontSystem{ std::make_unique<dae::Null_FontSystem>() };
+std::unique_ptr<dae::IRandomSystem> dae::ServiceLocator::m_pRandomSystem{ std::make_unique<dae::Default_RandomSystem>() };
 
 void dae::ServiceLocator::RegisterSoundSystem(std::unique_ptr<ISoundSystem>&& pSoundSystem)
 {
@@ -70,5 +72,20 @@ dae::IFontSystem& dae::ServiceLocator::GetFontSystem()
 		m_pFontSystem = std::make_unique<dae::Null_FontSystem>();
 	}
 	return *m_pFontSystem;
+}
+
+void dae::ServiceLocator::RegisterRandomSystem(std::unique_ptr<IRandomSystem>&& pRandomSystem)
+{
+	assert(pRandomSystem != nullptr && "ServiceLocator::RegisterRandomSystem: Tried to register nullptr as RandomSystem");
+	m_pRandomSystem = std::move(pRandomSystem);
+}
+
+dae::IRandomSystem& dae::ServiceLocator::GetRandomSystem()
+{
+	if (!m_pRandomSystem)
+	{
+		m_pRandomSystem = std::make_unique<dae::Default_RandomSystem>();
+	}
+	return *m_pRandomSystem;
 }
  

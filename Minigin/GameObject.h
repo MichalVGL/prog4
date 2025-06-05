@@ -21,6 +21,7 @@ GameObject Class
 #include <format>
 
 #include "sdbmHash.h"
+#include "GameObjectHandle.h"
 
 namespace dae
 {
@@ -40,6 +41,12 @@ namespace dae
 			:name{ name }
 			, id{ make_sdbm_hash(name) }
 		{
+		}
+
+		//== operator
+		bool operator==(const GobjID& other) const noexcept
+		{
+			return id == other.id;
 		}
 	};
 
@@ -126,6 +133,7 @@ namespace dae
 
 		//id related======================================================
 		std::string_view GetName() const;
+		const GobjID& GetId() const;
 
 		//deletion========================================================
 		void FlagForDeletion();
@@ -154,6 +162,11 @@ namespace dae
 		static constexpr std::string_view s_NullName{"___"};
 
 	private:
+
+		//External references=============================================
+		friend class GameObjectHandle;
+		void RegisterHandle(GameObjectHandle* handle);
+		void UnregisterHandle(GameObjectHandle* handle);
 		
 		//====================
 		//gameobject parent/children functions (private)
@@ -192,6 +205,10 @@ namespace dae
 		//====================
 		//scene of the gameobject
 		Scene* m_pScene{};
+
+		//====================
+		//External references
+		std::vector<GameObjectHandle*> m_RegisteredHandles; //Handles to this GameObject, will tnotify these handles when the object is getting deleted
 	};
 }
 

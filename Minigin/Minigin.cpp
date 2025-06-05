@@ -13,6 +13,7 @@
 
 #include "Minigin.h"
 #include "DaeTime.h"
+#include "DaeFiles.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 
@@ -58,8 +59,10 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string &dataPath, const Window& window)
+dae::Minigin::Minigin(const std::string &datapath, const Window& window)
 {
+	dae::dataPath = std::filesystem::path(datapath);
+
 	PrintSDLVersion();
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
@@ -68,11 +71,11 @@ dae::Minigin::Minigin(const std::string &dataPath, const Window& window)
 
 	{//systems init
 		auto renderSystem = std::make_unique<SDL_RenderSystem>(window);	//first create rendersystem seperatly to be able to give it to the texturesystem
-		ServiceLocator::RegisterTextureSystem(std::make_unique<SDL_TextureSystem>(dataPath, renderSystem->GetSDLRenderer()));
+		ServiceLocator::RegisterTextureSystem(std::make_unique<SDL_TextureSystem>(datapath, renderSystem->GetSDLRenderer()));
 		ServiceLocator::RegisterRenderSystem(std::move(renderSystem));
-		ServiceLocator::RegisterFontSystem(std::make_unique<SDL_FontSystem>(dataPath));
+		ServiceLocator::RegisterFontSystem(std::make_unique<SDL_FontSystem>(datapath));
 		//ServiceLocator::RegisterSoundSystem(std::make_unique<Logger_SoundSystem>(std::make_unique<SDL_SoundSystem>(dataPath)));
-		ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>(dataPath));
+		ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>(datapath));
 	}
 }
 

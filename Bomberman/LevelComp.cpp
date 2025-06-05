@@ -12,7 +12,7 @@ bm::LevelComp::LevelComp(dae::GameObject& parent)
 	for (size_t i{ 0 }; i < m_Tiles.size(); ++i)
 	{
 		auto go{ RenderGOBJ("LevelTile") };
-		m_Tiles[i] = go->AddComponent<TileComp>(TileType::Wall, glm::ivec2{ i % LEVELTILE_COLS, i / LEVELTILE_COLS });
+		m_Tiles[i] = go->AddComponent<TileComp>(TileType::wall, glm::ivec2{ i % LEVELTILE_COLS, i / LEVELTILE_COLS });
 		go->SetParent(&GetOwner());
 		GetOwner().GetScene().Add(std::move(go));
 	}

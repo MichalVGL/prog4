@@ -171,34 +171,46 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIController.cpp" />
     <ClCompile Include="BaseTile.cpp" />
     <ClCompile Include="BMServiceLocator.cpp" />
     <ClCompile Include="Bomberman.cpp" />
     <ClCompile Include="BaseEntityComp.cpp" />
+    <ClCompile Include="TileMod.cpp" />
+    <ClCompile Include="WallComp.cpp" />
+    <ClCompile Include="PathfinderSystem.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="PlayerEntityComp.cpp" />
     <ClCompile Include="EntityStates.cpp" />
+    <ClCompile Include="SpawnSystem.cpp" />
     <ClCompile Include="TileSystem.cpp" />
     <ClCompile Include="TimerComp.cpp" />
     <ClCompile Include="TileComp.cpp" />
-    <ClCompile Include="GameActorCommands.cpp" />
-    <ClCompile Include="GameActorComp.cpp" />
     <ClCompile Include="ObjectConstructions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIController.h" />
     <ClInclude Include="BaseTile.h" />
     <ClInclude Include="BMComponents.h" />
     <ClInclude Include="BMGameDefines.h" />
     <ClInclude Include="BaseEntityComp.h" />
     <ClInclude Include="BMServiceLocator.h" />
+    <ClInclude Include="WallComp.h" />
+    <ClInclude Include="EntityUtils.h" />
+    <ClInclude Include="EntityController.h" />
+    <ClInclude Include="IPathfinderSystem.h" />
+    <ClInclude Include="ISpawnSystem.h" />
+    <ClInclude Include="PathfinderSystem.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="PlayerEntityComp.h" />
     <ClInclude Include="EntityStates.h" />
-    <ClInclude Include="ITileMod.h" />
+    <ClInclude Include="TileMod.h" />
     <ClInclude Include="ITileSystem.h" />
+    <ClInclude Include="SpawnSystem.h" />
     <ClInclude Include="TileSystem.h" />
     <ClInclude Include="TimerComp.h" />
     <ClInclude Include="TileComp.h" />
     <ClInclude Include="GameActorCommands.h" />
-    <ClInclude Include="GameActorComp.h" />
     <ClInclude Include="ObjectConstructions.h" />
   </ItemGroup>
   <ItemGroup>

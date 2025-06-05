@@ -5,12 +5,10 @@
 #include "BMGameDefines.h" 
 #include "BMServiceLocator.h"
 
-bm::EntityState::EntityState(dae::GameObject& gObj)
+bm::EntityState::EntityState(dae::GameObject& gObj, EntityStateType type)
 	:m_GameObject{ gObj }
+	, m_StateType{ type }
 {
-#ifdef _DEBUG
-	ValidateSprite();
-#endif // _DEBUG
 }
 
 void bm::EntityState::SetCommand1(std::unique_ptr<dae::Command>&& command)
@@ -23,7 +21,29 @@ void bm::EntityState::SetCommand2(std::unique_ptr<dae::Command>&& command)
 	m_pCommand2 = std::move(command);
 }
 
+bm::EntityStateType bm::EntityState::GetStateType() const
+{
+	return m_StateType;
+}
+
 //HELPERS===================
+
+//public
+
+void bm::EntityState::ValidateSprite()
+{
+	auto spriteComp = m_GameObject.GetComponent<dae::SpriteComp>();
+
+	if (spriteComp->GetSpriteEntry(SPRITEID_MOVEUP) == nullptr or
+		spriteComp->GetSpriteEntry(SPRITEID_MOVELEFT) == nullptr or
+		spriteComp->GetSpriteEntry(SPRITEID_MOVEDOWN) == nullptr or
+		spriteComp->GetSpriteEntry(SPRITEID_DEATH) == nullptr)
+	{
+		std::cout << std::format("Warning: Cannot find a required sprite_id on the given spriteComp. [GameObject: {}]", spriteComp->GetOwner().GetName());
+	}
+}
+
+//private
 
 void bm::EntityState::SetCommands(EntityState* newState)
 {
@@ -31,19 +51,6 @@ void bm::EntityState::SetCommands(EntityState* newState)
 	{
 		newState->SetCommand1(std::move(m_pCommand1));
 		newState->SetCommand2(std::move(m_pCommand2));
-	}
-}
-
-void bm::EntityState::ValidateSprite()
-{
-	auto spriteComp = m_GameObject.GetComponent<dae::SpriteComp>();
-
-	if (spriteComp->GetSpriteEntry(SPRITEID_MOVEUP) == nullptr or
-		spriteComp->GetSpriteEntry(SPRITEID_MOVERIGHT) == nullptr or
-		spriteComp->GetSpriteEntry(SPRITEID_MOVEDOWN) == nullptr or
-		spriteComp->GetSpriteEntry(SPRITEID_DEATH) == nullptr)
-	{
-		std::cout << std::format("Warning: Cannot find a required sprite_id on the given spriteComp. [GameObject: {}]", spriteComp->GetOwner().GetName());
 	}
 }
 
@@ -55,8 +62,8 @@ void bm::EntityState::ValidateSprite()
 //MovementState (base class for implementations)
 //=========================================================
 
-bm::MovementState::MovementState(dae::GameObject& gObj)
-	:EntityState{ gObj }
+bm::MovementState::MovementState(dae::GameObject& gObj, EntityStateType type)
+	:EntityState{ gObj, type }
 	, m_TransformComp{ *gObj.GetComponent<dae::TransformComp>() }
 	, m_SpriteComp{ *gObj.GetComponent<dae::SpriteComp>() }
 {
@@ -90,7 +97,7 @@ std::unique_ptr<bm::EntityState> bm::MovementState::GetNewDirectionState(glm::iv
 	//todo, use servicelocator to get to tiles, the levelcomp inits and destroys the service. Use the helper function on the service to get validation here
 
 	auto& tileService{ BMServiceLocator::GetTileSystem() };
-	auto* currentTile{ tileService.GetTileFromWorldPos(m_TransformComp.GetLocalPosition()) };
+	auto* currentTile{ tileService.GetTileFromWorldPos(m_TransformComp.GetOwner().GetWorldPos()) };
 
 	if (currentTile == nullptr)
 	{
@@ -141,7 +148,7 @@ std::unique_ptr<bm::EntityState> bm::MovementState::GetNewDirectionState(glm::iv
 //=======================================================================
 
 bm::IdleState::IdleState(dae::GameObject& gObj)
-	:MovementState{ gObj }
+	:MovementState{ gObj, EntityStateType::Idle }
 {
 }
 
@@ -173,7 +180,7 @@ std::unique_ptr<bm::EntityState> bm::IdleState::HandleInput(EntityInput& input)
 //=======================================================================
 
 bm::MoveUpState::MoveUpState(dae::GameObject& gObj, float targetY)
-	:MovementState{ gObj }
+	:MovementState{ gObj, EntityStateType::Moving }
 	, m_TargetY{ targetY }
 {
 }
@@ -218,7 +225,7 @@ std::unique_ptr<bm::EntityState> bm::MoveUpState::HandleInput(EntityInput& input
 	if (input.direction.y == -1)	//if you want to go back mid transition
 	{
 		auto& tileService{ BMServiceLocator::GetTileSystem() };
-		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TransformComp.GetLocalPosition().y, m_TargetY }) };	//current target
+		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TransformComp.GetLocalPosition().x, m_TargetY }) };	//current target
 		auto* pNextTile{ pTargetTile ? pTargetTile->GetDownTile() : nullptr };	//potential next tile
 		if (pNextTile && pNextTile->IsWalkable())
 		{
@@ -235,7 +242,7 @@ std::unique_ptr<bm::EntityState> bm::MoveUpState::HandleInput(EntityInput& input
 //=======================================================================
 
 bm::MoveDownState::MoveDownState(dae::GameObject& gObj, float targetY)
-	:MovementState{ gObj }
+	:MovementState{ gObj, EntityStateType::Moving }
 	, m_TargetY{ targetY }
 {
 }
@@ -280,7 +287,7 @@ std::unique_ptr<bm::EntityState> bm::MoveDownState::HandleInput(EntityInput& inp
 	if (input.direction.y == 1)	//if you want to go back mid transition
 	{
 		auto& tileService{ BMServiceLocator::GetTileSystem() };
-		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TransformComp.GetLocalPosition().y, m_TargetY }) };	//current target
+		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TransformComp.GetLocalPosition().x, m_TargetY }) };	//current target
 		auto* pNextTile{ pTargetTile ? pTargetTile->GetUpTile() : nullptr };	//potential next tile
 		if (pNextTile && pNextTile->IsWalkable())
 		{
@@ -297,15 +304,15 @@ std::unique_ptr<bm::EntityState> bm::MoveDownState::HandleInput(EntityInput& inp
 //=======================================================================
 
 bm::MoveRightState::MoveRightState(dae::GameObject& gObj, float targetX)
-	:MovementState{ gObj }
+	:MovementState{ gObj, EntityStateType::Moving }
 	, m_TargetX{ targetX }
 {
 }
 
 void bm::MoveRightState::OnEnter()
 {
-	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVERIGHT);
-	m_SpriteComp.FlipHorizontal(true);	//flip the sprite to the left
+	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVELEFT);
+	m_SpriteComp.FlipHorizontal(true);	//flip the sprite to the right
 }
 
 void bm::MoveRightState::OnExit()
@@ -346,7 +353,7 @@ std::unique_ptr<bm::EntityState> bm::MoveRightState::HandleInput(EntityInput& in
 	if (input.direction.x == -1)	//if you want to go back mid transition
 	{
 		auto& tileService{ BMServiceLocator::GetTileSystem() };
-		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TransformComp.GetLocalPosition().y, m_TargetX }) };	//current target
+		auto* pTargetTile{ tileService.GetTileFromWorldPos({m_TargetX, m_TransformComp.GetLocalPosition().y}) };	//current target
 		auto* pNextTile{ pTargetTile ? pTargetTile->GetLeftTile() : nullptr };	//potential next tile
 		if (pNextTile && pNextTile->IsWalkable())
 		{
@@ -363,7 +370,7 @@ std::unique_ptr<bm::EntityState> bm::MoveRightState::HandleInput(EntityInput& in
 //=======================================================================
 
 bm::MoveLeftState::MoveLeftState(dae::GameObject& gObj, float targetX)
-	:MovementState{ gObj }
+	:MovementState{ gObj, EntityStateType::Moving }
 	, m_TargetX{ targetX }
 {
 }
@@ -371,7 +378,7 @@ bm::MoveLeftState::MoveLeftState(dae::GameObject& gObj, float targetX)
 void bm::MoveLeftState::OnEnter()
 {
 	m_SpriteComp.FlipHorizontal(false);	//reset the flip, if it was set by the MoveRightState
-	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVERIGHT);
+	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVELEFT);
 }
 
 std::unique_ptr<bm::EntityState> bm::MoveLeftState::Update(float deltaTime, EntityStats& data)
@@ -408,7 +415,7 @@ std::unique_ptr<bm::EntityState> bm::MoveLeftState::HandleInput(EntityInput& inp
 	if (input.direction.x == 1)	//if you want to go back mid transition
 	{
 		auto& tileService{ BMServiceLocator::GetTileSystem() };
-		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TransformComp.GetLocalPosition().y, m_TargetX }) };	//current target
+		auto* pTargetTile{ tileService.GetTileFromWorldPos({ m_TargetX, m_TransformComp.GetLocalPosition().y }) };	//current target
 		auto* pNextTile{ pTargetTile ? pTargetTile->GetRightTile() : nullptr };	//potential next tile
 		if (pNextTile && pNextTile->IsWalkable())
 		{
@@ -425,7 +432,7 @@ std::unique_ptr<bm::EntityState> bm::MoveLeftState::HandleInput(EntityInput& inp
 //=======================================================================
 
 bm::DeathState::DeathState(dae::GameObject& gObj, dae::Subject& subject)
-	:EntityState{ gObj }
+	:EntityState{ gObj, EntityStateType::Dying }
 	, m_SpriteComp{ *gObj.GetComponent<dae::SpriteComp>() }
 	, m_OnDeathComplete{ subject }
 {

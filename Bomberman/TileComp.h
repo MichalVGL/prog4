@@ -8,7 +8,7 @@
 #include <EngineComponents.h>
 
 #include "BaseTile.h"
-#include "ITileMod.h"
+#include "TileMod.h"
 
 namespace bm
 {
@@ -39,8 +39,11 @@ namespace bm
 		bool IsWalkable() const;
 		bool AllowSpawnables() const;
 
-		void RegisterTileMod(const ITileMod* pTileMod);
-		void UnregisterTileMod();
+		bool HasTileMod() const;	//returns the tilemodid if it exists, otherwise returns nullptr
+		const TileMod* GetTileMod() const;	//returns the tilemodid if it exists, otherwise returns nullptr
+
+		void RegisterTileMod(TileMod* pTileMod);
+		void UnregisterTileMod(TileMod* pTileMod);
 
 		TileComp* GetUpTile() const;
 		TileComp* GetRightTile() const;
@@ -58,7 +61,7 @@ namespace bm
 		dae::ReqComp<dae::RenderComp> m_RenderComp;
 
 		const BaseTile* m_pBaseTile;
-		const ITileMod* m_pTileMod{};
+		TileMod* m_pTileMod{};
 
 		const glm::ivec2 m_IndexPos;
 		const glm::vec2 m_Pos;

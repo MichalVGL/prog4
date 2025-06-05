@@ -7,8 +7,8 @@ namespace bm
 {
 	enum class BaseTileType
 	{
-		Ground,
-		Wall,
+		ground,
+		wall,
 		Count
 	};
 
