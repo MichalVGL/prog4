@@ -19,12 +19,8 @@ bm::BaseEntityComp::BaseEntityComp(dae::GameObject& parent, const EntityStats& e
 	//make sure spritecomp is added before this comp!!!
 	m_TransformComp.Init(GetOwner());
 	m_SpriteComp.Init(GetOwner());
-	m_SpriteComp->SetFPS(8.f);	//todo, use the defines
-	
-	//Align to center 
-	auto* pRenderComp = GetOwner().GetComponent<dae::RenderComp>();
-	pRenderComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
-	pRenderComp->SetVerticalAlignment(dae::VerticalAlignment::center);
+	m_SpriteComp->SetFPS(GLOBAL_FPS);	//todo, use the defines
+	m_SpriteComp->SetAlignment(dae::HorizontalAlignment::center, dae::VerticalAlignment::center);
 }
 
 bm::BaseEntityComp::~BaseEntityComp() = default;

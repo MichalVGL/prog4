@@ -60,6 +60,11 @@ const bm::TileMod* bm::TileComp::GetTileMod() const
 	return m_pTileMod;
 }
 
+bm::TileMod* bm::TileComp::GetTileMod()
+{
+	return m_pTileMod;
+}
+
 void bm::TileComp::RegisterTileMod(TileMod* pTileMod)
 {
 	if (m_pTileMod != nullptr)
@@ -72,7 +77,7 @@ void bm::TileComp::RegisterTileMod(TileMod* pTileMod)
 
 void bm::TileComp::UnregisterTileMod(TileMod* pTileMod)
 {
-	if (m_pTileMod == nullptr )
+	if (m_pTileMod == nullptr)
 	{
 		std::cout << std::format("TileComp: Tried to unregister a TileMod on tile ({}, {}) that does not have a TileMod\n", m_IndexPos.x, m_IndexPos.y);
 		return;

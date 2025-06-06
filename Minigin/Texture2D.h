@@ -33,12 +33,6 @@ namespace dae
 
 		int GetHeight() const;
 		int GetWidth() const;
-		Flip GetFlip() const;
-		texture_angle GetAngle() const;
-
-		void SetHorizontalFlip(bool flip);
-		void SetVerticalFlip(bool flip);
-		void SetAngle(texture_angle angle);
 
 	private:
 

@@ -54,7 +54,7 @@ void bm::AIController::Update(EntityCondition condition)
 			}
 			else
 			{
-				m_EntityInput.direction = glm::ivec2(0, 0);	//no more path, stop moving when completed (idle)
+				m_EntityInput.direction = glm::ivec2(0, 0);	//no more path, stop moving when completed (idle, will trigger pathing) 
 			}
 		}
 	}
@@ -118,7 +118,6 @@ bm::PathToTargetCommand::PathToTargetCommand(dae::GameObject& entity, std::vecto
 	, m_Target{}
 	, m_Path{ path }
 	, m_TargetFunc{ std::move(targetFunc) }
-	//, m_BackupCommand{ std::move(backupCommand) }
 {
 	backupCommand;
 }
@@ -131,31 +130,27 @@ void bm::PathToTargetCommand::Execute()
 		m_Target = m_TargetFunc();
 	if (!m_Target)	//no target found
 	{
-		//if (m_BackupCommand)
-		//{
-		//	m_BackupCommand->Execute();
-		//}
 		return;
 	}
 
 	//try using the target 
 	auto& pathingSystem = BMServiceLocator::GetPathfinderSystem();
 	m_Path = pathingSystem.FindPath(m_Entity.GetWorldPos(), m_Target->GetWorldPos());
-	if (m_Path.empty())	//if no path found, use the backup command
-	{
-		//if (m_BackupCommand)
-		//	m_BackupCommand->Execute();
+	if (m_Path.empty())	//no path found
 		return;
-	}
 
 	pathingSystem.ConvertPathToDirections(m_Path);	//convert the path to directions and reverse the vector
 }
 
+//Helper functions===================
+
 #include <SceneManager.h>
 #include <Scene.h>
 
-dae::GameObjectHandle bm::GetPlayer()
+dae::GameObjectHandle bm::GetPlayer()	//used as the target function for the AIController's PathToTargetCommand
 {
+	//Gets all the players in the scene and picks a random one
+
 	auto* currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
 
 	if (!currentScene)

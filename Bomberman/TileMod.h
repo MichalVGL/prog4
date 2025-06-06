@@ -12,13 +12,19 @@ namespace bm
 {
 	struct TileModId
 	{
+		unsigned int id;
+
 		template <size_t N>
 		constexpr TileModId(const char(&name)[N])
 			: id{ dae::make_sdbm_hash(name) }
 		{
 		}
 
-		unsigned int id;
+		//== operator
+		bool operator==(const TileModId& other) const
+		{
+			return id == other.id;
+		}
 	};
 
 	// To implement if you want to modify a tile
@@ -26,7 +32,13 @@ namespace bm
 	{
 	public:
 
-		TileMod(TileModId id, dae::GameObject& object);	//auto register to the tile
+		TileMod(dae::GameObject& object, TileModId id);	//auto register to the tile, make sure to set position before add the component that implements this
+
+		~TileMod() = default;
+		TileMod(const TileMod&) = delete;
+		TileMod(TileMod&&) noexcept = delete;
+		TileMod& operator=(const TileMod&) = delete;
+		TileMod& operator=(TileMod&&) noexcept = delete;
 
 		virtual bool IsWalkable() const = 0;
 		TileModId GetId() const;
@@ -37,6 +49,7 @@ namespace bm
 
 		TileModId m_Id;
 		dae::GameObject& m_Object;	//the object that has this tile mod
+		bool m_Registered{ false };
 		
 	};
 }

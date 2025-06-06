@@ -3,12 +3,13 @@
 #include "BMGameDefines.h"
 
 bm::WallComp::WallComp(dae::GameObject& parent)
-	:Component(parent), TileMod(WALL_MODID, parent)
+	:Component(parent), TileMod(parent, WALL_MODID)
 {
 	//setup sprite
 	m_SpriteComp.Init(parent);
 	m_SpriteComp->LoadTexture(s_WallTextureEntry);
 	m_SpriteComp->SetFPS(GLOBAL_FPS);
+	m_SpriteComp->SetAlignment(dae::HorizontalAlignment::center, dae::VerticalAlignment::center);
 	m_SpriteComp->AddSpriteEntry(s_BaseWallSprite);
 	m_SpriteComp->AddSpriteEntry(s_DestroyingWallSprite);
 
@@ -20,11 +21,17 @@ void bm::WallComp::Update(float deltaTime)
 	deltaTime;
 	if (m_IsBeingDestroyed && m_SpriteComp->IsLoopComplete())
 	{
-		//todo delete this and spawn a tilemod if there is one stored
+		GetOwner().FlagForDeletion();
 	}
 }
 
-void bm::WallComp::Destroy()
+void bm::WallComp::OnDestroy()
+{
+	TileMod::Unregister();
+	//todo spawn stored mod
+}
+
+void bm::WallComp::DestroyWall()
 {
 	if (m_IsBeingDestroyed == false)
 	{

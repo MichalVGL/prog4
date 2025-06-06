@@ -22,9 +22,9 @@ namespace dae
 		virtual void Render() const = 0;
 		virtual void SetBackgroundColor(Color color) = 0;
 
-		virtual void RenderTexture(const Texture2D& texture, float x, float y) const = 0; 
-		virtual void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y) const = 0;
-		virtual void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect) const = 0; 
+		virtual void RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const = 0;
+		virtual void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const = 0;
+		virtual void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const = 0; 
 	};
 }
 

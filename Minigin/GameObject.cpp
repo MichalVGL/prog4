@@ -110,7 +110,14 @@ const dae::GobjID& dae::GameObject::GetId() const
 
 void dae::GameObject::FlagForDeletion()
 {
-	m_FlaggedForDeletion = true;
+	if (!m_FlaggedForDeletion)	//prevent calling multiple times
+	{
+		m_FlaggedForDeletion = true;
+		for (auto& comp : m_Components)
+		{
+			comp->OnDestroy();
+		}
+	}
 }
 
 bool dae::GameObject::IsFlaggedForDeletion() const

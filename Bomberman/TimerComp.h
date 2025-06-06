@@ -7,13 +7,14 @@
 #include <format>
 
 #include <EngineComponents.h>
+#include <Subject.h>
 
 namespace bm
 {
-	class TimerComp final : public dae::Component	//Args: float startTime, bool useText = true
+	class TimerComp final : public dae::Component	//Args: float startTime = -1.f, bool useText = true
 	{
 	public:
-		TimerComp(dae::GameObject& parent, float startTime, bool useText = true);
+		TimerComp(dae::GameObject& parent, float startTime = -1.f, bool useText = true);
 
 		TimerComp(const TimerComp& other) = default;
 		TimerComp(TimerComp&& other) noexcept = default;
@@ -31,11 +32,16 @@ namespace bm
 		//--------------------------
 
 		float RemainingTime();
+		bool IsComplete();
 		//possible functions if needed later
-		//void SetTime();
+		void SetTime(float time);
 		//void Reset();
 
 		void SetFormatFunction(std::function<std::string(float)> func);
+
+		dae::Subject& OnTimerComplete();
+
+		static constexpr dae::Event s_TimerCompleteEvent{ "TimerComplete" };
 
 	private:
 
@@ -44,6 +50,7 @@ namespace bm
 
 		float m_RemainingTime;
 		bool m_Complete{ false };
+		dae::Subject m_TimerCompleteSubject{ s_TimerCompleteEvent };
 
 		std::function<std::string(float)> m_FormatFunc{ [](float t) {return std::format("{:.2f}", t); } };
 

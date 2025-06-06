@@ -55,9 +55,9 @@ namespace dae
 		void Render() const;
 		void SetBackgroundColor(SDL_Color color);
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const;
-		void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y) const;
-		void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect) const;
+		void RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const;
+		void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const;
+		void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const;
 
 	private:
 
@@ -134,20 +134,20 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::SetBackgroundColor(SDL_Color c
 	m_BackgroundColor = color;
 }
 
-void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, float x, float y) const
+void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const
 {
 	Rect srcRect{ 0, 0, texture.GetWidth(), texture.GetHeight() };
 	Rect dstRect{ static_cast<int>(x), static_cast<int>(y), texture.GetWidth(), texture.GetHeight() };
-	RenderTexture(texture, srcRect, dstRect);
+	RenderTexture(texture, srcRect, dstRect, param);
 }
 
-void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y) const
+void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const
 {
 	Rect dstRect{ static_cast<int>(x), static_cast<int>(y), srcRect.w, srcRect.h };
-	RenderTexture(texture, srcRect, dstRect);
+	RenderTexture(texture, srcRect, dstRect, param);
 }
 
-void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect) const
+void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const
 {
 	//================================
 	SDL_Rect src{
@@ -163,7 +163,7 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D&
 		.h = static_cast<int>(dstRect.h * m_RenderScale) };
 
 	//================================
-	Flip flip = texture.GetFlip();
+	Flip flip = param.flip;
 	SDL_RendererFlip sdlFlip = SDL_RendererFlip::SDL_FLIP_NONE;
 	if (flip.horizontal)
 		sdlFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
@@ -172,12 +172,12 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D&
 
 	//================================
 #ifdef _DEBUG
-	if (SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, texture.GetAngle(), nullptr, sdlFlip))
+	if (SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, param.angle, nullptr, sdlFlip))
 	{
 		std::cout << std::format("SDL_RenderCopyEx failed: {}\n", SDL_GetError());
 	}
 #else
-	SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, texture.GetAngle(), nullptr, sdlFlip);
+	SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, param.angle, nullptr, sdlFlip);
 #endif // DEBUG
 }
 
@@ -226,17 +226,17 @@ void dae::SDL_RenderSystem::SetBackgroundColor(Color color)
 	m_pSDLRenderSystemImpl->SetBackgroundColor(SDL_Color{ color.r, color.g, color.b, color.a });
 }
 
-void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, float x, float y) const
+void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const
 {
-	m_pSDLRenderSystemImpl->RenderTexture(texture, x, y);
+	m_pSDLRenderSystemImpl->RenderTexture(texture, x, y, param);
 }
 
-void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y) const
+void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const
 {
-	m_pSDLRenderSystemImpl->RenderTexture(texture, srcRect, x, y);
+	m_pSDLRenderSystemImpl->RenderTexture(texture, srcRect, x, y, param);
 }
 
-void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect) const
+void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const
 {
-	m_pSDLRenderSystemImpl->RenderTexture(texture, srcRect, dstRect);
+	m_pSDLRenderSystemImpl->RenderTexture(texture, srcRect, dstRect, param);
 }

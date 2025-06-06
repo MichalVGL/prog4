@@ -20,6 +20,7 @@ namespace bm
 
 	//TileModID's
 	inline constexpr TileModId WALL_MODID{"Wall"};
+	inline constexpr TileModId BOMB_MODID{"Bomb"};
 
 	//Entity vars====================================================================
 
@@ -38,14 +39,16 @@ namespace bm
 	//Player
 	inline constexpr dae::GobjID PLAYER_GOBJID{ "Bomberman" };
 	inline constexpr int PLAYER_START_LIVES{ 3 };
-	inline constexpr dae::TextureEntry PLAYER_TEXTUREENTRY{ "Bomberman.png" };
+	inline constexpr dae::TextureEntry PLAYER_TEXTURE{ "Bomberman.png" };
 
 	//Enemies
 	inline constexpr dae::GobjID ENEMY_GOBJID{ "Enemy" };
 	inline constexpr int RANDOMPATH_MINTILES{ 4 };
 	inline constexpr int RANDOMPATH_MAXTILES{ 10 };
-	inline constexpr dae::TextureEntry ENEMY_TEXTUREENTRY{ "Enemies.png" };
+	inline constexpr dae::TextureEntry ENEMY_TEXTURE{ "Enemies.png" };
 
+	//Various object names====================================================================
+	inline constexpr dae::GobjID FIRE_GOBJID{ "Fire" };
 
 	//Other==========================================================================
 	inline constexpr float GLOBAL_FPS{ 8 };

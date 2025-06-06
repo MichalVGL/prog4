@@ -176,6 +176,8 @@
     <ClCompile Include="BMServiceLocator.cpp" />
     <ClCompile Include="Bomberman.cpp" />
     <ClCompile Include="BaseEntityComp.cpp" />
+    <ClCompile Include="BombComp.cpp" />
+    <ClCompile Include="FireComp.cpp" />
     <ClCompile Include="TileMod.cpp" />
     <ClCompile Include="WallComp.cpp" />
     <ClCompile Include="PathfinderSystem.cpp" />
@@ -195,6 +197,10 @@
     <ClInclude Include="BMGameDefines.h" />
     <ClInclude Include="BaseEntityComp.h" />
     <ClInclude Include="BMServiceLocator.h" />
+    <ClInclude Include="BMUtils.h" />
+    <ClInclude Include="BombComp.h" />
+    <ClInclude Include="FireComp.h" />
+    <ClInclude Include="ObjectFinder.h" />
     <ClInclude Include="WallComp.h" />
     <ClInclude Include="EntityUtils.h" />
     <ClInclude Include="EntityController.h" />

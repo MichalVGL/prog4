@@ -19,9 +19,9 @@ namespace dae
 		void Render() const override {};
 		void SetBackgroundColor(Color) override {};
 
-		void RenderTexture(const Texture2D&, float, float) const override {};
-		void RenderTexture(const Texture2D&, Rect, float, float) const override {};
-		void RenderTexture(const Texture2D&, Rect, Rect) const override {};
+		void RenderTexture(const Texture2D&, float, float, RenderParams) const override {};
+		void RenderTexture(const Texture2D&, Rect, float, float, RenderParams) const override {};
+		void RenderTexture(const Texture2D&, Rect, Rect, RenderParams) const override {};
 
 	};
 }
@@ -49,9 +49,9 @@ namespace dae
 		void Render() const override;
 		void SetBackgroundColor(Color color) override;
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const override;
-		void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y) const override;
-		void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect) const override;
+		void RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const override;
+		void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const override;
+		void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const override;
 
 	private:
 

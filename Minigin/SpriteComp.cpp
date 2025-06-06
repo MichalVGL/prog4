@@ -116,6 +116,11 @@ void dae::SpriteComp::DeleteSpriteEntry(sprite_id id)
 
 void dae::SpriteComp::SetSpriteEntry(sprite_id id)
 {
+	if (m_pActiveEntry && m_pActiveEntry->id == id)
+	{
+		return;
+	}
+
 	auto loc = std::find_if(m_Entries.begin(), m_Entries.end(),
 		[&](const SpriteEntry& entry) { return entry.id == id; });
 
@@ -184,6 +189,17 @@ void dae::SpriteComp::FlipHorizontal(bool flip)
 void dae::SpriteComp::FlipVertical(bool flip)
 {
 	m_RenderComp->SetVerticalFlip(flip);
+}
+
+void dae::SpriteComp::SetAlignment(dae::HorizontalAlignment horAlign, dae::VerticalAlignment verAlign)
+{
+	m_RenderComp->SetHorizontalAlignment(horAlign);
+	m_RenderComp->SetVerticalAlignment(verAlign);
+}
+
+void dae::SpriteComp::SetRotation(float degrees)
+{
+	m_RenderComp->SetAngle(degrees);
 }
 
 bool dae::SpriteComp::IsLoopComplete() const

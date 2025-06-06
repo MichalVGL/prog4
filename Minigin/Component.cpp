@@ -29,6 +29,10 @@ void dae::Component::UpdateImGui()
 {
 }
 
+void dae::Component::OnDestroy()
+{
+}
+
 void dae::Component::Render() const
 {
 }

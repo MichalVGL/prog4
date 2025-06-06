@@ -99,6 +99,12 @@
     <ClCompile Include="TileMod.cpp">
       <Filter>Source Files\Tile</Filter>
     </ClCompile>
+    <ClCompile Include="BombComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FireComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameActorCommands.h">
@@ -169,6 +175,18 @@
     </ClInclude>
     <ClInclude Include="WallComp.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BombComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="FireComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BMUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFinder.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

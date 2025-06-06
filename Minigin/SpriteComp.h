@@ -75,6 +75,8 @@ namespace dae
 		void SetFrame(int frame);
 		void FlipHorizontal(bool flip);
 		void FlipVertical(bool flip);
+		void SetAlignment(dae::HorizontalAlignment horAlign, dae::VerticalAlignment verAlign);
+		void SetRotation(float degrees);
 
 		bool IsLoopComplete() const;
 

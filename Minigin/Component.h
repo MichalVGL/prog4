@@ -40,6 +40,8 @@ namespace dae
 		virtual void LateUpdate(float deltaTime);
 		virtual void UpdateImGui();
 
+		virtual void OnDestroy();	// called form the gameobject when the gameobject is flagged for deletion. (but not regular destructor!!!)
+
 		virtual void Render() const;
 
 		void FlagForDeletion();

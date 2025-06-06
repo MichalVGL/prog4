@@ -15,6 +15,11 @@ namespace dae
 			: id{ make_sdbm_hash(path) }
 		{
 		}
+
+		bool operator==(const Event& other) const noexcept
+		{
+			return id == other.id;
+		}
 	};
 }
 

@@ -1,6 +1,8 @@
 #ifndef SUBJECT_H
 #define SUBJECT_H
 #include <vector>
+#include <any>
+
 #include "Event.h"
 
 namespace dae
@@ -16,7 +18,7 @@ namespace dae
 		void AddObserver(IObserver* observer);
 		void RemoveObserver(IObserver* observer);
 
-		void NotifyObservers();
+		void NotifyObservers(const std::any& data = std::any{});
 
 	private:
 		//Component* m_pParentComponent;

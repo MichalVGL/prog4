@@ -28,6 +28,12 @@ namespace dae
 		bool vertical{ false };
 	};
 
+	struct RenderParams	//passed through the render function
+	{
+		Flip flip{};
+		texture_angle angle{ 0.f }; //in degrees
+	};
+
 	struct Window
 	{
 		std::string title;

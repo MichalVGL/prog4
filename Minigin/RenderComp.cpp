@@ -25,7 +25,7 @@ void RenderComp::Render() const
 	Texture2D* pTexture = GetTexture();
 
 	if (pTexture)
-		m_pRenderSystem->RenderTexture(*pTexture, m_SrcRect, dstRect);
+		m_pRenderSystem->RenderTexture(*pTexture, m_SrcRect, dstRect, m_RenderParams);
 }
 
 void dae::RenderComp::LoadImageTexture(const TextureEntry& entry)	//will reset rendersize
@@ -42,8 +42,6 @@ void dae::RenderComp::LoadImageTexture(const TextureEntry& entry)	//will reset r
 	if (pTexture)
 	{
 		SetSrcRect(Rect{ 0, 0, pTexture->GetWidth(), pTexture->GetHeight() });
-		ApplyFlip();
-		ApplyAngle();
 	}
 
 }
@@ -57,8 +55,6 @@ void dae::RenderComp::LoadTextTexture(Texture2D* text)	//will reset rendersize
 	{
 		m_TextureData = text;
 		SetSrcRect({ 0, 0, text->GetWidth(), text->GetHeight() });
-		ApplyFlip();
-		ApplyAngle();
 	}
 	else
 	{
@@ -113,20 +109,17 @@ void dae::RenderComp::SetVerticalAlignment(VerticalAlignment alignment)
 
 void dae::RenderComp::SetHorizontalFlip(bool flip)
 {
-	m_Flip.horizontal = flip;
-	ApplyFlip();
+	m_RenderParams.flip.horizontal = flip;
 }
 
 void dae::RenderComp::SetVerticalFlip(bool flip)
 {
-	m_Flip.vertical = flip;
-	ApplyFlip();
+	m_RenderParams.flip.vertical = flip;
 }
 
 void dae::RenderComp::SetAngle(texture_angle angle)
 {
-	m_Angle = angle;
-	ApplyAngle();
+	m_RenderParams.angle = angle;
 }
 
 //==========================================================================
@@ -183,23 +176,4 @@ void dae::RenderComp::CalculateAlignmentOffset()
 		m_AlignmentOffset.y = 0.f;
 		break;
 	}
-}
-
-void dae::RenderComp::ApplyFlip()
-{
-	Texture2D* pTexture = GetTexture();
-
-	if (pTexture)
-	{
-		pTexture->SetHorizontalFlip(m_Flip.horizontal);
-		pTexture->SetVerticalFlip(m_Flip.vertical);
-	}
-}
-
-void dae::RenderComp::ApplyAngle()
-{
-	Texture2D* pTexture = GetTexture();
-
-	if (pTexture)
-		pTexture->SetAngle(m_Angle);
 }

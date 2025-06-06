@@ -3,15 +3,18 @@
 #include <GameObject.h>
 #include "BMServiceLocator.h"
 
-bm::TileMod::TileMod(TileModId id, dae::GameObject& object)
-	: m_Id{ id }
-	, m_Object{ object }
+bm::TileMod::TileMod(dae::GameObject& object, TileModId id)
+	: m_Object{ object }
+	, m_Id{ id }
 {
-	//todo, maybe register here
 	auto& tileService = BMServiceLocator::GetTileSystem();
 	auto* pTile = tileService.GetTileFromWorldPos(object.GetWorldPos());
 
-	pTile->RegisterTileMod(this);
+	if (pTile)
+	{
+		pTile->RegisterTileMod(this);
+		m_Registered = true;
+	}
 }
 
 bm::TileModId bm::TileMod::GetId() const
@@ -21,8 +24,15 @@ bm::TileModId bm::TileMod::GetId() const
 
 void bm::TileMod::Unregister()
 {
+	if (!m_Registered)
+		return;
+
 	auto& tileService = BMServiceLocator::GetTileSystem();
 	auto* pTile = tileService.GetTileFromWorldPos(m_Object.GetWorldPos());
 
-	pTile->UnregisterTileMod(this);
+	if (pTile)
+	{
+		pTile->UnregisterTileMod(this);
+		m_Registered = false;
+	}
 }

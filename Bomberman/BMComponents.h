@@ -5,5 +5,6 @@
 #include "TimerComp.h"
 #include "PlayerEntityComp.h"
 #include "WallComp.h"
+#include "BombComp.h"
 
 #endif // !BMCOMPONENTS_H

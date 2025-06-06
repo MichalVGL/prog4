@@ -54,8 +54,6 @@ namespace dae
 		bool CheckLock();
 		Texture2D* GetTexture() const;
 		void CalculateAlignmentOffset();
-		void ApplyFlip();
-		void ApplyAngle();
 
 		//=====================================
 		ReqComp<TransformComp> m_TransformComp{};
@@ -76,8 +74,7 @@ namespace dae
 		VerticalAlignment m_VerticalAlignment{ VerticalAlignment::bottom };
 		glm::vec2 m_AlignmentOffset{ 0.f, 0.f };
 
-		Flip m_Flip{};
-		texture_angle m_Angle{};
+		RenderParams m_RenderParams{};	//flip and angle
 	};
 }
  

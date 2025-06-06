@@ -27,8 +27,8 @@ void Subject::RemoveObserver(IObserver* observer)
 	std::erase(m_Observers, observer);
 }
 
-void Subject::NotifyObservers()
+void Subject::NotifyObservers(const std::any& data)
 {
 	for (auto observer : m_Observers)
-		observer->Notify(m_Event);
+		observer->Notify(m_Event, data);
 }
