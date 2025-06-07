@@ -6,6 +6,7 @@
 #include "ITileSystem.h"
 #include "IPathfinderSystem.h"
 #include "ISpawnSystem.h"
+#include "IUpgradeSystem.h"
 
 namespace bm
 {
@@ -22,11 +23,15 @@ namespace bm
 		static void RegisterSpawnSystem(std::unique_ptr<ISpawnSystem>&& pSpawnSystem);
 		static ISpawnSystem& GetSpawnSystem();
 
+		static void RegisterUpgradeSystem(std::unique_ptr<IUpgradeSystem>&& pUpgradeSystem);
+		static IUpgradeSystem& GetUpgradeSystem();
+
 	private:
 
 		static std::unique_ptr<ITileSystem> s_pTileSystem;
 		static std::unique_ptr<IPathfinderSystem> s_pPathfinderSystem;
 		static std::unique_ptr<ISpawnSystem> s_pSpawnSystem;
+		static std::unique_ptr<IUpgradeSystem> s_pUpgradeSystem;
 
 	};
 }

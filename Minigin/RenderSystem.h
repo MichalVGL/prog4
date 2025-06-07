@@ -18,11 +18,13 @@ namespace dae
 
 		void Render() const override {};
 		void SetBackgroundColor(Color) override {};
+		void SetRenderOffset(glm::ivec2) override {};
 
 		void RenderTexture(const Texture2D&, float, float, RenderParams) const override {};
 		void RenderTexture(const Texture2D&, Rect, float, float, RenderParams) const override {};
 		void RenderTexture(const Texture2D&, Rect, Rect, RenderParams) const override {};
 
+		glm::vec2 GetCanvasSize() override { return glm::vec2(); };
 	};
 }
 
@@ -48,10 +50,13 @@ namespace dae
 
 		void Render() const override;
 		void SetBackgroundColor(Color color) override;
+		void SetRenderOffset(glm::ivec2 offset) override;
 
 		void RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const override;
 		void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const override;
 		void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const override;
+
+		glm::vec2 GetCanvasSize() override;
 
 	private:
 

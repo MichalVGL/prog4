@@ -54,10 +54,13 @@ namespace dae
 
 		void Render() const;
 		void SetBackgroundColor(SDL_Color color);
+		void SetRenderOffset(glm::ivec2 offset);
 
 		void RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const;
 		void RenderTexture(const Texture2D& texture, Rect srcRect, float x, float y, RenderParams param) const;
 		void RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const;
+
+		glm::vec2 GetCanvasSize();
 
 	private:
 
@@ -70,6 +73,8 @@ namespace dae
 
 		SDL_Color m_BackgroundColor{};
 		float m_RenderScale;
+
+		glm::ivec2 m_RenderOffset{ 0, 0 };
 	};
 }
 
@@ -134,6 +139,11 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::SetBackgroundColor(SDL_Color c
 	m_BackgroundColor = color;
 }
 
+void dae::SDL_RenderSystem::SDL_RenderSystemImpl::SetRenderOffset(glm::ivec2 offset)
+{
+	m_RenderOffset = offset;
+}
+
 void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const
 {
 	Rect srcRect{ 0, 0, texture.GetWidth(), texture.GetHeight() };
@@ -157,8 +167,8 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D&
 		.h = srcRect.h };
 
 	SDL_Rect dst{
-		.x = static_cast<int>(dstRect.x * m_RenderScale),
-		.y = static_cast<int>((m_Window.h - dstRect.y - dstRect.h) * m_RenderScale),	//change origin to bottom-left (of the window)
+		.x = static_cast<int>((dstRect.x - m_RenderOffset.x) * m_RenderScale),
+		.y = static_cast<int>((m_Window.h - dstRect.y - dstRect.h + m_RenderOffset.y) * m_RenderScale),	//change origin to bottom-left (of the window)
 		.w = static_cast<int>(dstRect.w * m_RenderScale),
 		.h = static_cast<int>(dstRect.h * m_RenderScale) };
 
@@ -179,6 +189,11 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::RenderTexture(const Texture2D&
 #else
 	SDL_RenderCopyEx(m_pRenderer.get(), texture.GetSDLTexture(), &src, &dst, param.angle, nullptr, sdlFlip);
 #endif // DEBUG
+}
+
+glm::vec2 dae::SDL_RenderSystem::SDL_RenderSystemImpl::GetCanvasSize()
+{
+	return glm::vec2(m_Window.w, m_Window.h);
 }
 
 //static
@@ -226,6 +241,11 @@ void dae::SDL_RenderSystem::SetBackgroundColor(Color color)
 	m_pSDLRenderSystemImpl->SetBackgroundColor(SDL_Color{ color.r, color.g, color.b, color.a });
 }
 
+void dae::SDL_RenderSystem::SetRenderOffset(glm::ivec2 offset)
+{
+	m_pSDLRenderSystemImpl->SetRenderOffset(offset);
+}
+
 void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, float x, float y, RenderParams param) const
 {
 	m_pSDLRenderSystemImpl->RenderTexture(texture, x, y, param);
@@ -239,4 +259,9 @@ void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, Rect srcRect
 void dae::SDL_RenderSystem::RenderTexture(const Texture2D& texture, Rect srcRect, Rect dstRect, RenderParams param) const
 {
 	m_pSDLRenderSystemImpl->RenderTexture(texture, srcRect, dstRect, param);
+}
+
+glm::vec2 dae::SDL_RenderSystem::GetCanvasSize()
+{
+	return m_pSDLRenderSystemImpl->GetCanvasSize();
 }

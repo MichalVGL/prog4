@@ -13,7 +13,6 @@
 std::vector<glm::ivec2> bm::PathfinderSystem::FindPath(glm::vec2 beginPos, glm::vec2 targetPos)
 {
 	//uses the Breadth-First Search algorithm to find the shortest path between two points on a grid of walkable tiles.
-
     auto& tileSystem = BMServiceLocator::GetTileSystem();
 
     auto* beginTile = tileSystem.GetTileFromWorldPos(beginPos);

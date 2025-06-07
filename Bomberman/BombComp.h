@@ -39,7 +39,7 @@ namespace bm
 
 		//==============================
 
-		static constexpr float s_DetonationTime{ 4.0f };
+		static constexpr float s_DetonationTime{ 2.5f };
 		static constexpr dae::TextureEntry s_BombTextureEntry{ "Bomb.png" };
 		static constexpr dae::SpriteEntry s_BombSpriteEntry{ "BaseBomb", { 0, 0, TILE_SIZE * 4, TILE_SIZE }, 4, 1 };
 

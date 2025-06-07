@@ -4,6 +4,7 @@
 #include <Scene.h>
 
 #include "BMUtils.h"
+#include "UpgradeComp.h"
 
 namespace bm
 {
@@ -12,9 +13,11 @@ namespace bm
 	public:
 		virtual ~ISpawnSystem() = default;
 
-		virtual void SpawnLevelStructures(int walls, dae::Scene& scene) = 0;	//spawns the amount of walls with 1 power up and a door
+		virtual void SpawnLevelStructures(int walls) = 0;
 
+		virtual dae::GameObjectHandle SpawnBomb(glm::vec2 pos) = 0;
 		virtual void SpawnFire(glm::vec2 pos, std::vector<dae::GameObjectHandle> targets, Direction direction, int spreadAmount) = 0;
+		virtual void SpawnUpgrade(glm::vec2 pos, UpgradeType type) = 0;
 	};
 }
 #endif // !ISPAWNSYSTEM_H

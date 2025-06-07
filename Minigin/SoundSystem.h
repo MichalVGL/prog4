@@ -111,7 +111,7 @@ namespace dae
 		void RegisterSound(const SoundEntry& soundEntry) override;
 		void UnregisterSound(sound_id id) override;
 	
-		std::unique_ptr<ISoundSystem> m_pSoundSystem;
+		std::unique_ptr<ISoundSystem> s_pSoundSystem;
 	};
 }
 

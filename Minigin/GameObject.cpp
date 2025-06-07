@@ -6,9 +6,10 @@
 #include "TransformComp.h"
 #include "Scene.h"
 
-dae::GameObject::GameObject(const GobjID& name)
+dae::GameObject::GameObject(const GobjID& name, render_layer rLayer)
 	:m_Id{name}
 	, m_Components{}
+	, m_RenderLayer{ rLayer }
 {
 	//do not use AddComponent() due to that function not accepting transformComp
 	m_Components.emplace_back(std::make_unique<TransformComp>(*this));
@@ -222,6 +223,11 @@ void dae::GameObject::SetLocalPosition(float x, float y)
 dae::Scene& dae::GameObject::GetScene()
 {
 	return *m_pScene;	//this pointer is salways set. If not, a warning will be printed on start(). (When the scene gets an gameobject, it will set this variable)
+}
+
+dae::render_layer dae::GameObject::GetRenderLayer() const
+{
+	return m_RenderLayer;
 }
 
 void dae::GameObject::RegisterHandle(GameObjectHandle* handle)

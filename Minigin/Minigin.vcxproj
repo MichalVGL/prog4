@@ -215,10 +215,13 @@
     <ClInclude Include="..\3rdParty\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\3rdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui\imstb_truetype.h" />
+    <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="DaeFiles.h" />
     <ClInclude Include="GameObjectHandle.h" />
+    <ClInclude Include="ICameraSystem.h" />
     <ClInclude Include="IRandomSystem.h" />
+    <ClInclude Include="ObjectFinder.h" />
     <ClInclude Include="RandomSystem.h" />
     <ClInclude Include="SpriteComp.h" />
     <ClInclude Include="EngineComponents.h" />
@@ -281,7 +284,9 @@
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="CameraSystem.cpp" />
     <ClCompile Include="GameObjectHandle.cpp" />
+    <ClCompile Include="ObjectFinder.cpp" />
     <ClCompile Include="RandomSystem.cpp" />
     <ClCompile Include="SpriteComp.cpp" />
     <ClCompile Include="FontSystem.cpp" />

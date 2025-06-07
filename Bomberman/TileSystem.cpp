@@ -13,8 +13,8 @@
 
 //flyweight data
 const std::array<bm::BaseTile, static_cast<int>(bm::BaseTileType::Count)> bm::Level_TileSystem::s_BaseTileTypes{
-		bm::BaseTile{ dae::TextureEntry{ "EmptyTile.png" }, true, true },			//Ground
-		bm::BaseTile{ dae::TextureEntry{ "IndestructableWall.png" }, false, false }	//Wall
+		bm::BaseTile{ dae::TextureEntry{ "EmptyTile.png" }, true },			//Ground
+		bm::BaseTile{ dae::TextureEntry{ "IndestructableWall.png" }, false }	//Wall
 };
 
 bm::Level_TileSystem::Level_TileSystem(dae::Scene& scene)

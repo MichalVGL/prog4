@@ -45,11 +45,6 @@ bool bm::TileComp::IsWalkable() const
 	}
 }
 
-bool bm::TileComp::AllowSpawnables() const
-{
-	return m_pTileMod == nullptr && m_pBaseTile->AllowsSpawnables();
-}
-
 bool bm::TileComp::HasTileMod() const
 {
 	return m_pTileMod != nullptr;

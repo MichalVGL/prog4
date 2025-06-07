@@ -8,6 +8,7 @@
 #include "IRenderSystem.h"
 #include "IFontSystem.h"
 #include "IRandomSystem.h"
+#include "ICameraSystem.h"
 
 namespace dae
 {
@@ -30,17 +31,22 @@ namespace dae
 		static void RegisterRandomSystem(std::unique_ptr<IRandomSystem>&& pRandomSystem);
 		static IRandomSystem& GetRandomSystem();
 
+		static void RegisterCameraSystem(std::unique_ptr<ICameraSystem>&& pCameraSystem);
+		static ICameraSystem& GetCameraSystem();
+
 	private:
 
-		static std::unique_ptr<ISoundSystem> m_pSoundSystem;
+		static std::unique_ptr<ISoundSystem> s_pSoundSystem;
 
-		static std::unique_ptr<ITextureSystem> m_pTextureSystem;
+		static std::unique_ptr<ITextureSystem> s_pTextureSystem;
 
-		static std::unique_ptr<IRenderSystem> m_pRenderSystem;
+		static std::unique_ptr<IRenderSystem> s_pRenderSystem;
 
-		static std::unique_ptr<IFontSystem> m_pFontSystem;
+		static std::unique_ptr<IFontSystem> s_pFontSystem;
 
-		static std::unique_ptr<IRandomSystem> m_pRandomSystem;
+		static std::unique_ptr<IRandomSystem> s_pRandomSystem;
+
+		static std::unique_ptr<ICameraSystem> s_pCameraSystem;
 	};
 }
 

@@ -10,11 +10,11 @@ namespace bm
 	{
 	public:
 
-		void SpawnLevelStructures(int walls, dae::Scene& scene) override;
+		void SpawnLevelStructures(int walls) override;
 
-		
+		dae::GameObjectHandle SpawnBomb(glm::vec2 pos) override;
 		void SpawnFire(glm::vec2 pos, std::vector<dae::GameObjectHandle> targets, Direction direction, int spreadAmount) override;
-
+		void SpawnUpgrade(glm::vec2 pos, UpgradeType type);
 	};
 }
 

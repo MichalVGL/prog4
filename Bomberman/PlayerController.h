@@ -14,7 +14,7 @@ namespace bm
 	public:
 
 		PlayerController(); //todo, add playerid for 2 player mode
-		//add global levelstate so the controller can determine wether to use gamepad 1 or 2 (single, dual, versus)
+		//add global levelstate so the controller can determine wether to use gamepad 1 or 2 (single, dual, versus) or pass it through the constructor
 
 
 		~PlayerController() override;
@@ -53,6 +53,23 @@ namespace bm
 
 		glm::ivec2 m_Direction;
 		EntityInput& m_Input;
+	};
+
+	class ActionCommand final : public dae::Command
+	{
+	public:
+		ActionCommand(bool& boolInput)
+			: m_Input{ boolInput }
+		{
+		}
+
+		void Execute() override
+		{
+			m_Input = true;
+		}
+
+	private:
+		bool& m_Input;
 	};
 }
 

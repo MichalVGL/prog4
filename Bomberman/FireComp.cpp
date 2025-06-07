@@ -1,23 +1,31 @@
 #include "FireComp.h"
 
+#include <ObjectFinder.h>
+#include <GameObject.h>
+
 #include "BMServiceLocator.h"
 #include "BMGameDefines.h"
 #include "BombComp.h"
 #include "WallComp.h"
-#include "ObjectFinder.h"
+#include "EntityComp.h"
 
 bm::FireComp::FireComp(dae::GameObject& parent, std::vector<dae::GameObjectHandle> targets, Direction direction, int spreadAmount)
 	:Component(parent)
 {
-	if(targets.empty())
-		targets = bm::FindObjects({ bm::PLAYER_GOBJID, bm::ENEMY_GOBJID });
+	if (targets.empty())
+		targets = dae::FindObjects({ bm::PLAYER_GOBJID, bm::ENEMY_GOBJID });
 
 	m_SpriteComp.Init(GetOwner());
 	m_SpriteComp->LoadTexture(s_FireTexture);
 	m_SpriteComp->SetFPS(GLOBAL_FPS);
 	m_SpriteComp->SetAlignment(dae::HorizontalAlignment::center, dae::VerticalAlignment::center);
 
-	//todo, setup collision with targets
+	//setup collision with targets
+	m_TileCollisionComp.Init(GetOwner());
+	m_TileCollisionComp->AddTarget(bm::PLAYER_GOBJID);
+	m_TileCollisionComp->AddTarget(bm::ENEMY_GOBJID);
+	m_TileCollisionComp->OnCollision().AddObserver(this);
+
 
 	float totalRotation = [&]() -> float
 		{
@@ -46,7 +54,7 @@ bm::FireComp::FireComp(dae::GameObject& parent, std::vector<dae::GameObjectHandl
 		{
 			m_SpriteComp->AddSpriteEntry(s_ConnectedSprite);
 			m_SpriteComp->SetSpriteEntry(s_ConnectedSprite.id);
-			HandleAllAdjacentTiles(targets, spreadAmount);
+			HandleNextTile(targets,  direction, spreadAmount);
 		}
 		else
 		{
@@ -60,7 +68,7 @@ bm::FireComp::FireComp(dae::GameObject& parent, std::vector<dae::GameObjectHandl
 		m_SpriteComp->AddSpriteEntry(s_OmniSprite);
 		m_SpriteComp->SetSpriteEntry(s_OmniSprite.id);
 
-		if(spreadAmount > 0)
+		if (spreadAmount > 0)
 			HandleAllAdjacentTiles(targets, spreadAmount);
 		break;
 	}
@@ -102,6 +110,7 @@ void bm::FireComp::HandleNextTile(std::vector<dae::GameObjectHandle> targets, Di
 	if (!nextTile)
 		return;
 
+	//handle if there is a tilemod
 	if (TileMod* tileMod = nextTile->GetTileMod(); tileMod != nullptr)
 	{
 		if (tileMod->GetId() == BOMB_MODID)
@@ -131,4 +140,26 @@ void bm::FireComp::HandleAllAdjacentTiles(std::vector<dae::GameObjectHandle> tar
 	HandleNextTile(targets, Direction::down, spreadAmount);
 	HandleNextTile(targets, Direction::left, spreadAmount);
 	HandleNextTile(targets, Direction::right, spreadAmount);
+}
+
+void bm::FireComp::Notify(dae::Event event, const std::any& data)
+{
+	if (event == TileCollisionComp::s_CollisionEvent)
+	{
+		auto target = std::any_cast<dae::GameObjectHandle>(data);
+		if (target.Get() == nullptr)
+			return;	//no target to handle
+		if (target->GetId() == bm::PLAYER_GOBJID || target->GetId() == bm::ENEMY_GOBJID)
+		{
+			HandleEntityCollision(target);
+		}
+	}
+}
+
+void bm::FireComp::HandleEntityCollision(const dae::GameObjectHandle& handle)
+{
+	auto entityComp = handle->TryGetComponent<bm::EntityComp>();
+	if (entityComp == nullptr)
+		return;
+	entityComp->Kill();
 }

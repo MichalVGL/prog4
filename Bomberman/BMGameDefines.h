@@ -21,6 +21,7 @@ namespace bm
 	//TileModID's
 	inline constexpr TileModId WALL_MODID{"Wall"};
 	inline constexpr TileModId BOMB_MODID{"Bomb"};
+	inline constexpr TileModId UPGRADE_MODID{"Upgrade"};
 
 	//Entity vars====================================================================
 
@@ -49,12 +50,13 @@ namespace bm
 
 	//Various object names====================================================================
 	inline constexpr dae::GobjID FIRE_GOBJID{ "Fire" };
+	inline constexpr dae::GobjID BOMB_GOBJID{ "Bomb" };
+	inline constexpr dae::GobjID UPGRADE_GOBJID{ "Upgrade" };
 
 	//Other==========================================================================
-	inline constexpr float GLOBAL_FPS{ 8 };
+	inline constexpr float GLOBAL_FPS{ 10 };
 
 	inline constexpr dae::TextureEntry ERROR_TEXTURE{ "Error.png" };
-
 }
 
 #endif // !BMGAMEDEFINES_H

@@ -431,10 +431,10 @@ std::unique_ptr<bm::EntityState> bm::MoveLeftState::HandleInput(EntityInput& inp
 //DeathState
 //=======================================================================
 
-bm::DeathState::DeathState(dae::GameObject& gObj, dae::Subject& subject)
+bm::DeathState::DeathState(dae::GameObject& gObj)
 	:EntityState{ gObj, EntityStateType::Dying }
 	, m_SpriteComp{ *gObj.GetComponent<dae::SpriteComp>() }
-	, m_OnDeathComplete{ subject }
+	, m_DeathCompleteSubject{ s_DeathComplete }
 {
 }
 
@@ -448,8 +448,13 @@ std::unique_ptr<bm::EntityState> bm::DeathState::Update(float, EntityStats&)
 	if (m_SubjectCalled == false)
 	{
 		if (m_SpriteComp.IsLoopComplete())
-			m_OnDeathComplete.NotifyObservers();
+			m_DeathCompleteSubject.NotifyObservers();
 	}
 
 	return nullptr;
+}
+
+dae::Subject& bm::DeathState::OnDeathComplete()
+{
+	return m_DeathCompleteSubject;
 }

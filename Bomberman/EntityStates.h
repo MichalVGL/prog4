@@ -7,7 +7,7 @@
 #include <Command.h>
 #include <Subject.h>
 
-#include "BaseEntityComp.h"
+#include "EntityComp.h"
 #include "EntityUtils.h"
 
 namespace bm
@@ -153,17 +153,21 @@ namespace bm
 	{
 	public:
 
-		DeathState(dae::GameObject& gObj, dae::Subject& subject);
+		DeathState(dae::GameObject& gObj);
 
 		void OnEnter() override;
 
 		std::unique_ptr<EntityState> Update(float deltaTime, EntityStats& data);
 		std::unique_ptr<EntityState> HandleInput(EntityInput&) { return nullptr; };
 
+		dae::Subject& OnDeathComplete();
+
+		static constexpr dae::Event s_DeathComplete = dae::Event("DeathComplete");
+
 	private:
 
 		dae::SpriteComp& m_SpriteComp;
-		dae::Subject& m_OnDeathComplete;
+		dae::Subject m_DeathCompleteSubject;
 		bool m_SubjectCalled{ false };
 	};
 

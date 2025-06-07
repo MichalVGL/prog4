@@ -3,8 +3,12 @@
 
 #include "TileComp.h"
 #include "TimerComp.h"
-#include "PlayerEntityComp.h"
+#include "EntityComp.h"
 #include "WallComp.h"
 #include "BombComp.h"
+#include "FireComp.h"
+#include "TileCollisionComp.h"
+#include "BombDeployerComp.h"
+#include "UpgradeComp.h"
 
 #endif // !BMCOMPONENTS_H

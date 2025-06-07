@@ -16,10 +16,9 @@ namespace bm
 	{
 	public:
 
-		constexpr BaseTile(dae::TextureEntry textureEntry, bool walkable, bool allowSpawnables)
+		constexpr BaseTile(dae::TextureEntry textureEntry, bool walkable)
 			: m_TextureEntry{ textureEntry }
 			, m_Walkable{ walkable }
-			, m_AllowSpawnables{ allowSpawnables }
 		{
 		}
 
@@ -30,7 +29,6 @@ namespace bm
 	private:
 
 		const bool m_Walkable;
-		const bool m_AllowSpawnables;
 		const dae::TextureEntry m_TextureEntry;
 	};
 }

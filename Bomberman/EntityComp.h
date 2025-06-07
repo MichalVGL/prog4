@@ -1,11 +1,13 @@
-#ifndef BASEENTITYCOMP_H
-#define BASEENTITYCOMP_H
+#ifndef ENTITYCOMP_H
+#define ENTITYCOMP_H
 
 #include "Component.h"
 
 #include <glm.hpp>
 #include <memory>
 #include <EngineComponents.h>
+#include <IObserver.h>
+#include <Command.h>
 
 #include "EntityUtils.h"
 
@@ -15,16 +17,16 @@ namespace bm
 {
 	class EntityState;
 
-	class BaseEntityComp final : public dae::Component	//Args: const EntityStats& entityStats, std::unique_ptr<EntityController>&& controller
+	class EntityComp final : public dae::Component, public dae::IObserver	//Args: const EntityStats& entityStats, std::unique_ptr<EntityController>&& controller
 	{
 	public:
-		BaseEntityComp(dae::GameObject& parent, const EntityStats& entityStats, std::unique_ptr<EntityController>&& controller);
+		EntityComp(dae::GameObject& parent, const EntityStats& entityStats, std::unique_ptr<EntityController>&& controller);
 
-		~BaseEntityComp(); //defaulted in cpp
-		//BaseEntityComp(const BaseEntityComp& other) = default;
-		//BaseEntityComp(BaseEntityComp&& other) noexcept = default;
-		//BaseEntityComp& operator=(const BaseEntityComp& other) = default;
-		//BaseEntityComp& operator=(BaseEntityComp&& other) noexcept = default;
+		~EntityComp(); //defaulted in cpp
+		EntityComp(const EntityComp& other) = default;
+		EntityComp(EntityComp&& other) noexcept = default;
+		EntityComp& operator=(const EntityComp& other) = default;
+		EntityComp& operator=(EntityComp&& other) noexcept = default;
 
 		// -------------------------
 		// Base Functions
@@ -36,11 +38,17 @@ namespace bm
 		//void Render() const override;
 		//--------------------------
 
+		void SetCommand1(std::unique_ptr<dae::Command>&& command);
+		void SetCommand2(std::unique_ptr<dae::Command>&& command);
+
 		void Kill();
 
 	protected:
 
 		void UpdateState(float deltaTime);	//return if the state has been changed
+
+		// Inherited via IObserver
+		void Notify(dae::Event event, const std::any& data) override;
 
 		//==========================
 
@@ -50,8 +58,7 @@ namespace bm
 		dae::ReqComp<dae::SpriteComp> m_SpriteComp{};
 
 		EntityStats m_EntityStats;
-		//EntityInput m_EntityInput{};
 		EntityCondition m_EntityCondition{};
 	};
 }
-#endif // !BASEENTITYCOMP_H
+#endif // !ENTITYCOMP_H

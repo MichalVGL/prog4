@@ -9,9 +9,9 @@ namespace bm
 	//void MakeLevel(dae::Scene& scene);
 
 	//Helpers
-	std::unique_ptr<dae::GameObject> GOBJ(const dae::GobjID& name);
-	std::unique_ptr<dae::GameObject> RenderGOBJ(const dae::GobjID& name);
-	std::unique_ptr<dae::GameObject> SpriteGOBJ(const dae::GobjID& name);
+	std::unique_ptr<dae::GameObject> GOBJ(const dae::GobjID& name, dae::render_layer rLayer = 0);
+	std::unique_ptr<dae::GameObject> RenderGOBJ(const dae::GobjID& name, dae::render_layer rLayer = 0);
+	std::unique_ptr<dae::GameObject> SpriteGOBJ(const dae::GobjID& name, dae::render_layer rLayer = 0);
 }
 
 #endif // !OBJECTCONSTRUCTION_H

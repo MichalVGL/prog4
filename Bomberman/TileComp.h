@@ -37,7 +37,6 @@ namespace bm
 		glm::ivec2 GetIndexPosition();
 
 		bool IsWalkable() const;
-		bool AllowSpawnables() const;
 
 		bool HasTileMod() const;	//returns the tilemodid if it exists, otherwise returns nullptr
 		const TileMod* GetTileMod() const;	//returns the tilemodid if it exists, otherwise returns nullptr

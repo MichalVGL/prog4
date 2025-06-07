@@ -6,17 +6,19 @@
 #include <vector>
 
 #include <Texture.h>
+#include <IObserver.h>
 
 #include "TileComp.h"
 #include "TileMod.h"
 #include "BMGameDefines.h"
 #include "BMUtils.h"
+#include "TileCollisionComp.h"
 
 
 namespace bm
 {
 
-	class FireComp final : public dae::Component 	//Args: std::vector<dae::GameObjectHandle> targets, FireComp::Direction direction, int spreadAmount
+	class FireComp final : public dae::Component, public dae::IObserver 	//Args: std::vector<dae::GameObjectHandle> targets, FireComp::Direction direction, int spreadAmount
 	{
 	public:
 
@@ -49,11 +51,17 @@ namespace bm
 		static constexpr dae::SpriteEntry s_EndSprite{ "EndFire", {0, TILE_SIZE * 2, TILE_SIZE * 7, TILE_SIZE}, 7, 1, false };
 
 		dae::ReqComp<dae::SpriteComp> m_SpriteComp{};
+		dae::ReqComp<TileCollisionComp> m_TileCollisionComp{};
 
 		//these function automatically check if the tile is valid to spawn fire / detonate other bombs
 		void HandleNextTile(std::vector<dae::GameObjectHandle> targets, Direction direction, int spreadAmount);
 		void HandleAllAdjacentTiles(std::vector<dae::GameObjectHandle> targets, int spreadAmount);
 
+
+		// Inherited via IObserver
+		void Notify(dae::Event event, const std::any& data) override;
+
+		void HandleEntityCollision(const dae::GameObjectHandle& handle);
 
 	};
 }

@@ -5,10 +5,12 @@
 #include "TileSystem.h"
 #include "PathfinderSystem.h"
 #include "SpawnSystem.h"
+#include "UpgradeSystem.h"
 
 std::unique_ptr<bm::ITileSystem> bm::BMServiceLocator::s_pTileSystem{ std::make_unique<bm::Null_TileSystem>() };
 std::unique_ptr<bm::IPathfinderSystem> bm::BMServiceLocator::s_pPathfinderSystem{ std::make_unique<bm::PathfinderSystem>() };
 std::unique_ptr<bm::ISpawnSystem> bm::BMServiceLocator::s_pSpawnSystem{ std::make_unique<bm::SpawnSystem>() };
+std::unique_ptr<bm::IUpgradeSystem> bm::BMServiceLocator::s_pUpgradeSystem{ std::make_unique<bm::UpgradeSystem>() };
 
 void bm::BMServiceLocator::RegisterTileSystem(std::unique_ptr<ITileSystem>&& pTileSystem)
 {
@@ -53,4 +55,19 @@ bm::ISpawnSystem& bm::BMServiceLocator::GetSpawnSystem()
 		s_pSpawnSystem = std::make_unique<bm::SpawnSystem>();
 	}
 	return *s_pSpawnSystem;
+}
+
+void bm::BMServiceLocator::RegisterUpgradeSystem(std::unique_ptr<IUpgradeSystem>&& pUpgradeSystem)
+{
+	assert(pUpgradeSystem != nullptr && "BMServiceLocator::RegisterUpgradeSystem: Tried to register nullptr as UpgradeSystem");
+	s_pUpgradeSystem = std::move(pUpgradeSystem);
+}
+
+bm::IUpgradeSystem& bm::BMServiceLocator::GetUpgradeSystem()
+{
+	if (!s_pUpgradeSystem)
+	{
+		s_pUpgradeSystem = std::make_unique<bm::UpgradeSystem>();
+	}
+	return *s_pUpgradeSystem;
 }

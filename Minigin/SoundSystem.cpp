@@ -149,7 +149,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 //===================================================================================================================================================
 
 dae::Logger_SoundSystem::Logger_SoundSystem(std::unique_ptr<ISoundSystem>&& soundSystem)
-	:m_pSoundSystem{ std::move(soundSystem) }
+	:s_pSoundSystem{ std::move(soundSystem) }
 {
 }
 
@@ -160,23 +160,23 @@ void dae::Logger_SoundSystem::Quit()
 void dae::Logger_SoundSystem::SetGlobalVolume(sound_volume volume)
 {
 	std::cout << std::format("Setting global volume to: {}\n", volume);
-	m_pSoundSystem->SetGlobalVolume(volume);
+	s_pSoundSystem->SetGlobalVolume(volume);
 }
 
 void dae::Logger_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops)
 {
 	std::cout << std::format("Playing sound effect with id: {}\n", soundToken.GetId());
-	m_pSoundSystem->PlayEffect(soundToken, volume, loops);
+	s_pSoundSystem->PlayEffect(soundToken, volume, loops);
 }
 
 void dae::Logger_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
 {
 	std::cout << std::format("Registering sound effect\n\t\"{}\"\tid: {}\n", soundEntry.path, soundEntry.id);
-	m_pSoundSystem->RegisterSound(soundEntry);
+	s_pSoundSystem->RegisterSound(soundEntry);
 }
 
 void dae::Logger_SoundSystem::UnregisterSound(sound_id id)
 {
 	std::cout << std::format("Unregistering sound effect with id: {}\n", id);
-	m_pSoundSystem->UnregisterSound(id);
+	s_pSoundSystem->UnregisterSound(id);
 }

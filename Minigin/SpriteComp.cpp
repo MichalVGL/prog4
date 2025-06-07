@@ -27,9 +27,9 @@ void dae::SpriteComp::Update(float deltaTime)
 	}
 
 	int totalFrameCount = m_pActiveEntry->cols * m_pActiveEntry->rows - 1;
-	bool loopComplete = m_FrameIndex > totalFrameCount;
+	//bool loopComplete = m_FrameIndex > totalFrameCount;
 	//if entry shouldn't loop and the loop is complete
-	if (m_pActiveEntry->loop == false and loopComplete)
+	if (m_pActiveEntry->loop == false and m_LoopComplete)
 	{
 		return;
 	}

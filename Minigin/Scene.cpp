@@ -3,40 +3,73 @@
 #include <algorithm>
 #include <memory>
 
-using namespace dae;
+#include "ServiceLocator.h"
 
-unsigned int Scene::m_idCounter = 0;
+unsigned int dae::Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name)
+dae::Scene::Scene(const std::string& name)
 	: m_name{ name } 
 {
 }
 
-Scene::~Scene() = default;
+void dae::Scene::RemoveFlaggedObjects()
+{
+	m_Objects.erase(
+		std::remove_if(m_Objects.begin(), m_Objects.end(), [&](const std::unique_ptr<GameObject>& obj)
+			{
+				if (obj->IsFlaggedForDeletion())
+				{
+					m_RenderSortedObjectsDirty = true; //if an object is flagged for deletion, we need to sort the render objects again
+					return true;
+				}
+				else
+					return false;
+			})
+		, m_Objects.end());
+}
 
-GameObject* Scene::Add(std::unique_ptr<GameObject> object)
+void dae::Scene::SortRenderObjects() const
+{
+	m_RenderSortedObjects.clear();
+	m_RenderSortedObjects.reserve(m_Objects.size());	
+
+	//copy the pointers
+	std::transform(m_Objects.begin(), m_Objects.end(), std::back_inserter(m_RenderSortedObjects),
+		[](const std::unique_ptr<GameObject>& obj) { return obj.get(); });
+
+	std::sort(m_RenderSortedObjects.begin(), m_RenderSortedObjects.end(),
+		[](const GameObject* a, const GameObject* b)
+		{
+			return a->GetRenderLayer() < b->GetRenderLayer();
+		});
+
+	m_RenderSortedObjectsDirty = false; 
+}
+
+dae::Scene::~Scene() = default;
+
+dae::GameObject* dae::Scene::Add(std::unique_ptr<GameObject> object)
 {
 	object->SetScene(this);
 	if (m_HasStarted)
 		object->Start();
 
 	m_Objects.emplace_back(std::move(object));
+
+	m_RenderSortedObjectsDirty = true;
 	return m_Objects.back().get();
 }
 
-void Scene::Remove(GameObject* object)
-{
-	m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(), [&object](const auto& gameObject) { return gameObject.get() == object; })
-		, m_Objects.end());
-}
-
-void Scene::RemoveAll()
+void dae::Scene::RemoveAll()
 {
 	m_Objects.clear();
 }
 
 void dae::Scene::Start()
 {
+	auto& cameraSystem = dae::ServiceLocator::GetCameraSystem();
+	cameraSystem.Start();
+
 	for (auto& object : m_Objects)
 	{
 		object->Start();
@@ -52,7 +85,7 @@ void dae::Scene::FixedUpdate(float deltaFixedTime)
 	}
 }
 
-void Scene::Update(float deltaTime)
+void dae::Scene::Update(float deltaTime)
 {
 	for(auto& object : m_Objects)
 	{
@@ -67,17 +100,19 @@ void dae::Scene::LateUpdate(float deltaTime)
 		object->LateUpdate(deltaTime);
 	}
 
-	m_Objects.erase(
-		std::remove_if(m_Objects.begin(), m_Objects.end(), [](const std::unique_ptr<GameObject>& obj)
-			{
-				return obj->IsFlaggedForDeletion();
-			})
-		, m_Objects.end());
+	RemoveFlaggedObjects();
+
+	auto& cameraSystem = dae::ServiceLocator::GetCameraSystem();
+	cameraSystem.Update(deltaTime);
 }
 
-void Scene::Render() const
+void dae::Scene::Render() const
 {
-	for (const auto& object : m_Objects)
+	if (m_RenderSortedObjectsDirty)
+	{
+		SortRenderObjects();
+	}
+	for (const auto* object : m_RenderSortedObjects)
 	{
 		object->Render();
 	}
@@ -91,7 +126,7 @@ void dae::Scene::UpdateImGui()
 	}
 }
 
-std::vector<GameObjectHandle> dae::Scene::GetObjectByID(GobjID id) const
+std::vector<dae::GameObjectHandle> dae::Scene::GetObjectByID(GobjID id) const
 {
 	std::vector<GameObjectHandle> handles{};
 	for (const auto& object : m_Objects)

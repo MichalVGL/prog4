@@ -49,6 +49,15 @@
     <Filter Include="Header Files\Pathfinding">
       <UniqueIdentifier>{3750955b-f4dd-423f-bb63-229a44bce5fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UpgradeSystem">
+      <UniqueIdentifier>{e3386ce4-166a-4475-9183-d68fb3d96470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SpawnSystem">
+      <UniqueIdentifier>{bcd954bb-19f1-46e3-a0e2-e121c3102c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SpawnSystem">
+      <UniqueIdentifier>{72316733-44d8-4c5a-a542-32655a02580f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp">
@@ -63,7 +72,7 @@
     <ClCompile Include="TimerComp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="BaseEntityComp.cpp">
+    <ClCompile Include="EntityComp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="EntityStates.cpp">
@@ -78,9 +87,6 @@
     <ClCompile Include="BaseTile.cpp">
       <Filter>Source Files\Tile</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerEntityComp.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Source Files\Entity\Controllers</Filter>
     </ClCompile>
@@ -89,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="PathfinderSystem.cpp">
       <Filter>Source Files\Pathfinding</Filter>
-    </ClCompile>
-    <ClCompile Include="SpawnSystem.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WallComp.cpp">
       <Filter>Source Files\Components</Filter>
@@ -104,6 +107,21 @@
     </ClCompile>
     <ClCompile Include="FireComp.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TileCollisionComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UpgradeComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BombDeployerComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpawnSystem.cpp">
+      <Filter>Source Files\SpawnSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UpgradeSystem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +143,7 @@
     <ClInclude Include="TimerComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="BaseEntityComp.h">
+    <ClInclude Include="EntityComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="EntityStates.h">
@@ -146,9 +164,6 @@
     <ClInclude Include="TileMod.h">
       <Filter>Header Files\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerEntityComp.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="EntityUtils.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
@@ -167,12 +182,6 @@
     <ClInclude Include="PathfinderSystem.h">
       <Filter>Header Files\Pathfinding</Filter>
     </ClInclude>
-    <ClInclude Include="ISpawnSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpawnSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WallComp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -185,8 +194,26 @@
     <ClInclude Include="BMUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectFinder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="TileCollisionComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BombDeployerComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IUpgradeSystem.h">
+      <Filter>Header Files\UpgradeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeSystem.h">
+      <Filter>Header Files\UpgradeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ISpawnSystem.h">
+      <Filter>Header Files\SpawnSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnSystem.h">
+      <Filter>Header Files\SpawnSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,12 +18,6 @@ namespace bm
 			return m_EntityInput;
 		}
 
-		//const and copy version. Given state should be able to access and modify the input (Action 1 and 2), this shouldn't be used for the state
-		//EntityInput GetInput() const
-		//{
-		//	return m_Input;
-		//}
-
 	protected:
 
 		EntityInput m_EntityInput{};

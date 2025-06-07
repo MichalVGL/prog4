@@ -28,7 +28,7 @@ namespace bm
 	};
 
 	// To implement if you want to modify a tile
-	class TileMod
+	class TileMod	//make sure to call unregister in OnDestroy (because making it auto unregister in the destructor will cause issues with the tilesystem, the tiles are destroyed)
 	{
 	public:
 

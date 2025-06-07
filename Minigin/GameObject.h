@@ -30,11 +30,12 @@ namespace dae
 	class Scene;
 
 	using gameobject_id = unsigned int;
+	using render_layer = int;
 
 	struct GobjID
 	{
-		const std::string_view name;
-		const gameobject_id id;
+		std::string_view name;
+		gameobject_id id;
 
 		template <size_t N>
 		constexpr GobjID(const char(&name)[N])
@@ -54,7 +55,7 @@ namespace dae
 	{
 	public:
 
-		GameObject(const GobjID& name = {"___"});
+		GameObject(const GobjID& name = {"___"}, render_layer rLayer = 0);
 		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -158,6 +159,7 @@ namespace dae
 
 		//Scene===========================================================
 		Scene& GetScene();
+		render_layer GetRenderLayer() const;
 
 		static constexpr std::string_view s_NullName{"___"};
 
@@ -168,14 +170,12 @@ namespace dae
 		void RegisterHandle(GameObjectHandle* handle);
 		void UnregisterHandle(GameObjectHandle* handle);
 		
-		//====================
 		//gameobject parent/children functions (private)
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
 		//world position
 		const glm::vec2& CalculateWorldPos();
 
-		//====================
 		//set the parent scene (should only be called by the scene itself)
 		friend class Scene;
 		void SetScene(Scene* scene);
@@ -184,17 +184,14 @@ namespace dae
 		//id related
 		GobjID m_Id;
 
-		//====================
 		//deletion
 		bool m_FlaggedForDeletion = false;
 
-		//====================
 		//components variables
 		std::vector<std::unique_ptr<Component>> m_Components;
 		TransformComp* m_TransformComp{};
 		bool m_IsCompFlaggedForDeletion{ false };
 
-		//====================
 		//gameobject parent/children variables
 		std::vector<GameObject*> m_ChildrenGameObj{};
 		GameObject* m_pParentGameObj{};
@@ -202,13 +199,11 @@ namespace dae
 		glm::vec2 m_WorldPos{};
 		bool m_IsWorldPosValid{};
 
-		//====================
-		//scene of the gameobject
 		Scene* m_pScene{};
+		const render_layer m_RenderLayer;
 
-		//====================
 		//External references
-		std::vector<GameObjectHandle*> m_RegisteredHandles; //Handles to this GameObject, will tnotify these handles when the object is getting deleted
+		std::vector<GameObjectHandle*> m_RegisteredHandles; //Handles to this GameObject, will notify these handles when the object is getting deleted
 	};
 }
 

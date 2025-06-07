@@ -9,6 +9,7 @@
 #include <Scene.h>
 #include <EngineComponents.h>
 #include <filesystem>
+#include <ServiceLocator.h>
 
 #include "BMGameDefines.h"
 #include "BMComponents.h"
@@ -61,6 +62,9 @@ void LevelTest()
 	auto& renderSystem = dae::ServiceLocator::GetRenderSystem();
 	renderSystem.SetBackgroundColor({.r = 156, .g = 156, .b = 156, .a = 255});
 
+	auto& cameraSystem = dae::ServiceLocator::GetCameraSystem();
+	cameraSystem.SetBounds({ 0, 0, 496, 240 });
+
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	//Level==================================
@@ -78,38 +82,41 @@ void LevelTest()
 	scene.Add(std::move(go));
 
 	//Player============================================================================
-	go = bm::SpriteGOBJ(bm::PLAYER_GOBJID);
+	go = bm::SpriteGOBJ(bm::PLAYER_GOBJID, 2);
 	auto* spriteComp = go->GetComponent<dae::SpriteComp>();
 	spriteComp->LoadTexture(bm::PLAYER_TEXTURE);
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveDown", { 0, bm::TILE_SIZE * 3, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveUp", { 0, bm::TILE_SIZE * 2, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveLeft", { 0, bm::TILE_SIZE * 1, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
-	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { 0, 0, bm::TILE_SIZE * 7, bm::TILE_SIZE }, 7, 1));
-	go->AddComponent<bm::BaseEntityComp>(bm::ENTITYSTATS_MEDIUM, std::make_unique<bm::PlayerController>());
-	auto transComp = go->GetComponent<dae::TransformComp>();
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { 0, 0, bm::TILE_SIZE * 7, bm::TILE_SIZE }, 7, 1, false));
+	go->AddComponent<bm::BombDeployerComp>();
+	auto* entityComp = go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_MEDIUM, std::make_unique<bm::PlayerController>());
+	entityComp->SetCommand1(std::make_unique<bm::DeployCommand>(*go));
+	entityComp->SetCommand2(std::make_unique<bm::DetonateCommand>(*go));
+	auto* transComp = go->GetComponent<dae::TransformComp>();
 	transComp->SetLocalPosition(24, 24);
-
-	scene.Add(std::move(go));
+	
+	cameraSystem.AddGObjSubject(scene.Add(std::move(go)));
 
 	//Enemy=============================================================================
-	go = bm::SpriteGOBJ(bm::ENEMY_GOBJID);
+	go = bm::SpriteGOBJ(bm::ENEMY_GOBJID, 1);
 	spriteComp = go->GetComponent<dae::SpriteComp>();
 	spriteComp->LoadTexture(bm::ENEMY_TEXTURE);
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveDown", { 0, bm::TILE_SIZE * 3, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveUp", { bm::TILE_SIZE * 4, bm::TILE_SIZE * 3, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveLeft", { bm::TILE_SIZE * 4, bm::TILE_SIZE * 3, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
-	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { bm::TILE_SIZE * 8, bm::TILE_SIZE * 3, bm::TILE_SIZE * 5, bm::TILE_SIZE }, 5, 1));
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { bm::TILE_SIZE * 8, bm::TILE_SIZE * 3, bm::TILE_SIZE * 5, bm::TILE_SIZE }, 5, 1, false));
 	auto pAIController = std::make_unique<bm::AIController>(bm::AIController::Intelligence::normal, *go);
-	go->AddComponent<bm::BaseEntityComp>(bm::ENTITYSTATS_SLOW, std::move(pAIController));
+	go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_SLOW, std::move(pAIController));
 	transComp = go->GetComponent<dae::TransformComp>();
 	transComp->SetLocalPosition(88, 88);
 
-	scene.Add(std::move(go));
+	cameraSystem.AddGObjSubject(scene.Add(std::move(go)));
 
 	//Wall test=========================================================================
 	go = bm::SpriteGOBJ("Wall");
 	transComp = go->GetComponent<dae::TransformComp>();
-	transComp->SetLocalPosition(56, 56);
+	transComp->SetLocalPosition(72, 56);
 	go->AddComponent<bm::WallComp>();
 
 	scene.Add(std::move(go));
@@ -117,28 +124,18 @@ void LevelTest()
 	//Bomb test=========================================================================
 	go = bm::SpriteGOBJ("Bomb");
 	transComp = go->GetComponent<dae::TransformComp>();
-	transComp->SetLocalPosition(56, 88);
+	transComp->SetLocalPosition(56, 56);
 	go->AddComponent<bm::TimerComp>();
 	go->AddComponent<bm::BombComp>();
 
 	scene.Add(std::move(go));
 
+	//Upgrade test======================================================================
+	auto& spawnSystem = bm::BMServiceLocator::GetSpawnSystem();
+	spawnSystem.SpawnUpgrade({ 56, 104 }, bm::UpgradeType::bombRange);
+	spawnSystem.SpawnUpgrade({ 56, 120 }, bm::UpgradeType::bombCount);
+	spawnSystem.SpawnUpgrade({ 88, 104 }, bm::UpgradeType::remoteDetonator);
 
-	////Character01=======================================================================================
-	//go = std::make_unique<dae::GameObject>("Bomberman");
-	//auto tranComp = go->GetComponent<dae::TransformComp>();
-	//tranComp->SetLocalPosition(100, 100);
-	//auto rendComp = go->AddComponent<dae::RenderComp>();
-	//rendComp->SetHorizontalAlignment(dae::HorizontalAlignment::center);
-	//rendComp->SetVerticalAlignment(dae::VerticalAlignment::center);
-	//auto* spriteComp = go->AddComponent<dae::SpriteComp>();
-	//spriteComp->LoadTexture(g_Bomberman);
-	//spriteComp->AddSpriteEntry(dae::SpriteEntry("WalkRight", { 0, bm::TILE_SIZE, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
-	//spriteComp->SetSpriteEntry(dae::SpriteId("WalkRight"));
-	//spriteComp->SetFPS(6.f);
-	//spriteComp->FlipHorizontal(true);
-	//go->AddComponent<GameActorComp>(50.f, 0);
-	//scene.Add(std::move(go));
 
 }
 

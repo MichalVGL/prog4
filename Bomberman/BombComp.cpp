@@ -22,9 +22,9 @@ bm::BombComp::BombComp(dae::GameObject& parent)
 void bm::BombComp::OnDestroy()
 {
 	TileMod::Unregister();
-	//todo spawn central fire
 	auto& spawnSystem = bm::BMServiceLocator::GetSpawnSystem();
-	spawnSystem.SpawnFire(GetOwner().GetWorldPos(), {}, Direction::all, 2);	//todo, add spread code
+	auto& upgradeSystem = bm::BMServiceLocator::GetUpgradeSystem();
+	spawnSystem.SpawnFire(GetOwner().GetWorldPos(), {}, Direction::all, upgradeSystem.GetBombRange());
 }
 
 void bm::BombComp::Detonate()
@@ -43,5 +43,5 @@ void bm::BombComp::Notify(dae::Event event, const std::any&)
 
 bool bm::BombComp::IsWalkable() const
 {
-	return true;
+	return false;
 }

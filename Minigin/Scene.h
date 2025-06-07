@@ -22,7 +22,6 @@ namespace dae
 		Scene& operator=(Scene&& other) = delete;
 
 		GameObject* Add(std::unique_ptr<GameObject> object);
-		void Remove(GameObject* object);
 		void RemoveAll();
 
 		void Start();
@@ -37,14 +36,18 @@ namespace dae
 	private: 
 		explicit Scene(const std::string& name);
 
-		std::string m_name;
-		std::vector <std::unique_ptr<GameObject>> m_Objects{};
+		void RemoveFlaggedObjects();
+		void SortRenderObjects() const;
 
-		static unsigned int m_idCounter; 
+		std::string m_name;
+		std::vector<std::unique_ptr<GameObject>> m_Objects{};
+		mutable std::vector<const GameObject*> m_RenderSortedObjects{};
+		mutable bool m_RenderSortedObjectsDirty{ true };
+
+		static unsigned int m_idCounter;//todo, check if this is necessary???
 
 		bool m_HasStarted{ false };	//if start() has ben called, Add() will cal start() instead
 	};
-
 }
 
 #endif // SCENE_H
