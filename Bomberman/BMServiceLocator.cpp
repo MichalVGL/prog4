@@ -6,11 +6,13 @@
 #include "PathfinderSystem.h"
 #include "SpawnSystem.h"
 #include "UpgradeSystem.h"
+#include "ScoreSystem.h"
 
 std::unique_ptr<bm::ITileSystem> bm::BMServiceLocator::s_pTileSystem{ std::make_unique<bm::Null_TileSystem>() };
 std::unique_ptr<bm::IPathfinderSystem> bm::BMServiceLocator::s_pPathfinderSystem{ std::make_unique<bm::PathfinderSystem>() };
 std::unique_ptr<bm::ISpawnSystem> bm::BMServiceLocator::s_pSpawnSystem{ std::make_unique<bm::SpawnSystem>() };
 std::unique_ptr<bm::IUpgradeSystem> bm::BMServiceLocator::s_pUpgradeSystem{ std::make_unique<bm::UpgradeSystem>() };
+std::unique_ptr<bm::IScoreSystem> bm::BMServiceLocator::s_pScoreSystem{ std::make_unique<bm::ScoreSystem>() };
 
 void bm::BMServiceLocator::RegisterTileSystem(std::unique_ptr<ITileSystem>&& pTileSystem)
 {
@@ -70,4 +72,19 @@ bm::IUpgradeSystem& bm::BMServiceLocator::GetUpgradeSystem()
 		s_pUpgradeSystem = std::make_unique<bm::UpgradeSystem>();
 	}
 	return *s_pUpgradeSystem;
+}
+
+void bm::BMServiceLocator::RegisterScoreSystem(std::unique_ptr<IScoreSystem>&& pScoreSystem)
+{
+	assert(pScoreSystem != nullptr && "BMServiceLocator::RegisterScoreSystem: Tried to register nullptr as ScoreSystem");
+	s_pScoreSystem = std::move(pScoreSystem);
+}
+
+bm::IScoreSystem& bm::BMServiceLocator::GetScoreSystem()
+{
+	if (!s_pScoreSystem)
+	{
+		s_pScoreSystem = std::make_unique<bm::ScoreSystem>();
+	}
+	return *s_pScoreSystem;
 }

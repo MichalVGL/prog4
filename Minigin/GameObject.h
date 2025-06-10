@@ -3,11 +3,15 @@
 
 /*========================README==========================================================================
 
-todo add info
-
 GameObject Class
 
+==BasicInfo
 	=> All GameObjects come automatically with a transformComp	
+	=> GameObjects can have multiple components, but only one of the same type.
+	=> Use GameObjectHandle to access GameObjects in a scene. It will automatically be set to nullptr when the object is destroyed.
+	=> GobjID is used to identify GameObjects. Makes them searchable by id.
+	=> GameObject can have a parent and children. Used to create a hierarchy of GameObjects following the positions of the parent.
+	=> GameObjects can be flagged for deletion, which will call OnDestroy on all components. (Should be the only way to destroy GameObject dynamically in a scene!)
 
 ========================================================================================================*/
 #include <glm.hpp>

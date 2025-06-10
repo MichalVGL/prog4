@@ -11,10 +11,17 @@
 
 namespace bm
 {
-	class WallComp final : public dae::Component, public TileMod	//Args: 
+	enum class ContainedObject
+	{
+		none,
+		upgrade,
+		door
+	};
+
+	class WallComp final : public dae::Component, public TileMod	//Args: ContainedObject object = ContainedObject::none
 	{
 	public:
-		WallComp(dae::GameObject& parent);
+		WallComp(dae::GameObject& parent, ContainedObject object = ContainedObject::none);
 
 		WallComp(const WallComp& other) = default;
 		WallComp(WallComp&& other) noexcept = default;
@@ -44,6 +51,7 @@ namespace bm
 
 		bool m_IsBeingDestroyed{ false };
 
+		ContainedObject m_ContainedObject;
 
 		// Inherited via TileMod
 		bool IsWalkable() const override;

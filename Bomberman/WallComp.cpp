@@ -1,9 +1,11 @@
 #include "WallComp.h"
 
 #include "BMGameDefines.h"
+#include "BMServiceLocator.h"
 
-bm::WallComp::WallComp(dae::GameObject& parent)
+bm::WallComp::WallComp(dae::GameObject& parent, ContainedObject object)
 	:Component(parent), TileMod(parent, WALL_MODID)
+	, m_ContainedObject{ object }
 {
 	//setup sprite
 	m_SpriteComp.Init(parent);
@@ -16,9 +18,8 @@ bm::WallComp::WallComp(dae::GameObject& parent)
 	m_SpriteComp->SetSpriteEntry(s_BaseWallSprite.id);
 }
 
-void bm::WallComp::Update(float deltaTime)
+void bm::WallComp::Update(float)
 {
-	deltaTime;
 	if (m_IsBeingDestroyed && m_SpriteComp->IsLoopComplete())
 	{
 		GetOwner().FlagForDeletion();
@@ -28,7 +29,17 @@ void bm::WallComp::Update(float deltaTime)
 void bm::WallComp::OnDestroy()
 {
 	TileMod::Unregister();
-	//todo spawn stored mod
+
+	auto& spawnSystem = bm::BMServiceLocator::GetSpawnSystem();
+	switch (m_ContainedObject)
+	{
+	case bm::ContainedObject::upgrade:
+		spawnSystem.SpawnRandomUpgrade(GetOwner().GetWorldPos());
+		break;
+	case bm::ContainedObject::door:
+		//todo add
+		break;
+	}
 }
 
 void bm::WallComp::DestroyWall()

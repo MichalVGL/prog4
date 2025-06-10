@@ -144,14 +144,13 @@ void bm::PathToTargetCommand::Execute()
 
 //Helper functions===================
 
-#include <SceneManager.h>
 #include <Scene.h>
 
 dae::GameObjectHandle bm::GetPlayer()	//used as the target function for the AIController's PathToTargetCommand
 {
 	//Gets all the players in the scene and picks a random one
 
-	auto* currentScene = dae::SceneManager::GetInstance().GetCurrentScene();
+	auto* currentScene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
 
 	if (!currentScene)
 	{

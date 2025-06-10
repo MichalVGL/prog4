@@ -6,12 +6,17 @@
 
 Base Component Class
 
-	=>
+==BasicInfo
+	=> Features base function that will be called automatically. (start, update,...)
+	=> OnDestroy will be called when the GameObject is flagged for deletion. (NOT on gameobject deletion, like when a scene is being destroyed)
+	=> Multiple components of the same type cannot be added to the same GameObject.
+	=> Use parent/child functionality of the GameObject to use the same component twice. (spritecomp, rendercomp, ...)
 
-//todo 
-//SubComponent creation
-//Component creation in the gameobject
-//debug only checks (duplicate components,...)
+==Creation
+	=> Use AddComponent<T> to add a component to a GameObject. 
+	=> Make sure to add the parameters after Args: seperatly. (due to the AddComponent as a template using perfect forwarding, thus not giving intellisense the info about the component constructor)
+										(hovering over the component type declaration will show the Args: ...)	
+	=> Use ReqComp<T> or OptComp<T> to create a required or optional componentpointer. (make sure to call .Init() in constructor or start!!!)
 
 ========================================================================================================*/
 #include <iostream>

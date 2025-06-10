@@ -1,7 +1,7 @@
 #include "SpawnSystem.h"
 
 #include <Scene.h>
-#include <SceneManager.h>
+#include <ServiceLocator.h>
 
 #include "BMServiceLocator.h"
 #include "BMGameDefines.h"
@@ -16,7 +16,7 @@ void bm::SpawnSystem::SpawnLevelStructures(int walls)
 
 dae::GameObjectHandle bm::SpawnSystem::SpawnBomb(glm::vec2 pos)
 {
-	auto* scene = dae::SceneManager::GetInstance().GetCurrentScene();
+	auto* scene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
 	auto& tileSystem = bm::BMServiceLocator::GetTileSystem();
 	auto* currentTile = tileSystem.GetTileFromWorldPos(pos);
 	if (!scene || !currentTile)
@@ -40,7 +40,7 @@ dae::GameObjectHandle bm::SpawnSystem::SpawnBomb(glm::vec2 pos)
 
 void bm::SpawnSystem::SpawnFire(glm::vec2 pos, std::vector<dae::GameObjectHandle> targets, Direction direction, int spreadAmount)
 {
-	auto* scene = dae::SceneManager::GetInstance().GetCurrentScene();
+	auto* scene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
 	if (!scene)
 		return;
 
@@ -55,7 +55,7 @@ void bm::SpawnSystem::SpawnFire(glm::vec2 pos, std::vector<dae::GameObjectHandle
 
 void bm::SpawnSystem::SpawnUpgrade(glm::vec2 pos, UpgradeType type)
 {
-	auto* scene = dae::SceneManager::GetInstance().GetCurrentScene();
+	auto* scene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
 	if (!scene)
 		return;
 	auto go = bm::RenderGOBJ(UPGRADE_GOBJID);
@@ -65,6 +65,50 @@ void bm::SpawnSystem::SpawnUpgrade(glm::vec2 pos, UpgradeType type)
 
 	go->AddComponent<bm::TileCollisionComp>();
 	go->AddComponent<bm::UpgradeComp>(type);
+
+	scene->Add(std::move(go));
+}
+
+void bm::SpawnSystem::SpawnRandomUpgrade(glm::vec2 pos)
+{
+	auto& randomSystem = dae::ServiceLocator::GetRandomSystem();
+	auto& upgradeSystem = bm::BMServiceLocator::GetUpgradeSystem();
+
+	int randomType = [&]() -> int
+		{
+			if (!upgradeSystem.IsRemoteActive())
+			{
+				return randomSystem.GetRandomInt(0, static_cast<int>(UpgradeType::count) - 1);	//all types allowed
+			}
+			else //prevent remote from being picked
+			{
+				int rnd{};
+				do
+				{
+					rnd = randomSystem.GetRandomInt(0, static_cast<int>(UpgradeType::count) - 1);
+				} while (rnd == static_cast<int>(UpgradeType::remoteDetonator));
+				return rnd;
+			}
+		}();
+
+	SpawnUpgrade(pos, static_cast<UpgradeType>(randomType));
+}
+
+void bm::SpawnSystem::SpawnTempText(glm::vec2 pos, const std::string& text, float time, int size)
+{
+	auto* scene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
+	if (!scene)
+		return;
+
+	auto go = bm::TextGOBJ("TempText", 3);
+	auto* textComp = go->GetComponent<dae::TextComp>();
+	textComp->SetText(text);
+	textComp->SetFont(bm::MAIN_FONT);
+	textComp->SetSize(size);
+
+	go->AddComponent<dae::AutoDestroyComp>(time);
+
+	go->GetComponent<dae::TransformComp>()->SetLocalPosition(pos);;
 
 	scene->Add(std::move(go));
 }

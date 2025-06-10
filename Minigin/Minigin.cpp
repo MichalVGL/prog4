@@ -15,13 +15,13 @@
 #include "DaeTime.h"
 #include "DaeFiles.h"
 #include "InputManager.h"
-#include "SceneManager.h"
 
 #include "ServiceLocator.h"
 #include "SoundSystem.h"
 #include "RenderSystem.h"
 #include "TextureSystem.h"
 #include "FontSystem.h"
+#include "SceneSystem.h"
 
 #include "Texture.h"
 #include "Sound.h"
@@ -69,7 +69,7 @@ dae::Minigin::Minigin(const std::string &datapath, const Window& window)
 		throw std::runtime_error(std::format("SDL_Init failed: {}\n", SDL_GetError()));
 	}
 
-	{//systems init
+	{	//systems init
 		auto renderSystem = std::make_unique<SDL_RenderSystem>(window);	//first create rendersystem seperatly to be able to give it to the texturesystem
 		ServiceLocator::RegisterTextureSystem(std::make_unique<SDL_TextureSystem>(datapath, renderSystem->GetSDLRenderer()));
 		ServiceLocator::RegisterRenderSystem(std::move(renderSystem));
@@ -88,16 +88,18 @@ dae::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run(const std::function<void()>& load)
+void dae::Minigin::Run(std::unique_ptr<Scene>&& startScene)
 {
-	load();
+	ServiceLocator::RegisterSceneSystem(std::make_unique<Default_SceneSystem>(std::move(startScene)));
+
 	dae::fixedDeltaTime = m_SecondsPerFixedUpdate;
 
 	auto& renderer = ServiceLocator::GetRenderSystem();
-	auto& sceneManager = SceneManager::GetInstance();
+	auto& sceneSystem = ServiceLocator::GetSceneSystem();
 	auto& input = InputManager::GetInstance();
 
-	sceneManager.Start();
+	sceneSystem.LoadScene();
+	sceneSystem.Start();
 
 	bool doContinue{ true };
 	std::chrono::steady_clock::time_point lastTime{ std::chrono::high_resolution_clock::now() };
@@ -116,11 +118,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		while (lag >= m_SecondsPerFixedUpdate)
 		{
-			sceneManager.FixedUpdate(m_SecondsPerFixedUpdate);
+			sceneSystem.FixedUpdate(m_SecondsPerFixedUpdate);
 			lag -= m_SecondsPerFixedUpdate;
 		}
-		sceneManager.Update(dae::deltaTime);
-		sceneManager.LateUpdate(dae::deltaTime);
+		sceneSystem.Update(dae::deltaTime);
+		sceneSystem.LateUpdate(dae::deltaTime);
 
 		renderer.Render();
 

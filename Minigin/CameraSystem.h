@@ -17,8 +17,7 @@ namespace dae
 
 		void SetBounds(Rect bounds) override;
 		glm::vec2 GetCameraPos() const override;
-		void SetCameraSpeed(float pixelsPerSecond) override;
-		void SetCameraDeadZone(float size);
+		void SetCameraSpeedFactor(float speedFactor) override;
 
 		void Reset() override;
 
@@ -33,8 +32,8 @@ namespace dae
 		glm::vec2 m_TargetPosition{}; //average of the subjects
 		Rect m_Bounds{ 0, 0, 0, 0 };	//camera bounds
 
-		float m_CameraSpeed{ 50.f };	//camera speed, how fast it moves towards the target position
-		float m_DeadZone{ 10.f };	//deadzone, how far the camera can be from the target before it starts moving
+		float m_CameraSpeedFactor{ 3.f };	//camera speed, how fast it moves towards the target position (only used when in transition)
+		const float m_SnapDistance{ 3.f };
 	};
 }
 

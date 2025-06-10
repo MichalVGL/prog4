@@ -40,7 +40,7 @@ namespace dae
 	{
 	public:
 
-		InputManager();	//todo, change constructors so you cant create instances outside (singleton class upcoming) => make it a service
+		InputManager();
 
 		bool ProcessInput();
 

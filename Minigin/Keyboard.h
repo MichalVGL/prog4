@@ -28,7 +28,7 @@ namespace dae
 	private:
 
 		class SDLImpl;
-		std::unique_ptr<SDLImpl> m_SDLImpl_Uptr;
+		std::unique_ptr<SDLImpl> m_pSDLImpl;
 
 	};
 }

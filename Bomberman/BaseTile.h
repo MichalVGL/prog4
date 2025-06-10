@@ -23,8 +23,7 @@ namespace bm
 		}
 
 		bool IsWalkable() const;
-		bool AllowsSpawnables() const;
-		dae::TextureEntry GetTextureEntry() const;
+		const dae::TextureEntry& GetTextureEntry() const;
 
 	private:
 

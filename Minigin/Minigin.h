@@ -3,8 +3,10 @@
 
 #include <string>
 #include <functional>
+#include <memory>
 
 #include "RenderUtils.h"
+#include "Scene.h"
 
 namespace dae
 {
@@ -13,7 +15,7 @@ namespace dae
 	public:
 		explicit Minigin(const std::string& dataPath, const Window& window);
 		~Minigin();
-		void Run(const std::function<void()>& load);
+		void Run(std::unique_ptr<Scene>&& startScene);
 
 		Minigin(const Minigin& other) = delete;
 		Minigin(Minigin&& other) = delete;

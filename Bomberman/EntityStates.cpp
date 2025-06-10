@@ -94,8 +94,6 @@ std::unique_ptr<bm::EntityState> bm::MovementState::HandleInput(EntityInput& inp
 
 std::unique_ptr<bm::EntityState> bm::MovementState::GetNewDirectionState(glm::ivec2 direction)
 {
-	//todo, use servicelocator to get to tiles, the levelcomp inits and destroys the service. Use the helper function on the service to get validation here
-
 	auto& tileService{ BMServiceLocator::GetTileSystem() };
 	auto* currentTile{ tileService.GetTileFromWorldPos(m_TransformComp.GetOwner().GetWorldPos()) };
 
@@ -207,7 +205,7 @@ std::unique_ptr<bm::EntityState> bm::MoveUpState::Update(float deltaTime, Entity
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());	//todo, call this in every return newState case
+		SetCommands(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -269,7 +267,7 @@ std::unique_ptr<bm::EntityState> bm::MoveDownState::Update(float deltaTime, Enti
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());	//todo, call this in every return newState case
+		SetCommands(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -335,7 +333,7 @@ std::unique_ptr<bm::EntityState> bm::MoveRightState::Update(float deltaTime, Ent
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());	//todo, call this in every return newState case
+		SetCommands(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -397,7 +395,7 @@ std::unique_ptr<bm::EntityState> bm::MoveLeftState::Update(float deltaTime, Enti
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());	//todo, call this in every return newState case
+		SetCommands(pNewState.get());
 		return pNewState;
 	}
 	else

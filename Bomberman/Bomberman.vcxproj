@@ -176,6 +176,10 @@
     <ClCompile Include="BMServiceLocator.cpp" />
     <ClCompile Include="BombDeployerComp.cpp" />
     <ClCompile Include="Bomberman.cpp" />
+    <ClCompile Include="EnemyComp.cpp" />
+    <ClCompile Include="ScoreComp.cpp" />
+    <ClCompile Include="ScoreSystem.cpp" />
+    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="UpgradeComp.cpp" />
     <ClCompile Include="EntityComp.cpp" />
     <ClCompile Include="BombComp.cpp" />
@@ -199,6 +203,12 @@
     <ClInclude Include="BMComponents.h" />
     <ClInclude Include="BMGameDefines.h" />
     <ClInclude Include="BombDeployerComp.h" />
+    <ClInclude Include="EnemyComp.h" />
+    <ClInclude Include="IEventSystem.h" />
+    <ClInclude Include="IScoreSystem.h" />
+    <ClInclude Include="ScoreComp.h" />
+    <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="UpgradeComp.h" />
     <ClInclude Include="EntityComp.h" />
     <ClInclude Include="BMServiceLocator.h" />

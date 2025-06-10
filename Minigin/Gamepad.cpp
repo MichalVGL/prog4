@@ -113,7 +113,7 @@ bool Gamepad::XinputImpl::IsValidGamepadButton(uint16_t button)
 //===============================
 
 Gamepad::Gamepad(int id)
-	:m_XinputImpl_Uptr{std::make_unique<XinputImpl>(id)}
+	:m_pXinputImpl{std::make_unique<XinputImpl>(id)}
 {
 }
 
@@ -123,27 +123,27 @@ Gamepad& Gamepad::operator=(Gamepad&& other) noexcept = default;
 
 void Gamepad::UpdateInput()
 {
-	m_XinputImpl_Uptr->UpdateInputImpl();
+	m_pXinputImpl->UpdateInputImpl();
 }
 
 bool Gamepad::IsButtonUp(uint16_t button) const
 {
-	return m_XinputImpl_Uptr->IsButtonUp(button);
+	return m_pXinputImpl->IsButtonUp(button);
 }
 
 bool Gamepad::IsButtonDown(uint16_t button) const
 {
-	return m_XinputImpl_Uptr->IsButtonDown(button);
+	return m_pXinputImpl->IsButtonDown(button);
 }
 
 bool Gamepad::IsButtonPressed(uint16_t button) const
 {
-	return m_XinputImpl_Uptr->IsButtonPressed(button);
+	return m_pXinputImpl->IsButtonPressed(button);
 }
 
 bool Gamepad::IsConnected() const
 {
-	return m_XinputImpl_Uptr->IsConnected();
+	return m_pXinputImpl->IsConnected();
 }
 
 bool Gamepad::IsValidGamepadButton(uint16_t button)

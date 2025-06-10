@@ -22,7 +22,7 @@ namespace bm
 	{
 	public:
 
-		Level_TileSystem(dae::Scene& scene);
+		Level_TileSystem();
 
 		TileComp* GetTileFromWorldPos(glm::vec2 position) override;
 		TileComp* GetTileFromIndex(glm::ivec2 indexPos) override;

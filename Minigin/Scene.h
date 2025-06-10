@@ -1,28 +1,34 @@
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef SCENESSCRIPT_H
+#define SCENESSCRIPT_H
 
 #include <vector>
-
-#include "SceneManager.h"
+#include <memory>
 #include "GameObject.h"
-#include "GameObjectHandle.h"
 
 namespace dae
 {
-	//class GameObject;
-	class Scene final
+	class Scene
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 
-		~Scene();
-		Scene(const Scene& other) = delete;
-		Scene(Scene&& other) = delete;
-		Scene& operator=(const Scene& other) = delete;
-		Scene& operator=(Scene&& other) = delete;
+		virtual ~Scene() = default;
+
+		virtual void Load() = 0;
+		virtual void Exit() = 0;
+		virtual std::unique_ptr<Scene> UpdateScene(float deltaTime) = 0;
 
 		GameObject* Add(std::unique_ptr<GameObject> object);
 		void RemoveAll();
+
+		std::vector<GameObjectHandle> GetObjectByID(GobjID id) const;
+
+	protected:
+
+		std::vector<std::unique_ptr<GameObject>> m_Objects{};
+
+	private:
+
+		friend class Default_SceneSystem;
 
 		void Start();
 		void FixedUpdate(float deltaFixedTime);
@@ -31,23 +37,15 @@ namespace dae
 		void Render() const;
 		void UpdateImGui();
 
-		std::vector<GameObjectHandle> GetObjectByID(GobjID id) const;
-
-	private: 
-		explicit Scene(const std::string& name);
-
 		void RemoveFlaggedObjects();
 		void SortRenderObjects() const;
 
-		std::string m_name;
-		std::vector<std::unique_ptr<GameObject>> m_Objects{};
+
 		mutable std::vector<const GameObject*> m_RenderSortedObjects{};
 		mutable bool m_RenderSortedObjectsDirty{ true };
-
-		static unsigned int m_idCounter;//todo, check if this is necessary???
 
 		bool m_HasStarted{ false };	//if start() has ben called, Add() will cal start() instead
 	};
 }
 
-#endif // SCENE_H
+#endif // !SCENESSCRIPT_H

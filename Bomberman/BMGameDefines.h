@@ -1,7 +1,7 @@
 #ifndef BMGAMEDEFINES_H
 #define BMGAMEDEFINES_H
 
-#include <TextureEntry.h>
+#include <Texture.h>
 #include <SpriteComp.h>
 #include <GameObject.h>
 
@@ -26,9 +26,9 @@ namespace bm
 	//Entity vars====================================================================
 
 	//General Entity Stats
-	inline constexpr EntityStats ENTITYSTATS_SLOW{ .movementSpeed = 25.f };
-	inline constexpr EntityStats ENTITYSTATS_MEDIUM{ .movementSpeed = 35.f };
-	inline constexpr EntityStats ENTITYSTATS_FAST{ .movementSpeed = 40.f };
+	inline constexpr EntityStats ENTITYSTATS_SLOW{ .movementSpeed = 30.f };
+	inline constexpr EntityStats ENTITYSTATS_MEDIUM{ .movementSpeed = 40.f };
+	inline constexpr EntityStats ENTITYSTATS_FAST{ .movementSpeed = 50.f };
 
 	//State Sprite IDs
 	inline constexpr int IDLEFRAME{ 1 };
@@ -55,6 +55,9 @@ namespace bm
 
 	//Other==========================================================================
 	inline constexpr float GLOBAL_FPS{ 10 };
+	inline constexpr float SOUNDVOLUME{ 0.1f };
+
+	inline constexpr dae::FontEntry MAIN_FONT{ "Fonts/KenneyPixel.ttf" };
 
 	inline constexpr dae::TextureEntry ERROR_TEXTURE{ "Error.png" };
 }

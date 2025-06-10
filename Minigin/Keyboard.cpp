@@ -69,7 +69,7 @@ bool Keyboard::SDLImpl::IsButtonPressed(uint16_t key)
 //===============================
 
 Keyboard::Keyboard()
-	: m_SDLImpl_Uptr{std::make_unique<SDLImpl>()}
+	: m_pSDLImpl{std::make_unique<SDLImpl>()}
 {
 }
 
@@ -77,21 +77,21 @@ Keyboard::~Keyboard() = default;
 
 void Keyboard::UpdateInput()
 {
-	m_SDLImpl_Uptr->UpdateInput();
+	m_pSDLImpl->UpdateInput();
 }
 
 bool Keyboard::IsButtonUp(uint16_t key)
 {
-	return m_SDLImpl_Uptr->IsButtonUp(key);
+	return m_pSDLImpl->IsButtonUp(key);
 }
 
 bool Keyboard::IsButtonDown(uint16_t key)
 {
-	return m_SDLImpl_Uptr->IsButtonDown(key);
+	return m_pSDLImpl->IsButtonDown(key);
 }
 
 bool Keyboard::IsButtonPressed(uint16_t key)
 {
-	return m_SDLImpl_Uptr->IsButtonPressed(key);
+	return m_pSDLImpl->IsButtonPressed(key);
 }
 

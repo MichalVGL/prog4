@@ -4,7 +4,6 @@
 #include <iostream>
 #include <format>
 
-#include "SceneManager.h"
 #include "ServiceLocator.h"
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_opengl3.h"
@@ -120,13 +119,13 @@ void dae::SDL_RenderSystem::SDL_RenderSystemImpl::Render() const
 	SDL_SetRenderDrawColor(m_pRenderer.get(), color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_pRenderer.get());
 
-	SceneManager::GetInstance().Render();
+	ServiceLocator::GetSceneSystem().Render();
 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 	//ImGui::ShowDemoWindow();
-	SceneManager::GetInstance().UpdateImGui();
+	ServiceLocator::GetSceneSystem().UpdateImGui();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

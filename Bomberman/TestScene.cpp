@@ -1,16 +1,12 @@
+#include "TestScene.h"
 
-#if _DEBUG
-#if __has_include(<vld.h>)
-#include <vld.h>
-#endif
-#endif
-
-#include <Minigin.h>
-#include <Scene.h>
 #include <EngineComponents.h>
 #include <filesystem>
 #include <ServiceLocator.h>
 #include <Utils.h>
+#include <memory>
+
+#include <ServiceLocator.h>
 
 #include "BMGameDefines.h"
 #include "BMComponents.h"
@@ -19,54 +15,24 @@
 #include "TileSystem.h"
 #include "PlayerController.h"
 #include "AIController.h"
-#include "TestScene.h"
 
-void LevelTest();
-
-std::filesystem::path GetDataPath()
+void bm::TestScene::Load()
 {
-	// Visual studio path
-	std::filesystem::path vsPath = "../" DATA_FOLDER_PATH;
-	if (std::filesystem::exists(vsPath))
-		return vsPath;
-
-	// Exe path
-	std::filesystem::path exePath = DATA_FOLDER_PATH;
-	if (std::filesystem::exists(exePath))
-		return exePath;
-
-	std::cout << "Data folder not found.\n";
-	throw std::runtime_error("Data folder not found.");
-}
-
-int main(int, char* []) {
-
-	dae::Window window{ .title = "Bomberman", .w = 256, .h = 240, .renderScale = 2.f };
-
-	dae::Minigin engine(GetDataPath().string(), window);
-	dae::ServiceLocator::GetSoundSystem().SetGlobalVolume(bm::SOUNDVOLUME);
-	engine.Run(std::make_unique<bm::TestScene>());
-	return 0;
-}
-
-void LevelTest()
-{
-	/*
 	auto& renderSystem = dae::ServiceLocator::GetRenderSystem();
-	renderSystem.SetBackgroundColor({.r = 156, .g = 156, .b = 156, .a = 255});
+	renderSystem.SetBackgroundColor({ .r = 156, .g = 156, .b = 156, .a = 255 });
 
 	auto& cameraSystem = dae::ServiceLocator::GetCameraSystem();
 	cameraSystem.SetBounds({ 0, 0, 496, 240 });
-
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
+	
 
 	//Level==================================
-	bm::BMServiceLocator::RegisterTileSystem(std::make_unique<bm::Level_TileSystem>(scene));
+	bm::BMServiceLocator::RegisterTileSystem(std::make_unique<bm::Level_TileSystem>());
 
+	
 	//Timer==================================
 	auto go = bm::GOBJ("UI");
 	go->AddComponent<dae::FollowCameraComp>();
-	auto* uiGO = scene.Add(std::move(go));
+	auto* uiGO = Add(std::move(go));
 
 	go = bm::RenderGOBJ("TestTimer");
 	go->SetLocalPosition({ 20.f, 220.f });
@@ -78,7 +44,7 @@ void LevelTest()
 
 	go->SetParent(uiGO, true);
 
-	scene.Add(std::move(go));
+	Add(std::move(go));
 
 	//Player============================================================================
 	go = bm::SpriteGOBJ(bm::PLAYER_GOBJID, 2);
@@ -94,8 +60,10 @@ void LevelTest()
 	entityComp->SetCommand2(std::make_unique<bm::DetonateCommand>(*go));
 	auto* transComp = go->GetComponent<dae::TransformComp>();
 	transComp->SetLocalPosition(24, 24);
-	
-	cameraSystem.AddGObjSubject(scene.Add(std::move(go)));
+
+	auto* pPlayer = Add(std::move(go));
+	cameraSystem.AddGObjSubject(pPlayer);
+	m_Player = pPlayer;
 
 	//Enemy=============================================================================
 	go = bm::SpriteGOBJ(bm::ENEMY_GOBJID, 1);
@@ -115,7 +83,7 @@ void LevelTest()
 	go->AddComponent<bm::ScoreComp>(100);	//add score component to the enemy, so it can give score when killed
 
 	//cameraSystem.AddGObjSubject(scene.Add(std::move(go)));
-	scene.Add(std::move(go));
+	Add(std::move(go));
 
 	//Wall test=========================================================================
 	go = bm::SpriteGOBJ("Wall");
@@ -123,7 +91,7 @@ void LevelTest()
 	transComp->SetLocalPosition(72, 56);
 	go->AddComponent<bm::WallComp>();
 
-	scene.Add(std::move(go));
+	Add(std::move(go));
 
 	//Wall2 upgrade=====================================================================
 	go = bm::SpriteGOBJ("Wall");
@@ -131,7 +99,7 @@ void LevelTest()
 	transComp->SetLocalPosition(104, 56);
 	go->AddComponent<bm::WallComp>(bm::ContainedObject::upgrade);
 
-	scene.Add(std::move(go));
+	Add(std::move(go));
 
 	//Bomb test=========================================================================
 	go = bm::SpriteGOBJ("Bomb");
@@ -140,12 +108,24 @@ void LevelTest()
 	go->AddComponent<bm::TimerComp>();
 	go->AddComponent<bm::BombComp>();
 
-	scene.Add(std::move(go));
+	Add(std::move(go));
 
 	//Upgrade test======================================================================
 	auto& spawnSystem = bm::BMServiceLocator::GetSpawnSystem();
 	spawnSystem.SpawnUpgrade({ 56, 104 }, bm::UpgradeType::bombRange);
 	spawnSystem.SpawnUpgrade({ 56, 120 }, bm::UpgradeType::bombCount);
 	spawnSystem.SpawnUpgrade({ 88, 104 }, bm::UpgradeType::remoteDetonator);
-	*/
+	
+}
+
+void bm::TestScene::Exit()
+{
+}
+
+std::unique_ptr<dae::Scene> bm::TestScene::UpdateScene(float )
+{
+	if (m_Player.Get() == nullptr)
+		return std::make_unique<TestScene>();
+
+    return nullptr;
 }

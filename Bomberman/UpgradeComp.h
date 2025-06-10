@@ -17,6 +17,7 @@ namespace bm
 		remoteDetonator,
 		bombCount,
 		bombRange,
+		count
 	};
 
 	class UpgradeComp final : public dae::Component, public TileMod, public dae::IObserver	//Args: UpgradeType type

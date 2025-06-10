@@ -13,7 +13,7 @@ bm::BombComp::BombComp(dae::GameObject& parent)
 	//setup sprite
 	m_SpriteComp.Init(parent);
 	m_SpriteComp->LoadTexture(s_BombTextureEntry);
-	m_SpriteComp->SetFPS(GLOBAL_FPS);
+	m_SpriteComp->SetFPS(GLOBAL_FPS / 2);
 	m_SpriteComp->AddSpriteEntry(s_BombSpriteEntry);
 	m_SpriteComp->SetSpriteEntry(s_BombSpriteEntry.id);
 	m_SpriteComp->SetAlignment(dae::HorizontalAlignment::center, dae::VerticalAlignment::center);

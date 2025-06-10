@@ -30,7 +30,7 @@ namespace dae
 	private:
 
 		class XinputImpl;
-		std::unique_ptr<XinputImpl> m_XinputImpl_Uptr;	//todo change to m_p... also in keyboard.h
+		std::unique_ptr<XinputImpl> m_pXinputImpl;
 	};
 }
 

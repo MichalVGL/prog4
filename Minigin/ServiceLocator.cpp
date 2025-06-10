@@ -8,6 +8,7 @@
 #include "FontSystem.h"
 #include "RandomSystem.h"
 #include "CameraSystem.h"
+#include "SceneSystem.h"
 
 std::unique_ptr<dae::ISoundSystem> dae::ServiceLocator::s_pSoundSystem{ std::make_unique<dae::Null_SoundSystem>() };
 std::unique_ptr<dae::ITextureSystem> dae::ServiceLocator::s_pTextureSystem{ std::make_unique<dae::Null_TextureSystem>() };
@@ -15,6 +16,7 @@ std::unique_ptr<dae::IRenderSystem> dae::ServiceLocator::s_pRenderSystem{ std::m
 std::unique_ptr<dae::IFontSystem> dae::ServiceLocator::s_pFontSystem{ std::make_unique<dae::Null_FontSystem>() };
 std::unique_ptr<dae::IRandomSystem> dae::ServiceLocator::s_pRandomSystem{ std::make_unique<dae::Default_RandomSystem>() };
 std::unique_ptr<dae::ICameraSystem> dae::ServiceLocator::s_pCameraSystem{ std::make_unique<dae::CameraSystem>() };
+std::unique_ptr<dae::ISceneSystem> dae::ServiceLocator::s_pSceneSystem{ std::make_unique<dae::Null_SceneSystem>() };
 
 void dae::ServiceLocator::RegisterSoundSystem(std::unique_ptr<ISoundSystem>&& pSoundSystem)
 {
@@ -104,5 +106,20 @@ dae::ICameraSystem& dae::ServiceLocator::GetCameraSystem()
 		s_pCameraSystem = std::make_unique<dae::CameraSystem>();
 	}
 	return *s_pCameraSystem;
+}
+
+void dae::ServiceLocator::RegisterSceneSystem(std::unique_ptr<ISceneSystem>&& pSceneSystem)
+{
+	assert(pSceneSystem != nullptr && "ServiceLocator::RegisterSceneSystem: Tried to register nullptr as SceneSystem");
+	s_pSceneSystem = std::move(pSceneSystem);
+}
+
+dae::ISceneSystem& dae::ServiceLocator::GetSceneSystem()
+{
+	if (!s_pSceneSystem)
+	{
+		s_pSceneSystem = std::make_unique<dae::Null_SceneSystem>();
+	}
+	return *s_pSceneSystem;
 }
  

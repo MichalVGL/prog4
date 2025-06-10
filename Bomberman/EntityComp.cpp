@@ -19,7 +19,7 @@ bm::EntityComp::EntityComp(dae::GameObject& parent, const EntityStats& entitySta
 	//make sure spritecomp is added before this comp!!!
 	m_TransformComp.Init(GetOwner());
 	m_SpriteComp.Init(GetOwner());
-	m_SpriteComp->SetFPS(GLOBAL_FPS);	//todo, use the defines
+	m_SpriteComp->SetFPS(GLOBAL_FPS);
 	m_SpriteComp->SetAlignment(dae::HorizontalAlignment::center, dae::VerticalAlignment::center);
 }
 

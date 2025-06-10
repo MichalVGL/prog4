@@ -5,7 +5,7 @@ bool bm::BaseTile::IsWalkable() const
 	return m_Walkable;
 }
 
-dae::TextureEntry bm::BaseTile::GetTextureEntry() const
+const dae::TextureEntry& bm::BaseTile::GetTextureEntry() const
 {
 	return m_TextureEntry;
 }

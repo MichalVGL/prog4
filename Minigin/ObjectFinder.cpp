@@ -1,12 +1,12 @@
 #include "ObjectFinder.h"
 
 #include "Scene.h"
-#include "SceneManager.h"
+#include "ServiceLocator.h"
 
 std::vector<dae::GameObjectHandle> dae::FindObjects(std::vector<dae::GobjID> objectIds)
 {
 	std::vector<dae::GameObjectHandle> foundObjects{};
-	auto* scene = dae::SceneManager::GetInstance().GetCurrentScene();
+	auto* scene = ServiceLocator::GetSceneSystem().GetCurrentScene();
 	if (!scene)
 		return foundObjects;
 	for (const auto& objectId : objectIds)

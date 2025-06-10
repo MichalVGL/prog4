@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <numeric>
+#include <iostream>
 
 #include "ServiceLocator.h"
+#include "Utils.h"
 
 void dae::CameraSystem::AddGObjSubject(GameObjectHandle object)
 {
@@ -32,31 +34,31 @@ void dae::CameraSystem::Start()
 void dae::CameraSystem::Update(float deltaTime)
 {
 	ValidateSubjects();
-
+	
 	if (m_Subjects.empty())
 		return; // no subjects to follow
-
+	
 	glm::vec2 addedPos = std::accumulate(m_Subjects.begin(), m_Subjects.end(), glm::vec2(0, 0),
 		[](const glm::vec2& acc, const GameObjectHandle& handle) {
 			return acc + handle->GetWorldPos();
 		});
-
+	
 	m_TargetPosition = addedPos / static_cast<float>(m_Subjects.size());
+
 	ValidateTarget();
 
-	//set the camerapos closer to the target
 	glm::vec2 toTarget = m_TargetPosition - m_CameraPosition;
-	float distance = glm::length(toTarget);
-
-	if (distance > m_DeadZone) // Only move if outside deadzone
+	float distanceSq = dae::LengthSquared(toTarget);
+	if (distanceSq < m_SnapDistance * m_SnapDistance)
+		m_CameraPosition = m_TargetPosition;	// snap to target if within snap distance
+	else										// or use a smooth transition
 	{
-		glm::vec2 direction = toTarget / distance;
-		float moveDistance = std::min(m_CameraSpeed * deltaTime, distance - m_DeadZone);
-		m_CameraPosition += direction * moveDistance;
+		m_CameraPosition += m_CameraSpeedFactor * toTarget * deltaTime;
 	}
 
-	//update the renderoffset
+	ValidateTarget();
 
+	//update the renderoffset
 	auto& renderSystem = dae::ServiceLocator::GetRenderSystem();
 	glm::ivec2 offset = static_cast<glm::ivec2>(m_CameraPosition - renderSystem.GetCanvasSize() / 2.f);
 	renderSystem.SetRenderOffset(static_cast<glm::ivec2>(offset));
@@ -67,16 +69,10 @@ glm::vec2 dae::CameraSystem::GetCameraPos() const
 	return m_CameraPosition;
 }
 
-void dae::CameraSystem::SetCameraSpeed(float pixelsPerSecond)
+void dae::CameraSystem::SetCameraSpeedFactor(float speedFactor)
 {
-	if (pixelsPerSecond > 0)
-		m_CameraSpeed = pixelsPerSecond;
-}
-
-void dae::CameraSystem::SetCameraDeadZone(float size)
-{
-	if (size > 0)
-		m_DeadZone = size;
+	if (speedFactor > 0)
+		m_CameraSpeedFactor = speedFactor;
 }
 
 void dae::CameraSystem::SetBounds(Rect bounds)
@@ -87,7 +83,9 @@ void dae::CameraSystem::SetBounds(Rect bounds)
 void dae::CameraSystem::Reset()
 {
 	m_Bounds = Rect{ 0, 0, 0, 0 };
-	m_CameraPosition = glm::vec2(0, 0);
+	auto& renderSystem = dae::ServiceLocator::GetRenderSystem();
+	m_CameraPosition = renderSystem.GetCanvasSize() / 2.f;
+	m_TargetPosition = m_CameraPosition;
 	m_Subjects.clear();
 }
 

@@ -4,8 +4,10 @@
 #include <fstream>
 #include <filesystem>
 #include <DaeFiles.h>
+#include <ServiceLocator.h>
 
 #include "ObjectConstructions.h"
+
 
 //================================================================================================
 // Level_TileSystem
@@ -17,11 +19,15 @@ const std::array<bm::BaseTile, static_cast<int>(bm::BaseTileType::Count)> bm::Le
 		bm::BaseTile{ dae::TextureEntry{ "IndestructableWall.png" }, false }	//Wall
 };
 
-bm::Level_TileSystem::Level_TileSystem(dae::Scene& scene)
+bm::Level_TileSystem::Level_TileSystem()
 {
+	auto* pScene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
+	if (pScene == nullptr)
+		return;
+	auto& scene = *pScene;
+
 	auto parentGObj = scene.Add(GOBJ("Level"));	//parent of all tiles
 
-	//todo, load tiletypes from a file
 	auto tileTypes = LoadTilesFromFile(s_BaseLevelFile);
 
 	for (size_t i{ 0 }; i < m_Tiles.size(); ++i)

@@ -129,7 +129,7 @@ void dae::RenderComp::SetAngle(texture_angle angle)
 bool dae::RenderComp::CheckLock()
 {
 	if (m_IsLocked)
-		std::cout << std::format("Tried assigning a new texture on a locked rendercomp\n");	//todo when gobj has name, add to this message
+		std::cout << std::format("Tried assigning a new texture on a locked rendercomp. [{}]\n", GetOwner().GetName());
 	return m_IsLocked;
 }
 

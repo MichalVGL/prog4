@@ -58,6 +58,21 @@
     <Filter Include="Source Files\SpawnSystem">
       <UniqueIdentifier>{72316733-44d8-4c5a-a542-32655a02580f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ScoreSystem">
+      <UniqueIdentifier>{2d128614-9d24-4486-ac69-4a1a28e7284b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\EventSystem">
+      <UniqueIdentifier>{597ce1f8-621a-4713-b639-4df14bc5534c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ScoreSystem">
+      <UniqueIdentifier>{d6a9dca7-6bf5-4239-9e65-1542b0ee3de9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{8b2a77b4-1d67-48c0-bcc4-1ca2cfa34be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{9de85649-48bd-4359-9a1f-5687714f1575}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp">
@@ -122,6 +137,18 @@
     </ClCompile>
     <ClCompile Include="UpgradeSystem.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreSystem.cpp">
+      <Filter>Source Files\ScoreSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +241,24 @@
     </ClInclude>
     <ClInclude Include="SpawnSystem.h">
       <Filter>Header Files\SpawnSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IScoreSystem.h">
+      <Filter>Header Files\ScoreSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventSystem.h">
+      <Filter>Header Files\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreSystem.h">
+      <Filter>Header Files\ScoreSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
