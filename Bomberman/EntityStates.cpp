@@ -21,6 +21,11 @@ void bm::EntityState::SetCommand2(std::unique_ptr<dae::Command>&& command)
 	m_pCommand2 = std::move(command);
 }
 
+void bm::EntityState::SetWalkSound(dae::SoundToken* pToken)
+{
+	m_pWalkSoundToken = pToken;
+}
+
 bm::EntityStateType bm::EntityState::GetStateType() const
 {
 	return m_StateType;
@@ -45,12 +50,13 @@ void bm::EntityState::ValidateSprite()
 
 //private
 
-void bm::EntityState::SetCommands(EntityState* newState)
+void bm::EntityState::TransferResources(EntityState* newState)
 {
 	if (newState)
 	{
 		newState->SetCommand1(std::move(m_pCommand1));
 		newState->SetCommand2(std::move(m_pCommand2));
+		newState->SetWalkSound(m_pWalkSoundToken);
 	}
 }
 
@@ -154,6 +160,9 @@ void bm::IdleState::OnEnter()
 {
 	m_SpriteComp.Pause();
 	m_SpriteComp.SetFrame(IDLEFRAME);
+
+	if (m_pWalkSoundToken)
+		m_pWalkSoundToken->Stop();
 }
 
 void bm::IdleState::OnExit()
@@ -167,7 +176,7 @@ std::unique_ptr<bm::EntityState> bm::IdleState::HandleInput(EntityInput& input)
 	auto pNewState{ GetNewDirectionState(input.direction) };
 	if (pNewState)
 	{
-		SetCommands(pNewState.get());	//transfer commands to the new state
+		TransferResources(pNewState.get());	//transfer commands to the new state
 		return pNewState;
 	}
 	return nullptr;
@@ -187,6 +196,9 @@ void bm::MoveUpState::OnEnter()
 {
 	m_SpriteComp.FlipHorizontal(false);	//reset the flip, if it was set by the MoveRightState
 	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVEUP);
+
+	if (m_pWalkSoundToken && m_pWalkSoundToken->IsPlaying() == false)
+		m_pWalkSoundToken->Play(1.f, -1);
 }
 
 std::unique_ptr<bm::EntityState> bm::MoveUpState::Update(float deltaTime, EntityStats& data)
@@ -205,7 +217,7 @@ std::unique_ptr<bm::EntityState> bm::MoveUpState::Update(float deltaTime, Entity
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());
+		TransferResources(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -228,7 +240,7 @@ std::unique_ptr<bm::EntityState> bm::MoveUpState::HandleInput(EntityInput& input
 		if (pNextTile && pNextTile->IsWalkable())
 		{
 			auto pNewState{ std::make_unique<bm::MoveDownState>(m_GameObject, pNextTile->GetPosition().y) };
-			SetCommands(pNewState.get());	//transfer commands to the new state
+			TransferResources(pNewState.get());	//transfer commands to the new state
 			return pNewState;
 		}
 	}
@@ -249,6 +261,9 @@ void bm::MoveDownState::OnEnter()
 {
 	m_SpriteComp.FlipHorizontal(false);	//reset the flip, if it was set by the MoveRightState
 	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVEDOWN);
+
+	if (m_pWalkSoundToken && m_pWalkSoundToken->IsPlaying() == false)
+		m_pWalkSoundToken->Play(1.f, -1);
 }
 
 std::unique_ptr<bm::EntityState> bm::MoveDownState::Update(float deltaTime, EntityStats& data)
@@ -267,7 +282,7 @@ std::unique_ptr<bm::EntityState> bm::MoveDownState::Update(float deltaTime, Enti
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());
+		TransferResources(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -290,7 +305,7 @@ std::unique_ptr<bm::EntityState> bm::MoveDownState::HandleInput(EntityInput& inp
 		if (pNextTile && pNextTile->IsWalkable())
 		{
 			auto pNewState{ std::make_unique<bm::MoveUpState>(m_GameObject, pNextTile->GetPosition().y) };
-			SetCommands(pNewState.get());	//transfer commands to the new state
+			TransferResources(pNewState.get());	//transfer commands to the new state
 			return pNewState;
 		}
 	}
@@ -311,10 +326,9 @@ void bm::MoveRightState::OnEnter()
 {
 	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVELEFT);
 	m_SpriteComp.FlipHorizontal(true);	//flip the sprite to the right
-}
 
-void bm::MoveRightState::OnExit()
-{
+	if (m_pWalkSoundToken && m_pWalkSoundToken->IsPlaying() == false)
+		m_pWalkSoundToken->Play(1.f, -1);
 }
 
 std::unique_ptr<bm::EntityState> bm::MoveRightState::Update(float deltaTime, EntityStats& data)
@@ -333,7 +347,7 @@ std::unique_ptr<bm::EntityState> bm::MoveRightState::Update(float deltaTime, Ent
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());
+		TransferResources(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -356,7 +370,7 @@ std::unique_ptr<bm::EntityState> bm::MoveRightState::HandleInput(EntityInput& in
 		if (pNextTile && pNextTile->IsWalkable())
 		{
 			auto pNewState{ std::make_unique<bm::MoveLeftState>(m_GameObject, pNextTile->GetPosition().x) };
-			SetCommands(pNewState.get());	//transfer commands to the new state
+			TransferResources(pNewState.get());	//transfer commands to the new state
 			return pNewState;
 		}
 	}
@@ -377,6 +391,9 @@ void bm::MoveLeftState::OnEnter()
 {
 	m_SpriteComp.FlipHorizontal(false);	//reset the flip, if it was set by the MoveRightState
 	m_SpriteComp.SetSpriteEntry(SPRITEID_MOVELEFT);
+
+	if (m_pWalkSoundToken && m_pWalkSoundToken->IsPlaying() == false)
+		m_pWalkSoundToken->Play(1.f, -1);
 }
 
 std::unique_ptr<bm::EntityState> bm::MoveLeftState::Update(float deltaTime, EntityStats& data)
@@ -395,7 +412,7 @@ std::unique_ptr<bm::EntityState> bm::MoveLeftState::Update(float deltaTime, Enti
 		{
 			pNewState = std::make_unique<bm::IdleState>(m_GameObject);
 		}
-		SetCommands(pNewState.get());
+		TransferResources(pNewState.get());
 		return pNewState;
 	}
 	else
@@ -418,7 +435,7 @@ std::unique_ptr<bm::EntityState> bm::MoveLeftState::HandleInput(EntityInput& inp
 		if (pNextTile && pNextTile->IsWalkable())
 		{
 			auto pNewState{ std::make_unique<bm::MoveRightState>(m_GameObject, pNextTile->GetPosition().x) };
-			SetCommands(pNewState.get());	//transfer commands to the new state
+			TransferResources(pNewState.get());	//transfer commands to the new state
 			return pNewState;
 		}
 	}
@@ -439,6 +456,9 @@ bm::DeathState::DeathState(dae::GameObject& gObj)
 void bm::DeathState::OnEnter()
 {
 	m_SpriteComp.SetSpriteEntry(SPRITEID_DEATH);
+
+	if (m_pWalkSoundToken)
+		m_pWalkSoundToken->Stop();
 }
 
 std::unique_ptr<bm::EntityState> bm::DeathState::Update(float, EntityStats&)

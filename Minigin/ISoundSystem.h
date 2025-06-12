@@ -26,6 +26,8 @@ namespace dae
 
 		//should only be called by the token
 		virtual void PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops) = 0;	
+		virtual void StopEffect(const SoundToken& soundToken) = 0;
+		virtual bool IsPlayingEffect(const SoundToken& soundToken) const = 0;
 		virtual void RegisterSound(const SoundEntry& soundEntry) = 0;
 		virtual void UnregisterSound(sound_id id) = 0;
 	};

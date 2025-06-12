@@ -12,5 +12,7 @@
 #include "UpgradeComp.h"
 #include "EnemyComp.h"
 #include "ScoreComp.h"
+#include "BombermanComp.h"
+#include "DoorComp.h"
 
 #endif // !BMCOMPONENTS_H

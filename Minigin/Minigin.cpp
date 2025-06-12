@@ -128,4 +128,6 @@ void dae::Minigin::Run(std::unique_ptr<Scene>&& startScene)
 
 		std::this_thread::sleep_for(currentTime + std::chrono::milliseconds(m_MsPerFrame) - std::chrono::high_resolution_clock::now());
 	}
+
+	sceneSystem.Quit();
 }

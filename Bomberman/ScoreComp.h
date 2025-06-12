@@ -31,7 +31,7 @@ namespace bm
 
 	private:
 
-		static constexpr int s_TextSize{ 10 };
+		static constexpr int s_TextSize{ 8 };
 		static constexpr float s_DisplayTextTime{ 4.f };
 
 		const int m_ScoreAmount;

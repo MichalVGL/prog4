@@ -36,7 +36,7 @@ void dae::SDL_SoundSystem::Quit()
 	m_SDLThread.request_stop();
 	m_CV.notify_all();
 
-	std::lock_guard<std::mutex> lock(m_Mtx);
+	std::lock_guard<std::mutex> lock(m_QueueMtx);
 	m_Sounds.clear();
 
 	Mix_CloseAudio();
@@ -51,21 +51,45 @@ void dae::SDL_SoundSystem::SetGlobalVolume(sound_volume volume)
 void dae::SDL_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops)
 {
 	volume = std::clamp(volume, 0.0f, 1.0f);
-	std::lock_guard<std::mutex> lock(m_Mtx);
+	std::lock_guard<std::mutex> lock(m_QueueMtx);
 	m_SoundPlayQueue.push(std::make_tuple(soundToken.GetId(), volume * m_GlobalVolume, loops));
 	m_CV.notify_one();
 }
 
+void dae::SDL_SoundSystem::StopEffect(const SoundToken& soundToken)
+{
+	std::lock_guard<std::mutex> lock(m_QueueMtx);
+	m_SoundStopQueue.push(soundToken.GetId());
+	m_CV.notify_one();
+}
+
+bool dae::SDL_SoundSystem::IsPlayingEffect(const SoundToken& soundToken) const
+{
+	auto soundId = soundToken.GetId();
+
+	std::lock_guard<std::mutex> lock(m_SoundsMtx);
+
+	auto loc = m_Sounds.find(soundId);
+	if (loc == m_Sounds.end())
+	{
+		std::cout << std::format("Failed to find sound effect to check with id: {}\n", soundId);
+		return false;
+	}
+
+	auto& audioEffect = *(loc->second.pSoundEffect);
+	return audioEffect.IsPlaying();
+}
+
 void dae::SDL_SoundSystem::RegisterSound(const SoundEntry& soundEntry)
 {
-	std::lock_guard<std::mutex> lock(m_Mtx);
+	std::lock_guard<std::mutex> lock(m_QueueMtx);
 	m_SoundLoadQueue.push(soundEntry);
 	m_CV.notify_one();
 }
 
 void dae::SDL_SoundSystem::UnregisterSound(sound_id id)
 {
-	std::lock_guard<std::mutex> lock(m_Mtx);
+	std::lock_guard<std::mutex> lock(m_QueueMtx);
 	m_SoundUnloadQueue.push(id);
 	m_CV.notify_one();
 }
@@ -74,20 +98,40 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 {
 	while (!stopToken.stop_requested())
 	{
-		std::unique_lock<std::mutex> lock(m_Mtx);
+		std::unique_lock<std::mutex> lock(m_QueueMtx);
 
 		m_CV.wait(lock, [&]() {
-			return m_SoundPlayQueue.size() != 0 or m_SoundLoadQueue.size() != 0 or m_SoundUnloadQueue.size() != 0
+			return m_SoundPlayQueue.size() != 0 or m_SoundLoadQueue.size() != 0 or m_SoundUnloadQueue.size() != 0 or m_SoundStopQueue.size() != 0
 				or stopToken.stop_requested(); });
 
 		if (stopToken.stop_requested())
 			break;
 
-		if (m_SoundLoadQueue.size() != 0)	//load sound (priority)
+		if (m_SoundStopQueue.size() != 0)	//stop sound (priority)
+		{
+			auto soundId = m_SoundStopQueue.front();
+			m_SoundStopQueue.pop();
+			lock.unlock();
+			
+			std::unique_lock<std::mutex> soundLock(m_SoundsMtx);
+
+			auto loc = m_Sounds.find(soundId);
+			if (loc == m_Sounds.end())
+			{
+				std::cout << std::format("Failed to find sound effect to stop with id: {}\n", soundId);
+				continue;
+			}
+
+			auto& audioEffect = *(loc->second.pSoundEffect);
+			audioEffect.StopEffect();
+		}
+		else if (m_SoundLoadQueue.size() != 0)	//load sound
 		{
 			auto soundEntry = m_SoundLoadQueue.front();
 			m_SoundLoadQueue.pop();
 			lock.unlock();
+
+			std::unique_lock<std::mutex> soundLock(m_SoundsMtx);
 
 			auto loc = m_Sounds.find(soundEntry.id);
 			if (loc == m_Sounds.end())
@@ -101,7 +145,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 					continue;
 				}
 				loc = newLoc;
-				loc->second.pTexture->Load();
+				loc->second.pSoundEffect->Load();
 			}
 			loc->second.tokenAmount++;
 		}
@@ -110,6 +154,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 			auto soundId = m_SoundUnloadQueue.front();
 			m_SoundUnloadQueue.pop();
 			lock.unlock();
+			std::unique_lock<std::mutex> soundLock(m_SoundsMtx);
 
 			auto loc = m_Sounds.find(soundId);
 			if (loc == m_Sounds.end())
@@ -121,6 +166,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 			loc->second.tokenAmount--;
 			if (loc->second.tokenAmount <= 0)
 			{
+				loc->second.pSoundEffect->StopEffect();	//stop the sound effect before deleting it
 				m_Sounds.erase(loc);
 			}
 		}
@@ -129,6 +175,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 			auto [soundId, volume, loops] = m_SoundPlayQueue.front();
 			m_SoundPlayQueue.pop();
 			lock.unlock();
+			std::unique_lock<std::mutex> soundLock(m_SoundsMtx);
 
 			auto loc = m_Sounds.find(soundId);
 			if (loc == m_Sounds.end())
@@ -137,7 +184,7 @@ void dae::SDL_SoundSystem::SoundThread(std::stop_token stopToken)
 				continue;
 			}
 
-			auto& audioEffect = *(loc->second.pTexture);
+			auto& audioEffect = *(loc->second.pSoundEffect);
 			audioEffect.SetVolume(volume);
 			audioEffect.PlayEffect(loops);
 		}
@@ -167,6 +214,12 @@ void dae::Logger_SoundSystem::PlayEffect(const SoundToken& soundToken, sound_vol
 {
 	std::cout << std::format("Playing sound effect with id: {}\n", soundToken.GetId());
 	s_pSoundSystem->PlayEffect(soundToken, volume, loops);
+}
+
+void dae::Logger_SoundSystem::StopEffect(const SoundToken& soundToken)
+{
+	std::cout << std::format("Stopping sound effect with id: {}\n", soundToken.GetId());
+	s_pSoundSystem->StopEffect(soundToken);
 }
 
 void dae::Logger_SoundSystem::RegisterSound(const SoundEntry& soundEntry)

@@ -13,15 +13,20 @@ void bm::BombDeployerComp::DeployBomb()
 {
 	ValidateBombHandles();
 
+	//check if you are allowed to deploy a bomb
 	auto& upgradeSystem = bm::BMServiceLocator::GetUpgradeSystem();
 	if (static_cast<int>(m_Bombs.size()) >= upgradeSystem.GetMaxBombs())
 	{
 		return;
 	}
 
+	//deploy the bomb
 	auto& spawnSystem = bm::BMServiceLocator::GetSpawnSystem();
-
 	m_Bombs.emplace_back(spawnSystem.SpawnBomb(GetOwner().GetWorldPos()));
+
+	//sound
+	auto& levelSoundsPlayer = bm::BMServiceLocator::GetLevelSoundsPlayer();
+	levelSoundsPlayer.PlaySound(bm::LevelSound::bombDeployed);
 }
 
 void bm::BombDeployerComp::DetonateLastBomb()

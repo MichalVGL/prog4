@@ -46,9 +46,6 @@ namespace bm
 		dae::ReqComp<TimerComp> m_TimerComp;
 		dae::ReqComp<dae::SpriteComp> m_SpriteComp;
 
-
-
-
 		// Inherited via IObserver
 		void Notify(dae::Event event, const std::any& data) override;
 

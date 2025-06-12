@@ -68,8 +68,19 @@ void dae::Scene::UpdateImGui()
 
 //HELPERS=============
 
+dae::Scene::Scene()
+{
+	m_Objects.reserve(s_MaxObjects); 
+}
+
 dae::GameObject* dae::Scene::Add(std::unique_ptr<GameObject> object)
 {
+	if (m_Objects.size() >= s_MaxObjects)
+	{
+		std::cout << std::format("Max amount of objects reached. Cannot add a new one.\n");
+		return nullptr;
+	}
+
 	object->SetScene(this);
 	if (m_HasStarted)
 		object->Start();
@@ -77,6 +88,8 @@ dae::GameObject* dae::Scene::Add(std::unique_ptr<GameObject> object)
 	m_Objects.emplace_back(std::move(object));
 
 	m_RenderSortedObjectsDirty = true;
+
+	OnObjectAdded(m_Objects.back().get());
 	return m_Objects.back().get();
 }
 
@@ -85,7 +98,7 @@ void dae::Scene::RemoveAll()
 	m_Objects.clear();
 }
 
-std::vector<dae::GameObjectHandle> dae::Scene::GetObjectByID(GobjID id) const
+std::vector<dae::GameObjectHandle> dae::Scene::GetObjectsByID(GobjID id) const
 {
 	std::vector<GameObjectHandle> handles{};
 	for (const auto& object : m_Objects)
@@ -96,6 +109,17 @@ std::vector<dae::GameObjectHandle> dae::Scene::GetObjectByID(GobjID id) const
 		}
 	}
 	return handles;
+}
+
+void dae::Scene::UpdateHandles(std::vector<GameObjectHandle>& handles)
+{
+	handles.erase(
+		std::remove_if(handles.begin(), handles.end(),
+			[](const GameObjectHandle& handle)
+			{
+				return handle.Get() == nullptr;
+			})
+		, handles.end());
 }
 
 

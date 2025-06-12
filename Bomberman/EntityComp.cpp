@@ -67,6 +67,18 @@ void bm::EntityComp::SetCommand2(std::unique_ptr<dae::Command>&& command)
 	}
 }
 
+void bm::EntityComp::SetWalkSound(dae::SoundToken* pToken)
+{
+	if (m_pCurrentState)
+	{
+		m_pCurrentState->SetWalkSound(pToken);
+	}
+	else
+	{
+		std::cout << std::format("Warning: EntityComp has no current state to set walksound. [{}]\n", GetOwner().GetName());
+	}
+}
+
 void bm::EntityComp::Kill()	//base behaviour
 {
 	m_pCurrentState->OnExit();

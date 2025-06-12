@@ -309,7 +309,6 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
-    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="SoundToken.cpp" />

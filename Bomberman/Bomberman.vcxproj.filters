@@ -73,12 +73,15 @@
     <Filter Include="Source Files\Scenes">
       <UniqueIdentifier>{9de85649-48bd-4359-9a1f-5687714f1575}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Defines">
+      <UniqueIdentifier>{91fb6167-958e-4959-880f-29a17ac037bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Defines">
+      <UniqueIdentifier>{bf56e568-f113-460b-b4a8-cf638604d7ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomberman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectConstructions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TileComp.cpp">
@@ -150,6 +153,21 @@
     <ClCompile Include="TestScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="LevelScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectConstructions.cpp">
+      <Filter>Source Files\Defines</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSoundsPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BombermanComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DoorComp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameActorCommands.h">
@@ -157,12 +175,6 @@
     </ClInclude>
     <ClInclude Include="BMComponents.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="BMGameDefines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectConstructions.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TileComp.h">
       <Filter>Header Files\Components</Filter>
@@ -259,6 +271,30 @@
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="BMGameDefines.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectConstructions.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyTypes.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="ILevelSoundsPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSoundsPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BombermanComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DoorComp.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

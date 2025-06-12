@@ -40,7 +40,7 @@ void bm::TestScene::Load()
 	textComp->SetSize(16);
 	textComp->SetFont(bm::MAIN_FONT);
 	auto timerComp = go->AddComponent<bm::TimerComp>(30.f, true);
-	timerComp->SetFormatFunction([](float t) { return std::format("Time left: {:.0f} h", t); });
+	timerComp->SetFormatFunction([](float t) { return std::format("Time left: {:.0f}", t); });
 
 	go->SetParent(uiGO, true);
 

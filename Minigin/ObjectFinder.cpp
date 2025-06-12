@@ -11,7 +11,7 @@ std::vector<dae::GameObjectHandle> dae::FindObjects(std::vector<dae::GobjID> obj
 		return foundObjects;
 	for (const auto& objectId : objectIds)
 	{
-		auto objects = scene->GetObjectByID(objectId);
+		auto objects = scene->GetObjectsByID(objectId);
 		if (!objects.empty())
 		{
 			foundObjects.insert(foundObjects.end(), objects.begin(), objects.end());

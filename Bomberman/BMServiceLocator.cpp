@@ -7,12 +7,14 @@
 #include "SpawnSystem.h"
 #include "UpgradeSystem.h"
 #include "ScoreSystem.h"
+#include "LevelSoundsPLayer.h"
 
 std::unique_ptr<bm::ITileSystem> bm::BMServiceLocator::s_pTileSystem{ std::make_unique<bm::Null_TileSystem>() };
 std::unique_ptr<bm::IPathfinderSystem> bm::BMServiceLocator::s_pPathfinderSystem{ std::make_unique<bm::PathfinderSystem>() };
 std::unique_ptr<bm::ISpawnSystem> bm::BMServiceLocator::s_pSpawnSystem{ std::make_unique<bm::SpawnSystem>() };
 std::unique_ptr<bm::IUpgradeSystem> bm::BMServiceLocator::s_pUpgradeSystem{ std::make_unique<bm::UpgradeSystem>() };
 std::unique_ptr<bm::IScoreSystem> bm::BMServiceLocator::s_pScoreSystem{ std::make_unique<bm::ScoreSystem>() };
+std::unique_ptr<bm::ILevelSoundsPlayer> bm::BMServiceLocator::s_pLevelSoundsPlayer{ std::make_unique<bm::Null_LevelSoundsPlayer>() };
 
 void bm::BMServiceLocator::RegisterTileSystem(std::unique_ptr<ITileSystem>&& pTileSystem)
 {
@@ -87,4 +89,19 @@ bm::IScoreSystem& bm::BMServiceLocator::GetScoreSystem()
 		s_pScoreSystem = std::make_unique<bm::ScoreSystem>();
 	}
 	return *s_pScoreSystem;
+}
+
+void bm::BMServiceLocator::RegisterLevelSoundsPlayer(std::unique_ptr<ILevelSoundsPlayer>&& pLevelSoundsPlayer)
+{
+	assert(pLevelSoundsPlayer != nullptr && "BMServiceLocator::RegisterLevelSoundsPlayer: Tried to register nullptr as LevelSoundsPlayer");
+	s_pLevelSoundsPlayer = std::move(pLevelSoundsPlayer);
+}
+
+bm::ILevelSoundsPlayer& bm::BMServiceLocator::GetLevelSoundsPlayer()
+{
+	if (!s_pLevelSoundsPlayer)
+	{
+		s_pLevelSoundsPlayer = std::make_unique<bm::Null_LevelSoundsPlayer>();
+	}
+	return *s_pLevelSoundsPlayer;
 }

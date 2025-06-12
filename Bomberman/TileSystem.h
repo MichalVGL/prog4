@@ -16,6 +16,8 @@ namespace bm
 	{
 		TileComp* GetTileFromWorldPos(glm::vec2) override { return nullptr; };
 		TileComp* GetTileFromIndex(glm::ivec2) override { return nullptr; };
+		std::vector<TileComp*> GetAllTiles() override { return {}; };
+		std::vector<TileComp*> GetAllWalkableTiles() override { return {}; };
 	};
 
 	class Level_TileSystem final : public ITileSystem
@@ -26,6 +28,8 @@ namespace bm
 
 		TileComp* GetTileFromWorldPos(glm::vec2 position) override;
 		TileComp* GetTileFromIndex(glm::ivec2 indexPos) override;
+		std::vector<TileComp*> GetAllTiles() override;
+		std::vector<TileComp*> GetAllWalkableTiles() override;
 
 	private:
 

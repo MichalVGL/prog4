@@ -14,6 +14,11 @@ namespace bm
 	{
 		unsigned int id;
 
+		TileModId()	//null id (given when the object is flagged for deletion)
+			:id{ 0 }
+		{
+		}
+
 		template <size_t N>
 		constexpr TileModId(const char(&name)[N])
 			: id{ dae::make_sdbm_hash(name) }

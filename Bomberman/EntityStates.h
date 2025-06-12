@@ -24,8 +24,9 @@ namespace bm
 		virtual std::unique_ptr<EntityState> Update(float deltaTime, EntityStats& data) = 0;
 		virtual std::unique_ptr<EntityState> HandleInput(EntityInput& input) = 0;
 
-		virtual void SetCommand1(std::unique_ptr<dae::Command>&& command);
-		virtual void SetCommand2(std::unique_ptr<dae::Command>&& command);
+		void SetCommand1(std::unique_ptr<dae::Command>&& command);
+		void SetCommand2(std::unique_ptr<dae::Command>&& command);
+		void SetWalkSound(dae::SoundToken* pToken);
 
 		EntityStateType GetStateType() const;
 
@@ -33,11 +34,13 @@ namespace bm
 
 	protected:
 
-		void SetCommands(EntityState* state);	//for internal usage so commands are auto transferred
+		void TransferResources(EntityState* state);	//for internal usage so commands and the soundtoken are auto transferred
 
 		//===============================
 		std::unique_ptr<dae::Command> m_pCommand1;	//executes if Action1 == true (from EntityInput)
 		std::unique_ptr<dae::Command> m_pCommand2;	//executes if Action1 == true (from EntityInput)
+
+		dae::SoundToken* m_pWalkSoundToken{ nullptr };
 
 		dae::GameObject& m_GameObject;
 		EntityStateType m_StateType;
@@ -121,7 +124,6 @@ namespace bm
 		MoveRightState(dae::GameObject& gObj, float targetX);
 
 		void OnEnter() override;
-		void OnExit() override;
 
 		virtual std::unique_ptr<EntityState> Update(float deltaTime, EntityStats& data);
 		virtual std::unique_ptr<EntityState> HandleInput(EntityInput& input);

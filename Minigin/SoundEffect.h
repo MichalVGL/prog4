@@ -26,7 +26,9 @@ namespace dae
 
 		void SetVolume(sound_volume volume);
 
-		void PlayEffect(int loops);
+		int PlayEffect(int loops);	//return the channel
+		void StopEffect();
+		bool IsPlaying() const;
 
 	private:
 

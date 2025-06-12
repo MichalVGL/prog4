@@ -37,7 +37,7 @@ void bm::WallComp::OnDestroy()
 		spawnSystem.SpawnRandomUpgrade(GetOwner().GetWorldPos());
 		break;
 	case bm::ContainedObject::door:
-		//todo add
+		spawnSystem.SpawnDoor(GetOwner().GetWorldPos());
 		break;
 	}
 }

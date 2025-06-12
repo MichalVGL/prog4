@@ -55,6 +55,10 @@ void bm::UpgradeComp::Notify(dae::Event event, const std::any& data)
 		{
 			auto& upgradeSystem = bm::BMServiceLocator::GetUpgradeSystem();
 			upgradeSystem.AddUpgrade(m_Type);
+
+			auto& levelSoundsPlayer = bm::BMServiceLocator::GetLevelSoundsPlayer();
+			levelSoundsPlayer.PlaySound(bm::LevelSound::powerUp);
+
 			GetOwner().FlagForDeletion();
 		}
 	}

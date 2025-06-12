@@ -11,6 +11,8 @@ namespace dae
 	{
 	public:
 
+		Scene();
+
 		virtual ~Scene() = default;
 
 		virtual void Load() = 0;
@@ -20,11 +22,18 @@ namespace dae
 		GameObject* Add(std::unique_ptr<GameObject> object);
 		void RemoveAll();
 
-		std::vector<GameObjectHandle> GetObjectByID(GobjID id) const;
+		std::vector<GameObjectHandle> GetObjectsByID(GobjID id) const;
+
+		void UpdateHandles(std::vector<GameObjectHandle>& handles);	//use as a automatic nullptr check for all handles (will auto remove them from the vector)
 
 	protected:
 
+		virtual void OnObjectAdded(GameObjectHandle object) {};
+
 		std::vector<std::unique_ptr<GameObject>> m_Objects{};
+
+		static constexpr int s_MaxObjects{ 2000 };
+
 
 	private:
 

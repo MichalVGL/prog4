@@ -16,11 +16,11 @@ namespace dae
 {
 	struct SoundResource
 	{
-		std::unique_ptr<SoundEffect> pTexture;
+		std::unique_ptr<SoundEffect> pSoundEffect;
 		int tokenAmount{ 0 };
 
 		SoundResource(const std::string& path)
-			: pTexture{ std::make_unique<SoundEffect>(path) }
+			: pSoundEffect{ std::make_unique<SoundEffect>(path) }
 		{
 		}
 	};
@@ -43,6 +43,8 @@ namespace dae
 		void SetGlobalVolume(sound_volume) override {};
 	private:
 		void PlayEffect(const SoundToken&, sound_volume, sound_loops) override {};
+		void StopEffect(const SoundToken&) override {};
+		bool IsPlayingEffect(const SoundToken&) const override { return false; };
 		void RegisterSound(const SoundEntry&) override {};
 		void UnregisterSound(sound_id) override {};
 	};
@@ -66,6 +68,8 @@ namespace dae
 	private:
 
 		void PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops) override;
+		void StopEffect(const SoundToken& soundToken) override;
+		bool IsPlayingEffect(const SoundToken& soundToken) const override;
 
 		void RegisterSound(const SoundEntry& soundEntry) override;
 		void UnregisterSound(sound_id id) override;
@@ -77,11 +81,13 @@ namespace dae
 
 		//shared resources with thread
 		std::queue<std::tuple<sound_id, sound_volume, sound_loops>> m_SoundPlayQueue{};
+		std::queue<sound_id> m_SoundStopQueue{};
 		std::queue<SoundEntry> m_SoundLoadQueue{};
 		std::queue<sound_id> m_SoundUnloadQueue{};
 
 		//thread related vars
-		std::mutex m_Mtx{};
+		mutable std::mutex m_QueueMtx{};
+		mutable std::mutex m_SoundsMtx{};
 		std::condition_variable m_CV{};
 		std::jthread m_SDLThread;
 
@@ -108,6 +114,7 @@ namespace dae
 	private:
 
 		void PlayEffect(const SoundToken& soundToken, sound_volume volume, sound_loops loops) override;
+		void StopEffect(const SoundToken& soundToken) override;
 		void RegisterSound(const SoundEntry& soundEntry) override;
 		void UnregisterSound(sound_id id) override;
 	

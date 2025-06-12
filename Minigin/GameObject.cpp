@@ -57,6 +57,7 @@ void dae::GameObject::Update(float deltaTime)
 {
 	for (auto& comp : m_Components)
 	{
+		assert(comp != nullptr && "Component is nullptr, this should never happen");
 		comp->Update(deltaTime);
 	}
 }

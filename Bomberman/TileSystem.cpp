@@ -69,6 +69,26 @@ bm::TileComp* bm::Level_TileSystem::GetTileFromIndex(glm::ivec2 indexPos)
 	return nullptr;
 }
 
+std::vector<bm::TileComp*> bm::Level_TileSystem::GetAllTiles()
+{
+	std::vector<TileComp*> tiles;
+	tiles.reserve(m_Tiles.size());
+	for (auto& tile : m_Tiles)
+	{
+		if (tile != nullptr)
+			tiles.push_back(tile);
+	}
+	return tiles;
+}
+
+std::vector<bm::TileComp*> bm::Level_TileSystem::GetAllWalkableTiles()
+{
+	auto tiles = GetAllTiles();
+	tiles.erase(std::remove_if(tiles.begin(), tiles.end(),
+		[](TileComp* tile) { return tile == nullptr || !tile->IsWalkable(); }), tiles.end());
+	return tiles;
+}
+
 //============HELPERS=================================
 
 glm::ivec2 bm::Level_TileSystem::GetTilePosition(glm::vec2 position) const

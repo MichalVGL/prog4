@@ -84,7 +84,7 @@ bool dae::InputManager::ProcessInput()
 	return true;	//continue game
 }
 
-dae::KeyboardBinding dae::InputManager::CreateBinding(Key key, KeyState keyState, std::unique_ptr<Command>&& command)	//change command to not use unique pointer here
+dae::KeyboardBinding dae::InputManager::CreateBinding(Key key, KeyState keyState, std::unique_ptr<Command>&& command)
 {
 	assert(key < SDL_NUM_SCANCODES && "Invalid SDLScancode given to keyboard binding");
 	assert(command && "Command cannot be null when adding a binding");

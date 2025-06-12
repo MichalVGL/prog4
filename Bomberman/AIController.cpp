@@ -158,7 +158,7 @@ dae::GameObjectHandle bm::GetPlayer()	//used as the target function for the AICo
 		return {};
 	}
 
-	auto playerHandles = currentScene->GetObjectByID(bm::PLAYER_GOBJID);
+	auto playerHandles = currentScene->GetObjectsByID(bm::PLAYER_GOBJID);
 	if (playerHandles.empty())
 	{
 		return {};

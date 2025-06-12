@@ -16,6 +16,7 @@ namespace dae
 	class TextComp final : public Component	//Args:
 	{
 	public:
+
 		TextComp(dae::GameObject& parent);				// Constructor
 
 		TextComp(const TextComp& other) = delete;
@@ -31,6 +32,7 @@ namespace dae
 		//--------------------------
 
 		void SetText(const std::string& text);
+		void SetTextFunc(std::function<std::string()> func);
 		void SetFont(const FontEntry& fontEntry);
 		void SetSize(font_size size);
 		void SetColor(Color color);
@@ -39,7 +41,16 @@ namespace dae
 
 		ReqComp<RenderComp> m_RenderComp{};
 
+		enum class TextMode
+		{
+			text,
+			textFunc
+		};
+
 		std::string m_Text{};
+		std::function<std::string()> m_TextFunc{};
+		TextMode m_Mode{ TextMode::text };
+
 		FontToken m_FontToken{};
 		std::unique_ptr<Texture2D> m_pTextTexture;
 		Color m_FgColor{.r = 255u, .g = 255u, .b = 255u, .a = 255u};

@@ -29,13 +29,16 @@ public:
 
 	void SetVolume(sound_volume volume = 1.f);
 
-	void PlayEffect(int loops);
+	int PlayEffect(int loops);
+	void StopEffect();
+	bool IsPlaying() const;
 
 private:
 
 	std::string m_Path;
 
 	std::unique_ptr<Mix_Chunk> m_pChunk{ nullptr };
+	int m_Channel{ -1 };
 };
 
 dae::SoundEffect::SDL_SoundEffectImpl::SDL_SoundEffectImpl(const std::string& path)
@@ -70,12 +73,34 @@ void dae::SoundEffect::SDL_SoundEffectImpl::SetVolume(sound_volume volume)
 	}
 }
 
-void dae::SoundEffect::SDL_SoundEffectImpl::PlayEffect(int loops)
+int dae::SoundEffect::SDL_SoundEffectImpl::PlayEffect(int loops)
 {
 	if (m_pChunk)
 	{
-		Mix_PlayChannel(-1, m_pChunk.get(), loops);
+		m_Channel = Mix_PlayChannel(-1, m_pChunk.get(), loops);
+		if (m_Channel == -1)
+		{
+			std::cout << std::format("Failed to play sound effect! SDL_mixer Error: {}\n", Mix_GetError());
+		}
 	}
+	return m_Channel;
+}
+
+void dae::SoundEffect::SDL_SoundEffectImpl::StopEffect()
+{
+	if (m_Channel != -1)
+	{
+		if (Mix_Playing(m_Channel) == 1)	//currently playing the sound
+		{
+			Mix_HaltChannel(m_Channel);
+		}
+		m_Channel = -1;	//reset channel
+	}
+}
+
+bool dae::SoundEffect::SDL_SoundEffectImpl::IsPlaying() const
+{
+	return m_Channel != -1 && Mix_Playing(m_Channel) != 0;
 }
 
 //===================================================================================================================================================  
@@ -107,7 +132,17 @@ void dae::SoundEffect::SetVolume(sound_volume volume)
 	m_pSDLSoundEffectImpl->SetVolume(volume);
 }
 
-void dae::SoundEffect::PlayEffect(int loops)
+int dae::SoundEffect::PlayEffect(int loops)
 {
-	m_pSDLSoundEffectImpl->PlayEffect(loops);
+	return m_pSDLSoundEffectImpl->PlayEffect(loops);
+}
+
+void dae::SoundEffect::StopEffect()
+{
+	m_pSDLSoundEffectImpl->StopEffect();
+}
+
+bool dae::SoundEffect::IsPlaying() const
+{
+	return m_pSDLSoundEffectImpl->IsPlaying();
 }

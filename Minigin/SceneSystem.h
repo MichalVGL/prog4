@@ -13,6 +13,7 @@ namespace dae
 		// Inherited via ISceneSystem
 		Scene* GetCurrentScene() const override { return nullptr; };
 		void LoadScene() override {};
+		void Quit() override {};
 		void Start() override {};
 		void FixedUpdate(float) override {};
 		void Update(float) override {};
@@ -30,6 +31,7 @@ namespace dae
 		// Inherited via ISceneSystem
 		Scene* GetCurrentScene() const override;
 		void LoadScene() override;
+		void Quit() override;
 
 		void Start() override;
 		void FixedUpdate(float deltaFixedTime) override;

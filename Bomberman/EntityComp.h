@@ -8,6 +8,7 @@
 #include <EngineComponents.h>
 #include <IObserver.h>
 #include <Command.h>
+#include <Sound.h>
 
 #include "EntityUtils.h"
 
@@ -40,6 +41,7 @@ namespace bm
 
 		void SetCommand1(std::unique_ptr<dae::Command>&& command);
 		void SetCommand2(std::unique_ptr<dae::Command>&& command);
+		void SetWalkSound(dae::SoundToken* pToken);
 
 		void Kill();
 

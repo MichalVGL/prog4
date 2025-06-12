@@ -329,9 +329,6 @@
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Source Files\Sound</Filter>
-    </ClCompile>
     <ClCompile Include="SoundEffect.cpp">
       <Filter>Source Files\Sound</Filter>
     </ClCompile>

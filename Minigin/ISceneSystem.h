@@ -14,6 +14,8 @@ namespace dae
 
 		virtual void LoadScene() = 0;	//only called once when run() is called in minigin.cpp (to make sure the load() function has access to a fully loaded engine), new scenes after the first one will automatically call this
 
+		virtual void Quit() = 0;	//only called when closing the engine
+
 		virtual void Start() = 0;
 		virtual void FixedUpdate(float deltaFixedTime) = 0;
 		virtual void Update(float deltaTime) = 0;

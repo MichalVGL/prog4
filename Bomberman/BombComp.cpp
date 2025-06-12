@@ -30,6 +30,8 @@ void bm::BombComp::OnDestroy()
 void bm::BombComp::Detonate()
 {
 	GetOwner().FlagForDeletion();	//will call ondestroy
+	auto& levelSounds = bm::BMServiceLocator::GetLevelSoundsPlayer();
+	levelSounds.PlaySound(bm::LevelSound::explosion);
 }
 
 void bm::BombComp::Notify(dae::Event event, const std::any&)

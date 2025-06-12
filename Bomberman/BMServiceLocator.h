@@ -8,6 +8,7 @@
 #include "ISpawnSystem.h"
 #include "IUpgradeSystem.h"
 #include "IScoreSystem.h"
+#include "ILevelSoundsPlayer.h"
 
 namespace bm
 {
@@ -30,6 +31,9 @@ namespace bm
 		static void RegisterScoreSystem(std::unique_ptr<IScoreSystem>&& pScoreSystem);
 		static IScoreSystem& GetScoreSystem();
 
+		static void RegisterLevelSoundsPlayer(std::unique_ptr<ILevelSoundsPlayer>&& pLevelSoundsPlayer);
+		static ILevelSoundsPlayer& GetLevelSoundsPlayer();
+
 	private:
 
 		static std::unique_ptr<ITileSystem> s_pTileSystem;
@@ -37,6 +41,8 @@ namespace bm
 		static std::unique_ptr<ISpawnSystem> s_pSpawnSystem;
 		static std::unique_ptr<IUpgradeSystem> s_pUpgradeSystem;
 		static std::unique_ptr<IScoreSystem> s_pScoreSystem;
+
+		static std::unique_ptr<ILevelSoundsPlayer> s_pLevelSoundsPlayer;
 
 	};
 }

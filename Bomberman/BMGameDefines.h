@@ -11,6 +11,8 @@
 namespace bm
 {
 	//general level vars=============================================================
+	inline constexpr glm::ivec2 WINDOW_BASESIZE{ 256, 240 };	//base size of the window
+	inline constexpr float RENDER_SCALE{ 2.f };
 
 	//Tiles
 	inline constexpr int TILE_SIZE{ 16 };
@@ -20,6 +22,7 @@ namespace bm
 
 	//TileModID's
 	inline constexpr TileModId WALL_MODID{"Wall"};
+	inline constexpr TileModId DOOR_MODID{"Door"};
 	inline constexpr TileModId BOMB_MODID{"Bomb"};
 	inline constexpr TileModId UPGRADE_MODID{"Upgrade"};
 
@@ -28,7 +31,7 @@ namespace bm
 	//General Entity Stats
 	inline constexpr EntityStats ENTITYSTATS_SLOW{ .movementSpeed = 30.f };
 	inline constexpr EntityStats ENTITYSTATS_MEDIUM{ .movementSpeed = 40.f };
-	inline constexpr EntityStats ENTITYSTATS_FAST{ .movementSpeed = 50.f };
+	inline constexpr EntityStats ENTITYSTATS_FAST{ .movementSpeed = 45.f };
 
 	//State Sprite IDs
 	inline constexpr int IDLEFRAME{ 1 };
@@ -40,18 +43,20 @@ namespace bm
 	//Player
 	inline constexpr dae::GobjID PLAYER_GOBJID{ "Bomberman" };
 	inline constexpr int PLAYER_START_LIVES{ 3 };
+	inline constexpr glm::ivec2 PLAYER_START_TILE{ 1, 1 };
 	inline constexpr dae::TextureEntry PLAYER_TEXTURE{ "Bomberman.png" };
 
 	//Enemies
 	inline constexpr dae::GobjID ENEMY_GOBJID{ "Enemy" };
 	inline constexpr int RANDOMPATH_MINTILES{ 4 };
-	inline constexpr int RANDOMPATH_MAXTILES{ 10 };
-	inline constexpr dae::TextureEntry ENEMY_TEXTURE{ "Enemies.png" };
+	inline constexpr int RANDOMPATH_MAXTILES{ 12 };
+	inline constexpr dae::TextureEntry ENEMY_TEXTURE{ "Textures/Enemies.png" };
 
 	//Various object names====================================================================
 	inline constexpr dae::GobjID FIRE_GOBJID{ "Fire" };
 	inline constexpr dae::GobjID BOMB_GOBJID{ "Bomb" };
 	inline constexpr dae::GobjID UPGRADE_GOBJID{ "Upgrade" };
+	inline constexpr dae::GobjID DOOR_GOBJID{ "Door" };
 
 	//Other==========================================================================
 	inline constexpr float GLOBAL_FPS{ 10 };

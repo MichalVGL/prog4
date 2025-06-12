@@ -28,6 +28,7 @@ void TextComp::Start()
 
 void TextComp::Update(float)
 {
+	//update fornt if needed
 	if (m_FontNeedsUpdate)
 	{
 		m_FontNeedsUpdate = false;
@@ -40,6 +41,18 @@ void TextComp::Update(float)
 		m_NeedsUpdate = true;
 	}
 
+	//handle the function
+	if (m_Mode == TextMode::textFunc && m_TextFunc)
+	{
+		std::string newText = m_TextFunc();
+		if (m_Text != newText)
+		{
+			m_NeedsUpdate = true;
+			m_Text = std::move(newText);
+		}
+	}
+
+	//update the texture if needed
 	if (m_NeedsUpdate)
 	{
 		m_NeedsUpdate = false;
@@ -56,10 +69,24 @@ void TextComp::Update(float)
 
 void TextComp::SetText(const std::string& text)
 {
-	if (m_Text != text)
+	if (m_Text != text || m_Mode == TextMode::textFunc)
 	{
 		m_NeedsUpdate = true;
 		m_Text = text;
+		m_Mode = TextMode::text;
+	}
+}
+
+void dae::TextComp::SetTextFunc(std::function<std::string()> func)
+{
+	m_TextFunc = std::move(func);
+	if (m_TextFunc)
+	{
+		m_Mode = TextMode::textFunc;
+	}
+	else
+	{
+		m_Mode = TextMode::text;
 	}
 }
 

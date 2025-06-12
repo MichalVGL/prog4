@@ -17,6 +17,14 @@ void dae::Default_SceneSystem::LoadScene()
 	m_pScene->Load();
 }
 
+void dae::Default_SceneSystem::Quit()
+{
+	m_pScene->Exit();
+	m_pScene->RemoveAll();
+	ServiceLocator::GetTextureSystem().UnloadUnusedResources();
+	ServiceLocator::GetFontSystem().UnloadUnusedResources();
+}
+
 void dae::Default_SceneSystem::Start()
 {
 	if (m_pScene)
@@ -46,6 +54,7 @@ void dae::Default_SceneSystem::LateUpdate(float deltaTime)
 		m_pScene->Exit();
 		m_pScene->RemoveAll();
 		ServiceLocator::GetTextureSystem().UnloadUnusedResources();
+		ServiceLocator::GetFontSystem().UnloadUnusedResources();
 		m_pScene = std::move(newScene);
 		m_pScene->Load(); //load the scene itself
 		Start(); // Call Start on the new scene to initialize it	
