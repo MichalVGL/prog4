@@ -1,9 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-//==========================
-//Base Class 
-//==========================
+#include <functional>
 
 namespace dae
 {
@@ -18,6 +16,26 @@ namespace dae
 	{
 	public:
 		void Execute() override {};
+	};
+
+	class FuncCommand final : public Command
+	{
+	public:
+		explicit FuncCommand(std::function<void()>&& func)
+			: m_Func(std::move(func))
+		{
+		}
+		void Execute() override
+		{
+			if (m_Func)
+			{
+				m_Func();
+			}
+		}
+
+	private:
+
+		std::function<void()> m_Func;	//function to execute
 	};
 }
 

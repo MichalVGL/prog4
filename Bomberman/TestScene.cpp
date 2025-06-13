@@ -15,6 +15,7 @@
 #include "TileSystem.h"
 #include "PlayerController.h"
 #include "AIController.h"
+#include "LevelUtils.h"
 
 void bm::TestScene::Load()
 {
@@ -55,7 +56,7 @@ void bm::TestScene::Load()
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveLeft", { 0, bm::TILE_SIZE * 1, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { 0, 0, bm::TILE_SIZE * 7, bm::TILE_SIZE }, 7, 1, false));
 	go->AddComponent<bm::BombDeployerComp>();
-	auto* entityComp = go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_MEDIUM, std::make_unique<bm::PlayerController>());
+	auto* entityComp = go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_MEDIUM, std::make_unique<bm::PlayerController>(GameMode::singleplayer, false));
 	entityComp->SetCommand1(std::make_unique<bm::DeployCommand>(*go));
 	entityComp->SetCommand2(std::make_unique<bm::DetonateCommand>(*go));
 	auto* transComp = go->GetComponent<dae::TransformComp>();

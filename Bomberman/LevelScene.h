@@ -7,6 +7,7 @@
 #include <Sound.h>
 #include <Command.h>
 #include <InputManager.h>
+#include "LevelUtils.h"
 
 namespace bm
 {
@@ -15,15 +16,17 @@ namespace bm
 	{
 	public:
 
-		LevelScene(int lives);
+		LevelScene(LevelInfo&& lvlInfo);
 
 		// Inherited via Scene
 		void Load() override;
 		void Exit() override;
 		std::unique_ptr<Scene> UpdateScene(float deltaTime) override;
 
-	private:
+		const LevelInfo& GetLevelInfo() const;
 
+	private:
+		friend class SkipLevelCommand;
 		friend class RestartSoundtrackCommand;
 		void RestartSoundtrack();
 
@@ -41,7 +44,9 @@ namespace bm
 		dae::SoundToken m_SoundtrackToken{ s_SoundtrackEntry };
 		std::unique_ptr<dae::KeyboardBinding> m_RestartSoundtrackBinding{};
 
-		int m_PlayerLives;
+		LevelInfo m_LevelInfo;
+		StageInfo m_CurrentStageInfo{};
+
 		std::vector<dae::GameObjectHandle> m_PlayerHandles{};
 
 		dae::GameObjectHandle m_TimerHandle;
@@ -49,19 +54,13 @@ namespace bm
 
 		bool m_PlayerEscaped{ false };
 
+		//cheat
+		std::unique_ptr<dae::KeyboardBinding> m_SkipLevelBinding{};
+
 		// Inherited via IObserver
 		void Notify(dae::Event event, const std::any& data) override;
 
 	};
-
-	//levelstate stuff
-	/*
-	* std::vector<stageInfo> stages
-	* int lives
-	* int savedScore
-	* bool soundEnabled
-	*
-	*/
 
 	class RestartSoundtrackCommand final : public dae::Command
 	{
@@ -78,6 +77,21 @@ namespace bm
 
 	private:
 		LevelScene& m_Level;
+	};
+
+	class SkipLevelCommand final : public dae::Command
+	{
+	public:
+
+		SkipLevelCommand(LevelScene& levelScene);
+
+		// Inherited via Command
+		void Execute() override;
+
+	private:
+
+		LevelScene& m_Level;
+
 	};
 }
 

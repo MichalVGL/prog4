@@ -87,6 +87,8 @@ void dae::CameraSystem::Reset()
 	m_CameraPosition = renderSystem.GetCanvasSize() / 2.f;
 	m_TargetPosition = m_CameraPosition;
 	m_Subjects.clear();
+
+	renderSystem.SetRenderOffset({0, 0});
 }
 
 void dae::CameraSystem::ValidateSubjects()

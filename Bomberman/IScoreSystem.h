@@ -29,6 +29,7 @@ namespace bm
 
 		virtual void AddScore(int amount) = 0;
 		virtual void ResetScore() = 0;
+		virtual void SetScore(int score) = 0;
 
 		virtual bool IsHighScore() const = 0;
 		virtual void AddHighScore(std::string name) = 0;

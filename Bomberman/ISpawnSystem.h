@@ -8,6 +8,7 @@
 #include "TileComp.h"
 #include "WallComp.h"
 #include "EnemyTypes.h"
+#include "LevelUtils.h"
 
 namespace bm
 {
@@ -19,9 +20,9 @@ namespace bm
 		virtual void SpawnLevelWalls(int totalAmount, int powerUpWalls, std::vector<TileComp*> tileToIgnore) = 0;
 		virtual void SpawnEnemies(int amount, std::vector<EnemyType> types, std::vector<TileComp*> tileToIgnore) = 0;
 
-		virtual void SpawnPlayer() = 0;
+		virtual void SpawnPlayer(GameMode mode, bool player2) = 0;
 		virtual void SpawnEnemy(glm::vec2 pos, EnemyType type) = 0;
-		virtual void SpawnPlayerEnemy() = 0;
+		virtual void SpawnPlayerEnemy(GameMode mode, bool player2) = 0;
 
 		virtual void SpawnWall(glm::vec2 pos, ContainedObject containedObject = ContainedObject::none) = 0;
 		virtual dae::GameObjectHandle SpawnBomb(glm::vec2 pos) = 0;

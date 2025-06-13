@@ -123,7 +123,7 @@ namespace dae
 			return m_pComponent;
 		}
 
-		CompType* operator->() { return m_pComponent; }
+		CompType* operator->() const { return m_pComponent; }
 
 	private:
 		CompType* m_pComponent{ nullptr };
@@ -150,7 +150,7 @@ namespace dae
 			return m_pComponent;
 		}
 
-		CompType* operator->() { return m_pComponent; }
+		CompType* operator->() const { return m_pComponent; }
 
 		operator bool() const noexcept { return m_pComponent != nullptr; }	//for if statements (or any bool usage...)
 

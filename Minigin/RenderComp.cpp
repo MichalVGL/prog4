@@ -122,6 +122,15 @@ void dae::RenderComp::SetAngle(texture_angle angle)
 	m_RenderParams.angle = angle;
 }
 
+glm::vec2 dae::RenderComp::GetTextureSize()
+{
+	auto* texture = GetTexture();
+	if(!texture)
+		return glm::vec2{ 0.f, 0.f };
+
+	return glm::vec2(texture->GetWidth(), texture->GetHeight());
+}
+
 //==========================================================================
 //class helpers
 //==========================================================================

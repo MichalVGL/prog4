@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "StartStageScene.h"
 #include "BMServiceLocator.h"
 #include "TileSystem.h"
 #include "EnemyTypes.h"
@@ -9,10 +10,18 @@
 #include "ObjectConstructions.h"
 #include "LevelSoundsPlayer.h"
 
-bm::LevelScene::LevelScene(int lives)
-	:m_PlayerLives{ lives }
-{
+#include "MenuScene.h"
+#include "HighScoreScene.h"
 
+bm::LevelScene::LevelScene(LevelInfo&& lvlInfo)
+	:m_LevelInfo{ std::move(lvlInfo) }
+{
+	if (m_LevelInfo.stages.size() == 0)
+	{
+		std::cout << std::format("Error: LevelInfo has no stages!\n");
+		throw std::invalid_argument("LevelInfo has no stages");
+	}
+	m_CurrentStageInfo = m_LevelInfo.stages.back();	//will be popped is the level is succesfull
 }
 
 void bm::LevelScene::Load()
@@ -52,14 +61,22 @@ void bm::LevelScene::Load()
 		return;
 	}
 
-	spawnSystem.SpawnLevelWalls(2, 1, playerSpawnTiles);
+	spawnSystem.SpawnLevelWalls(m_CurrentStageInfo.wallCount, m_CurrentStageInfo.powerUpCount, playerSpawnTiles);
 	SpawnSafetyWalls(playerSpawnTiles);
 
 	//spawn enemies======================================================================
-	spawnSystem.SpawnEnemies(1, { bm::EnemyType::balloom, bm::EnemyType::oneal }, playerSpawnTiles);
+	spawnSystem.SpawnEnemies(m_CurrentStageInfo.enemyCount, m_CurrentStageInfo.enemyTypes, playerSpawnTiles);
 
 	//spawn player(s)====================
-	spawnSystem.SpawnPlayer();
+	spawnSystem.SpawnPlayer(m_LevelInfo.gameMode, false);
+	if (m_LevelInfo.gameMode == bm::GameMode::coop)
+	{
+		spawnSystem.SpawnPlayer(m_LevelInfo.gameMode, true);
+	}
+	else if (m_LevelInfo.gameMode == bm::GameMode::versus)
+	{
+		spawnSystem.SpawnPlayerEnemy(m_LevelInfo.gameMode, true);
+	}
 
 	//setup ui===========================
 	SetupUI();
@@ -70,45 +87,90 @@ void bm::LevelScene::Load()
 	//setup player handles==============
 	m_PlayerHandles = GetObjectsByID(bm::PLAYER_GOBJID);
 
-	//setup mute functionality (extension, sound is set in bomberman.cpp)
+	//setup mute functionality (extension, sound volume is set in bomberman.cpp)
 	auto& inputManager = dae::InputManager::GetInstance();
 	m_RestartSoundtrackBinding = std::make_unique<dae::KeyboardBinding>(inputManager.CreateBinding(SDL_SCANCODE_F2, dae::KeyState::down,
 		std::make_unique<RestartSoundtrackCommand>(*this)));
 	inputManager.RegisterBinding(m_RestartSoundtrackBinding.get());
+
+	//setup f1 skip cheat
+	m_SkipLevelBinding = std::make_unique<dae::KeyboardBinding>(inputManager.CreateBinding(SDL_SCANCODE_F1, dae::KeyState::down,
+		std::make_unique<SkipLevelCommand>(*this)));
+	inputManager.RegisterBinding(m_SkipLevelBinding.get());
 }
 
 void bm::LevelScene::Exit()
 {
 	bm::BMServiceLocator::RegisterTileSystem(std::make_unique<bm::Null_TileSystem>());
 	bm::BMServiceLocator::RegisterLevelSoundsPlayer(std::make_unique<bm::Null_LevelSoundsPlayer>());
+	dae::ServiceLocator::GetCameraSystem().Reset();
+
+	auto& renderSystem = dae::ServiceLocator::GetRenderSystem();
+	renderSystem.SetBackgroundColor({ .r = 0, .g = 0, .b = 0, .a = 255 });
+
+	auto& inputManager = dae::InputManager::GetInstance();
+	if (m_RestartSoundtrackBinding)
+	{
+		inputManager.UnRegisterBinding(m_RestartSoundtrackBinding.get());
+	}
+	if (m_SkipLevelBinding)
+	{
+		inputManager.UnRegisterBinding(m_SkipLevelBinding.get());
+	}
 }
 
-std::unique_ptr<dae::Scene> bm::LevelScene::UpdateScene(float deltaTime)
+std::unique_ptr<dae::Scene> bm::LevelScene::UpdateScene(float)
 {
 	BMServiceLocator::GetLevelSoundsPlayer().Update();
-	
-	//succes
-	if (m_PlayerEscaped)
+
+	if (m_PlayerEscaped)	//succes
 	{
-		return std::make_unique<bm::LevelScene>(m_PlayerLives);
+		m_LevelInfo.stages.pop_back();
+
+		auto& scoreSystem = BMServiceLocator::GetScoreSystem();
+		if (m_LevelInfo.stages.empty())	//all stages complete
+		{
+			if (scoreSystem.IsHighScore() && m_LevelInfo.gameMode == GameMode::singleplayer)	//high score (only in singlelayer)
+			{
+				return std::make_unique<bm::HighScoreScene>();
+			}
+			else
+			{
+				int finalScore = scoreSystem.GetScore();
+				scoreSystem.ResetScore();
+				return std::make_unique<bm::MenuScene>(finalScore);
+			}
+		}
+		else //next stage
+		{
+			m_LevelInfo.savedScore = scoreSystem.GetScore();
+			return std::make_unique<StartStageScene>(std::make_unique<bm::LevelScene>(std::move(m_LevelInfo)));
+		}
 	}
 
-	//player died
+
 	UpdateHandles(m_PlayerHandles);
-	if (m_PlayerHandles.size() == 0)
+	if (m_PlayerHandles.size() == 0 || m_TimerFinished) //player failed
 	{
-		//failed, got killed
-		return std::make_unique<bm::LevelScene>(m_PlayerLives);
+		m_LevelInfo.playerLives--;
+		if (m_LevelInfo.playerLives < 0)
+		{
+			return std::make_unique<bm::MenuScene>();
+		}
+		auto& scoreSystem = BMServiceLocator::GetScoreSystem();
+		scoreSystem.SetScore(m_LevelInfo.savedScore);
+
+		return std::make_unique<StartStageScene>(std::make_unique<bm::LevelScene>(std::move(m_LevelInfo)));
 	}
 
-	//time ran out
-	if (m_TimerFinished)
-	{
-		return std::make_unique<bm::LevelScene>(m_PlayerLives);
-	}
-
-	deltaTime;
 	return nullptr;
+}
+
+//=====================================================================================
+
+const bm::LevelInfo& bm::LevelScene::GetLevelInfo() const
+{
+	return m_LevelInfo;
 }
 
 //=====================================================================================
@@ -124,7 +186,7 @@ void bm::LevelScene::RestartSoundtrack()
 void bm::LevelScene::OnObjectAdded(dae::GameObjectHandle object)
 {
 	//setup door when the door is spawned
-	if (object && object->GetId() == DOOR_GOBJID)	
+	if (object && object->GetId() == DOOR_GOBJID)
 	{
 		auto* doorComp = object->GetComponent<bm::DoorComp>();
 		doorComp->OnPlayerEscaped().AddObserver(this);
@@ -164,7 +226,7 @@ void bm::LevelScene::SetupUI()
 	textComp = go->GetComponent<dae::TextComp>();
 	textComp->SetSize(16);
 	textComp->SetFont(bm::MAIN_FONT);
-	textComp->SetText(std::format("LEFT {}", m_PlayerLives));
+	textComp->SetText(std::format("LEFT {}", m_LevelInfo.playerLives));
 
 	renderComp = go->GetComponent<dae::RenderComp>();
 	renderComp->SetHorizontalAlignment(dae::HorizontalAlignment::right);
@@ -246,3 +308,14 @@ void bm::LevelScene::Notify(dae::Event event, const std::any&)
 	}
 }
 
+//==============================
+
+bm::SkipLevelCommand::SkipLevelCommand(LevelScene& levelScene)
+	:m_Level{ levelScene }
+{
+}
+
+void bm::SkipLevelCommand::Execute()
+{
+	m_Level.m_PlayerEscaped = true;	//force the level to be skipped
+}

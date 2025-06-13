@@ -49,10 +49,12 @@ namespace dae
 		void SetVerticalFlip(bool flip);
 		void SetAngle(texture_angle angle);
 
+		glm::vec2 GetTextureSize();
+
 	private:
 
 		bool CheckLock();
-		Texture2D* GetTexture() const;
+		Texture2D* GetTexture() const;	//helper to get the texture from std::variant
 		void CalculateAlignmentOffset();
 
 		//=====================================

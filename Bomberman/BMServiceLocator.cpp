@@ -13,7 +13,7 @@ std::unique_ptr<bm::ITileSystem> bm::BMServiceLocator::s_pTileSystem{ std::make_
 std::unique_ptr<bm::IPathfinderSystem> bm::BMServiceLocator::s_pPathfinderSystem{ std::make_unique<bm::PathfinderSystem>() };
 std::unique_ptr<bm::ISpawnSystem> bm::BMServiceLocator::s_pSpawnSystem{ std::make_unique<bm::SpawnSystem>() };
 std::unique_ptr<bm::IUpgradeSystem> bm::BMServiceLocator::s_pUpgradeSystem{ std::make_unique<bm::UpgradeSystem>() };
-std::unique_ptr<bm::IScoreSystem> bm::BMServiceLocator::s_pScoreSystem{ std::make_unique<bm::ScoreSystem>() };
+std::unique_ptr<bm::IScoreSystem> bm::BMServiceLocator::s_pScoreSystem{ std::make_unique<bm::Null_ScoreSystem>() };
 std::unique_ptr<bm::ILevelSoundsPlayer> bm::BMServiceLocator::s_pLevelSoundsPlayer{ std::make_unique<bm::Null_LevelSoundsPlayer>() };
 
 void bm::BMServiceLocator::RegisterTileSystem(std::unique_ptr<ITileSystem>&& pTileSystem)
@@ -86,7 +86,7 @@ bm::IScoreSystem& bm::BMServiceLocator::GetScoreSystem()
 {
 	if (!s_pScoreSystem)
 	{
-		s_pScoreSystem = std::make_unique<bm::ScoreSystem>();
+		s_pScoreSystem = std::make_unique<bm::Default_ScoreSystem>();
 	}
 	return *s_pScoreSystem;
 }

@@ -3,35 +3,41 @@
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
+#include <DaeFiles.h>
 
-bm::ScoreSystem::ScoreSystem()
+bm::Default_ScoreSystem::Default_ScoreSystem()
 {
 	LoadHighScores();
 }
 
-int bm::ScoreSystem::GetScore() const
+int bm::Default_ScoreSystem::GetScore() const
 {
 	return m_CurrentScore;
 }
 
-void bm::ScoreSystem::AddScore(int amount)
+void bm::Default_ScoreSystem::AddScore(int amount)
 {
 	m_CurrentScore += amount;
 }
 
-void bm::ScoreSystem::ResetScore()
+void bm::Default_ScoreSystem::ResetScore()
 {
 	m_CurrentScore = 0;
 }
 
-bool bm::ScoreSystem::IsHighScore() const
+void bm::Default_ScoreSystem::SetScore(int score)
 {
-	if (m_HighScores.empty())
-		return true; // no high scores, so any score is a high score
+	m_CurrentScore = score;
+}
+
+bool bm::Default_ScoreSystem::IsHighScore() const
+{
+	if (m_HighScores.size() < s_MaxAmountOfHighScores)
+		return true; // unfilled high scores, so any score is a high score
 	return m_CurrentScore > m_HighScores.back().score;
 }
 
-void bm::ScoreSystem::AddHighScore(std::string name)
+void bm::Default_ScoreSystem::AddHighScore(std::string name)
 {
 	if (name.empty())
 		return;
@@ -48,16 +54,18 @@ void bm::ScoreSystem::AddHighScore(std::string name)
 	SaveHighScores();
 }
 
-const std::vector<bm::HighScore>& bm::ScoreSystem::GetHighScores() const
+const std::vector<bm::HighScore>& bm::Default_ScoreSystem::GetHighScores() const
 {
 	return m_HighScores;
 }
 
-void bm::ScoreSystem::LoadHighScores()
+void bm::Default_ScoreSystem::LoadHighScores()
 {
 	m_HighScores.clear();
 
-	std::ifstream file{ std::string(s_HighScoreFilePath) };
+	auto fullPath = dae::dataPath / s_HighScoreFilePath;
+
+	std::ifstream file{ fullPath };
 	if (!file.is_open())
 		return;
 
@@ -98,9 +106,10 @@ void bm::ScoreSystem::LoadHighScores()
 		[](const HighScore& a, const HighScore& b) { return a.score > b.score; });
 }
 
-void bm::ScoreSystem::SaveHighScores()
+void bm::Default_ScoreSystem::SaveHighScores()
 {
-	std::ofstream file{ std::string(s_HighScoreFilePath) };
+	auto fullPath = dae::dataPath / s_HighScoreFilePath;
+	std::ofstream file{ fullPath };
 	if (!file.is_open())
 		return;
 	for (const auto& hs : m_HighScores)

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "EntityController.h"
+#include "LevelUtils.h"
 
 namespace bm
 {
@@ -13,7 +14,7 @@ namespace bm
 	{
 	public:
 
-		PlayerController(); //todo, add playerid for 2 player mode
+		PlayerController(GameMode mode, bool player2 = false); //todo, add playerid for 2 player mode
 		//add global levelstate so the controller can determine wether to use gamepad 1 or 2 (single, dual, versus) or pass it through the constructor
 
 
@@ -28,7 +29,8 @@ namespace bm
 
 	private:
 
-		void SetupInput();	//todo: make for player1, then SetupInputAsPlayer2
+		void SetupKeyboardInput();
+		void SetupGamepadInput(int gamepadId);	
 
 		std::vector<std::unique_ptr<dae::KeyboardBinding>> m_KeyboardBindings{};
 		std::vector<std::unique_ptr<dae::GamepadBinding>> m_GamepadBindings{};

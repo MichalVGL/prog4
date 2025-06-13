@@ -13,9 +13,9 @@ namespace bm
 		void SpawnLevelWalls(int totalAmount, int powerUpWalls, std::vector<TileComp*> tileToIgnore) override;
 		void SpawnEnemies(int amount, std::vector<EnemyType> types, std::vector<TileComp*> tileToIgnore) override;
 
-		void SpawnPlayer() override;
+		void SpawnPlayer(GameMode mode, bool player2) override;
 		void SpawnEnemy(glm::vec2 pos, EnemyType type) override;
-		void SpawnPlayerEnemy() override;
+		void SpawnPlayerEnemy(GameMode mode, bool player2) override;
 
 		void SpawnWall(glm::vec2 pos, ContainedObject containedObject = ContainedObject::none) override;
 		dae::GameObjectHandle SpawnBomb(glm::vec2 pos) override;

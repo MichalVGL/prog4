@@ -145,7 +145,7 @@ void bm::SpawnSystem::SpawnEnemies(int amount, std::vector<EnemyType> types, std
 
 //=================================================================================================
 
-void bm::SpawnSystem::SpawnPlayer()
+void bm::SpawnSystem::SpawnPlayer(GameMode mode, bool player2)
 {
 	auto* scene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
 	if (!scene)
@@ -162,7 +162,7 @@ void bm::SpawnSystem::SpawnPlayer()
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveLeft", { 0, bm::TILE_SIZE * 1, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
 	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { 0, 0, bm::TILE_SIZE * 7, bm::TILE_SIZE }, 7, 1, false));
 	go->AddComponent<bm::BombDeployerComp>();
-	auto* entityComp = go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_MEDIUM, std::make_unique<bm::PlayerController>());
+	auto* entityComp = go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_MEDIUM, std::make_unique<bm::PlayerController>(mode, player2));
 	entityComp->SetCommand1(std::make_unique<bm::DeployCommand>(*go));
 	entityComp->SetCommand2(std::make_unique<bm::DetonateCommand>(*go));
 	auto* transComp = go->GetComponent<dae::TransformComp>();
@@ -265,9 +265,62 @@ void bm::SpawnSystem::SpawnEnemy(glm::vec2 pos, EnemyType type)
 	scene->Add(std::move(go));
 }
 
-void bm::SpawnSystem::SpawnPlayerEnemy()
+void bm::SpawnSystem::SpawnPlayerEnemy(GameMode mode, bool player2)
 {
-	//todo implement
+	auto* scene = dae::ServiceLocator::GetSceneSystem().GetCurrentScene();
+	if (!scene)
+		return;
+
+	auto go = bm::SpriteGOBJ(bm::ENEMY_GOBJID, 2);
+	auto spriteComp = go->GetComponent<dae::SpriteComp>();
+	spriteComp->LoadTexture(bm::ENEMYPLAYER_TEXTURE);
+	spriteComp->SetFPS(GLOBAL_FPS / 2);
+
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveDown", { 0, 0, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveUp", { bm::TILE_SIZE * 4, 0, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("MoveLeft", { bm::TILE_SIZE * 4, 0, bm::TILE_SIZE * 4, bm::TILE_SIZE }, 4, 1));
+	spriteComp->AddSpriteEntry(dae::SpriteEntry("Death", { bm::TILE_SIZE * 8, 0, bm::TILE_SIZE * 5, bm::TILE_SIZE }, 5, 1, false));
+
+	auto pPlayerController = std::make_unique<bm::PlayerController>(mode, player2);
+	go->AddComponent<bm::EntityComp>(bm::ENTITYSTATS_SLOW, std::move(pPlayerController));
+	go->AddComponent<dae::SimpleCollisionComp>();
+	go->AddComponent<bm::EnemyComp>();
+	go->AddComponent<bm::ScoreComp>(bm::ENEMYPLAYER_SCORE);
+
+	//Position ==================================================================================
+	auto& tileSystem = bm::BMServiceLocator::GetTileSystem();
+	auto availableTiles = tileSystem.GetAllWalkableTiles();
+
+	// Only keep tiles in the first 14 columns and that are walkable and have no tile mod
+	availableTiles.erase(
+		std::remove_if(
+			availableTiles.begin(),
+			availableTiles.end(),
+			[](TileComp* tile) {
+				auto idx = tile->GetIndexPosition();
+				return idx.x >= 14 || !tile->IsWalkable() || tile->HasTileMod();
+			}
+		),
+		availableTiles.end()
+	);
+
+	if (availableTiles.empty())
+	{
+		std::cout << std::format("Warning: cannot spawn player enemy, no available tiles in first 10 columns.");
+		return;
+	}
+
+	auto randomIndex = dae::ServiceLocator::GetRandomSystem().GetRandomInt(0, static_cast<int>(availableTiles.size()) - 1);
+	auto* tile = availableTiles.at(randomIndex);
+	auto pos = tile->GetPosition();
+
+	auto* transComp = go->GetComponent<dae::TransformComp>();
+	transComp->SetLocalPosition(pos.x, pos.y);
+
+	//add this to the list of targets for the camera
+	auto& cameraSystem = dae::ServiceLocator::GetCameraSystem();
+
+	cameraSystem.AddGObjSubject(scene->Add(std::move(go)));
 }
 
 //=================================================================================================

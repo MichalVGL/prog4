@@ -27,6 +27,10 @@
 #include "AIController.h"
 #include "TestScene.h"
 #include "LevelScene.h"
+#include "StartStageScene.h"
+#include "MenuScene.h"
+#include "LevelUtils.h"
+#include "ScoreSystem.h"
 
 std::filesystem::path GetDataPath()
 {
@@ -43,6 +47,8 @@ std::filesystem::path GetDataPath()
 	std::cout << "Data folder not found.\n";
 	throw std::runtime_error("Data folder not found.");
 }
+
+//todo, switch textures to the textures path
 
 class MuteCommand final : public dae::Command
 {
@@ -73,11 +79,14 @@ int main(int, char* []) {
 
 	dae::Minigin engine(GetDataPath().string(), window);
 	dae::ServiceLocator::GetSoundSystem().SetGlobalVolume(bm::SOUNDVOLUME);
-	//todo setup f2 here
+	bm::BMServiceLocator::RegisterScoreSystem(std::make_unique<bm::Default_ScoreSystem>());
+
+	//mute setup
 	auto& inputManager = dae::InputManager::GetInstance();
 	auto binding = std::make_unique<dae::KeyboardBinding>(inputManager.CreateBinding(SDL_SCANCODE_F2, dae::KeyState::down,
 		std::make_unique<MuteCommand>()));
 	inputManager.RegisterBinding(binding.get());
-	engine.Run(std::make_unique<bm::LevelScene>(3));
+
+	engine.Run(std::make_unique<bm::MenuScene>());
 	return 0;
 }
