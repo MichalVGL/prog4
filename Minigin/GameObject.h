@@ -115,27 +115,6 @@ namespace dae
 			return static_cast<compType*>(m_Components.back().get());
 		}
 
-		template<typename compType>
-		bool RemoveComponent()	//returns true if a component has been removed
-		{
-			static_assert(std::is_base_of<Component, compType>::value, "compType must derive of Component");
-			static_assert(!std::is_same<compType, TransformComp>::value, "Cannot remove TransformComp from a GameObject");
-
-			auto loc = std::find_if(m_Components.begin(), m_Components.end(), [](const std::unique_ptr<Component>& comp) {
-				return dynamic_cast<compType*>(comp.get()) != nullptr;
-				});
-			if (loc != m_Components.end())
-			{
-				(*loc)->FlagForDeletion();
-				m_IsCompFlaggedForDeletion = true;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
 		//id related======================================================
 		std::string_view GetName() const;
 		const GobjID& GetId() const;
@@ -194,7 +173,6 @@ namespace dae
 		//components variables
 		std::vector<std::unique_ptr<Component>> m_Components;
 		TransformComp* m_TransformComp{};
-		bool m_IsCompFlaggedForDeletion{ false };
 
 		//gameobject parent/children variables
 		std::vector<GameObject*> m_ChildrenGameObj{};

@@ -14,9 +14,7 @@ namespace bm
 	{
 	public:
 
-		PlayerController(GameMode mode, bool player2 = false); //todo, add playerid for 2 player mode
-		//add global levelstate so the controller can determine wether to use gamepad 1 or 2 (single, dual, versus) or pass it through the constructor
-
+		PlayerController(GameMode mode, bool player2 = false); 
 
 		~PlayerController() override;
 

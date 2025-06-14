@@ -1,18 +1,71 @@
-# Minigin
-
-Minigin is a very small project using [SDL2](https://www.libsdl.org/) and [glm](https://github.com/g-truc/glm) for 2D c++ game projects. It is in no way a game engine, only a barebone start project where everything sdl related has been set up. It contains glm for vector math, to aleviate the need to write custom vector and matrix classes.
-
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/msbuild.yml/badge.svg)](https://github.com/avadae/msbuild/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/avadae/minigin?logo=github&sort=semver)](https://github.com/avadae/minigin/releases/latest)
-
-# Goal
-
-Minigin can/may be used as a start project for the exam assignment in the course [Programming 4](https://youtu.be/j96Oh6vzhmg) at DAE. In that assignment students need to recreate a popular 80's arcade game with a game engine they need to program themselves. During the course we discuss several game programming patterns, using the book '[Game Programming Patterns](https://gameprogrammingpatterns.com/)' by [Robert Nystrom](https://github.com/munificent) as reading material. 
-
-# Disclaimer
-
-Minigin is, despite perhaps the suggestion in its name, **not** a game engine. It is just a very simple sdl2 ready project with some of the scaffolding in place to get started. None of the patterns discussed in the course are used yet (except singleton which use we challenge during the course). It is up to the students to implement their own vision for their engine, apply patterns as they see fit, create their game as efficient as possible.
-
 # Use
 
-Either download the latest release of this project and compile/run in visual studio or, since students need to have their work on github too, they can use this repository as a template (see the "Use this template" button at the top right corner). There is no point in forking this project.
+- Build the project
+- Set the startup project to Bomberman
+- Run
+
+# Used patterns
+    -state pattern
+        -Entity state
+        -scene
+    -observer
+        -anything IObserver
+        -GameObjectHandle (prevents lookups in a big objects vector)
+    -subclass sandbox 
+        -scene
+        -controller
+        -tilemod
+        -...
+    -flyweight
+        -basetile/tilecomp
+        -texturetoken/texture2D (and other entries/tokens)
+    -servicelocator
+        -2 seperate ones for the engine and bomberman
+    -command
+        -entity states
+        -input handling
+    -type object
+        -levelscene/levelinfo and stageinfo
+    -dirty flag
+        -gameobject position
+        -render order of gameobjects
+        -text variable changes
+    
+
+    
+    
+# Engine design decisions
+    -Resource system
+        -entry for the path/id from sdbm_hash
+        -token for identifying/interfacing with the resource in question. (and counting the amount of current usage)
+        -texture/soundsystem are only used directly to set global settings (volume)
+
+    -Camerasystem that has simple implementation to track targets and center itself
+
+    -Extensive use of sdbm_hash for identification/quicker lookup
+        -gameobjects
+        -sound, textures, font
+        -tilemod
+
+    -Inputmanager is a singleton
+    The only reason you need sdl and xinput in the bomberman project, ideally this would have been made into a system using the servicelocator and using an engine defined layer to abstract the input values from an engine definition to the xinput/sdl variant. 
+    This would have taken too much time to implement so it remained as is.
+
+    -GameObjectHandles as a wrapper for pointers to gameobjects.
+    These handle will automatically be set to nullptr when the gameobject is deleted, making pointers to gameobjects safer and easier to do. Really usefull combined with the search functionality provided with the id's (sdbm_hash) of gameobjects.
+
+    -ReqComp and OptComp. 
+    Components often have to use other components to be used correctly.
+    These wrappers around the pointers are used just for clarity of intend in your header and can be initialized with Init(). Given components cannot be deleted seperatly, reqcomp can be used without checking nullptr once it is initialized. (if the component is of the same parent, obviously)
+
+    -SceneSystem uses a state pattern.
+    Scenes have load/exit/update funtions, the update function return a pointer to a potentially new scene. This allows scenes to be defined seperatly from eachother and only having logic as to how it gets to the next scene. Resources are automatically cleaned up in between 2 scenes;
+
+# Game design decision
+    -Game is split up into tiles, it allows for better/less buggy implementations of spawning objects, movement and especially ai controllers.
+
+    -Tilecomp contains just a basic tile (wall/ground) and optionally can contain a tilemod (usually a component inheriting form tilemod) that will change the behaviour of the tile. 1 tile can only have 1 tilemod.
+
+    -Enemies and Players use the same entitycomp, the main difference between the 2 are the controllers given to the entitycomp. They use the exact same state system. There are some extension components (enemycomp,bombdeployercomp,...) to specify behaviour of the entity.
+
+

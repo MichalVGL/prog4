@@ -132,7 +132,6 @@ bm::UIExplorerComp::UIExplorerComp(dae::GameObject& parent, ExplorerMode mode)
 
 bm::UIExplorerComp::~UIExplorerComp()
 {
-	//todo, unregisterbindings
 	auto& inputMngr = dae::InputManager::GetInstance();
 
 	for (auto& keyboardBinding : m_KeyboardBindings)

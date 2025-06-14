@@ -44,7 +44,7 @@ namespace bm
 
 	private:
 
-		static constexpr dae::TextureEntry s_FireTexture{ "Fire.png" };
+		static constexpr dae::TextureEntry s_FireTexture{ "Textures/Fire.png" };
 
 		static constexpr dae::SpriteEntry s_OmniSprite{ "OmniFire", {0, 0, TILE_SIZE * 7, TILE_SIZE}, 7, 1, false };
 		static constexpr dae::SpriteEntry s_ConnectedSprite{ "ConnectedFire", {0, TILE_SIZE, TILE_SIZE * 7, TILE_SIZE}, 7, 1, false };

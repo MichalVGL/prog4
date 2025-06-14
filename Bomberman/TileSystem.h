@@ -4,6 +4,7 @@
 #include "ITileSystem.h"
 
 #include <array>
+#include <Texture.h>
 
 #include "BMGameDefines.h"
 #include "BaseTile.h"
@@ -38,8 +39,8 @@ namespace bm
 
 		std::array<TileComp*, LEVELTILES_TOTAL> m_Tiles{};
 
-		const static std::array<BaseTile, static_cast<int>(BaseTileType::Count)> s_BaseTileTypes;
-		constexpr static std::string_view s_BaseLevelFile{"Levels/main.bmlevel"};
+		static const std::array<BaseTile, static_cast<int>(BaseTileType::Count)> s_BaseTileTypes;
+		static constexpr std::string_view s_BaseLevelFile{"Levels/main.bmlevel"};
 
 	};
 }

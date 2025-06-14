@@ -11,8 +11,8 @@
 namespace bm
 {
 	//general level vars=============================================================
-	inline constexpr glm::ivec2 WINDOW_BASESIZE{ 256, 240 };	//base size of the window
-	inline constexpr float RENDER_SCALE{ 3.f };
+	inline constexpr glm::ivec2 WINDOW_BASESIZE{ 256, 240 };
+	inline constexpr float RENDER_SCALE{ 2.f };
 	inline constexpr float STAGE_TOTALTIME{ 200.f };
 
 	//Tiles
@@ -32,7 +32,7 @@ namespace bm
 	//General Entity Stats
 	inline constexpr EntityStats ENTITYSTATS_SLOW{ .movementSpeed = 30.f };
 	inline constexpr EntityStats ENTITYSTATS_MEDIUM{ .movementSpeed = 40.f };
-	inline constexpr EntityStats ENTITYSTATS_FAST{ .movementSpeed = 45.f };
+	inline constexpr EntityStats ENTITYSTATS_FAST{ .movementSpeed = 50.f };
 
 	//State Sprite IDs
 	inline constexpr int IDLEFRAME{ 1 };

@@ -30,8 +30,6 @@ namespace bm
 		//void OnDestroy() override;
 		//--------------------------
 
-
-
 	private:
 
 		static constexpr dae::SoundEntry s_WalkSoundEntry{ "Sounds/Walk.wav" };

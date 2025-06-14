@@ -68,17 +68,6 @@ void dae::GameObject::LateUpdate(float deltaTime)
 	{
 		comp->LateUpdate(deltaTime);
 	}
-
-	//erase components that are flagged
-	if (m_IsCompFlaggedForDeletion)
-	{
-		m_Components.erase(
-			std::remove_if(m_Components.begin(), m_Components.end(), [](const std::unique_ptr<Component>& comp)
-			{
-				return comp->IsFlaggedForDeletion();
-			})
-			, m_Components.end());
-	}
 }
 
 void dae::GameObject::Render() const

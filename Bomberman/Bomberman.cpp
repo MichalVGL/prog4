@@ -19,17 +19,8 @@
 #include <Keyboard.h>
 
 #include "BMGameDefines.h"
-#include "BMComponents.h"
-#include "ObjectConstructions.h"
 #include "BMServiceLocator.h"
-#include "TileSystem.h"
-#include "PlayerController.h"
-#include "AIController.h"
-#include "TestScene.h"
-#include "LevelScene.h"
-#include "StartStageScene.h"
 #include "MenuScene.h"
-#include "LevelUtils.h"
 #include "ScoreSystem.h"
 
 std::filesystem::path GetDataPath()
@@ -47,8 +38,6 @@ std::filesystem::path GetDataPath()
 	std::cout << "Data folder not found.\n";
 	throw std::runtime_error("Data folder not found.");
 }
-
-//todo, switch textures to the textures path
 
 class MuteCommand final : public dae::Command
 {

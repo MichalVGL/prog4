@@ -43,7 +43,7 @@ namespace bm
 
 	private:
 
-		static constexpr dae::TextureEntry s_WallTextureEntry{ "Wall.png" };
+		static constexpr dae::TextureEntry s_WallTextureEntry{ "Textures/Wall.png" };
 		static constexpr dae::SpriteEntry s_BaseWallSprite{ "Normal", {0, 0, TILE_SIZE, TILE_SIZE}, 1, 1, false };
 		static constexpr dae::SpriteEntry s_DestroyingWallSprite{ "Destroying", {TILE_SIZE, 0, TILE_SIZE * 6, TILE_SIZE}, 6, 1, false };
 

@@ -130,6 +130,8 @@ std::unique_ptr<dae::Scene> bm::LevelScene::UpdateScene(float)
 		auto& scoreSystem = BMServiceLocator::GetScoreSystem();
 		if (m_LevelInfo.stages.empty())	//all stages complete
 		{
+			auto& upgradeSystem = BMServiceLocator::GetUpgradeSystem();
+			upgradeSystem.ResetUpgrades();
 			if (scoreSystem.IsHighScore() && m_LevelInfo.gameMode == GameMode::singleplayer)	//high score (only in singlelayer)
 			{
 				return std::make_unique<bm::HighScoreScene>();
@@ -155,6 +157,8 @@ std::unique_ptr<dae::Scene> bm::LevelScene::UpdateScene(float)
 		m_LevelInfo.playerLives--;
 		if (m_LevelInfo.playerLives < 0)
 		{
+			auto& upgradeSystem = BMServiceLocator::GetUpgradeSystem();	//only reset upgrades when game is over, failing doesnt reset the upgrades
+			upgradeSystem.ResetUpgrades();
 			return std::make_unique<bm::MenuScene>();
 		}
 		auto& scoreSystem = BMServiceLocator::GetScoreSystem();
